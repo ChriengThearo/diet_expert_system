@@ -2,88 +2,449 @@
 
 {% block title %}Sign Up{% endblock %}
 
+{% block extra_css %}
+<style>
+    .register-page {
+        min-height: calc(100vh - 170px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem 0 2rem;
+    }
+
+    .register-page .dashboard-container {
+        max-width: 806px;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .register-hero {
+        position: relative;
+        overflow: hidden;
+        border-radius: 23px;
+        background: var(--dash-primary);
+        box-shadow: 0 28px 60px rgba(var(--dash-primary-rgb), 0.24);
+        padding: clamp(0.77rem, 1.34vw, 1.41rem);
+        min-height: 416px;
+        margin: 0 auto;
+    }
+
+    .register-hero::before {
+        content: '';
+        position: absolute;
+        top: 12%;
+        left: 10%;
+        width: 110px;
+        height: 110px;
+        border-radius: 999px;
+        background: rgba(var(--dash-accent-rgb), 0.2);
+        box-shadow:
+            400px 24px 0 -8px rgba(var(--dash-warm-rgb), 0.18),
+            340px 220px 0 -20px rgba(var(--dash-secondary-rgb), 0.14),
+            70px 210px 0 -34px rgba(255, 255, 255, 0.12);
+        animation: orbDrift 18s ease-in-out infinite;
+        pointer-events: none;
+    }
+
+    .register-hero::after {
+        content: '';
+        position: absolute;
+        right: 6%;
+        bottom: 8%;
+        width: 210px;
+        height: 190px;
+        border-radius: 34px;
+        background: rgba(var(--dash-secondary-rgb), 0.24);
+        animation: orbDrift 22s ease-in-out infinite reverse;
+        pointer-events: none;
+    }
+
+    .register-hero .row {
+        position: relative;
+        z-index: 1;
+    }
+
+    .register-copy {
+        color: #f7fdff;
+        padding: clamp(0.51rem, 1.02vw, 0.96rem);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 0.64rem;
+    }
+
+    .register-title {
+        font-family: 'Sora', 'Segoe UI', sans-serif;
+        font-size: clamp(1.28rem, 2.56vw, 2.05rem);
+        line-height: 1.12;
+        margin: 0;
+        max-width: 16ch;
+    }
+
+    .register-subtitle {
+        margin: 0;
+        color: rgba(247, 253, 255, 0.9);
+        font-size: 0.78rem;
+        max-width: 48ch;
+    }
+
+    .register-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        margin-top: 0.3rem;
+    }
+
+    .register-badges .badge {
+        border-radius: 999px;
+        font-size: 0.6rem;
+        padding: 0.34rem 0.5rem;
+        background: rgba(var(--dash-soft-rgb), 0.94);
+        border: 1px solid rgba(var(--dash-secondary-rgb), 0.2);
+        color: var(--dash-primary);
+        font-weight: 600;
+    }
+
+    .register-points {
+        display: grid;
+        gap: 0.4rem;
+        margin: 0.2rem 0 0;
+        padding: 0;
+        list-style: none;
+        max-width: 46ch;
+        font-size: 0.78rem;
+    }
+
+    .register-points li {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.58rem;
+        color: rgba(247, 253, 255, 0.96);
+    }
+
+    .register-points i {
+        margin-top: 0.2rem;
+        color: var(--dash-accent);
+    }
+
+    .register-login-link {
+        width: fit-content;
+        margin-top: 0.25rem;
+        color: #ffffff;
+        text-decoration: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+        font-weight: 600;
+        font-size: 0.78rem;
+    }
+
+    .register-login-link:hover {
+        color: #ffffff;
+        border-bottom-color: #ffffff;
+    }
+
+    .register-copy-card-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.55rem;
+        margin-top: 0.1rem;
+        max-width: 370px;
+    }
+
+    .register-copy-card {
+        border-radius: 14px;
+        padding: 0.72rem 0.78rem;
+        box-shadow: 0 16px 28px rgba(70, 81, 59, 0.14);
+        animation: floatCard 7.5s ease-in-out infinite;
+    }
+
+    .register-copy-card:nth-child(1) {
+        background: rgba(var(--dash-secondary-rgb), 0.92);
+        color: var(--dash-primary);
+    }
+
+    .register-copy-card:nth-child(2) {
+        background: rgba(var(--dash-accent-rgb), 0.94);
+        color: var(--dash-primary);
+        animation-delay: 0.4s;
+    }
+
+    .register-copy-card strong {
+        display: block;
+        margin-bottom: 0.24rem;
+        font-size: 0.98rem;
+        line-height: 1.1;
+    }
+
+    .register-copy-card span {
+        display: block;
+        font-size: 0.62rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        opacity: 0.72;
+    }
+
+    .register-copy-card p {
+        margin: 0.24rem 0 0;
+        font-size: 0.72rem;
+        line-height: 1.4;
+    }
+
+    .register-form-card {
+        background: rgba(255, 253, 246, 0.97);
+        border: 1px solid rgba(255, 255, 255, 0.52);
+        border-radius: 15px;
+        box-shadow: 0 26px 52px rgba(var(--dash-primary-rgb), 0.18);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        padding: clamp(0.64rem, 1.28vw, 1.06rem);
+        height: 100%;
+    }
+
+    .register-form-card h2 {
+        font-family: 'Sora', 'Segoe UI', sans-serif;
+        margin: 0;
+        font-size: clamp(0.98rem, 1.7vw, 1.3rem);
+        color: var(--dash-ink);
+    }
+
+    .register-form-card .form-label {
+        font-weight: 600;
+        color: var(--dash-primary);
+        margin-bottom: 0.24rem;
+        font-size: 0.82rem;
+    }
+
+    .register-form-card .form-control {
+        border-radius: 9px;
+        border: 1px solid rgba(var(--dash-primary-rgb), 0.22);
+        padding: 0.45rem 0.54rem;
+        background: #fffdf7;
+        font-size: 0.82rem;
+    }
+
+    .register-form-card .form-control:focus {
+        border-color: rgba(var(--dash-primary-rgb), 0.7);
+        box-shadow: 0 0 0 0.2rem rgba(var(--dash-secondary-rgb), 0.16);
+    }
+
+    .register-submit {
+        border: 0;
+        border-radius: 9px;
+        font-weight: 700;
+        color: var(--dash-primary);
+        background: var(--dash-accent);
+        padding: 0.47rem 0.61rem;
+        font-size: 0.82rem;
+    }
+
+    .register-submit:hover,
+    .register-submit:focus {
+        color: var(--dash-primary);
+        background: var(--dash-warm);
+        box-shadow: 0 14px 24px rgba(var(--dash-primary-rgb), 0.26);
+        transform: translateY(-1px);
+    }
+
+    .register-form-footer {
+        border-top: 1px solid rgba(16, 40, 58, 0.12);
+        margin-top: 0.64rem;
+        padding-top: 0.6rem;
+        text-align: center;
+        color: var(--dash-muted);
+        font-size: 0.82rem;
+    }
+
+    .register-form-footer a {
+        font-weight: 700;
+    }
+
+    .register-page .hero-chip {
+        font-size: 0.52rem;
+        padding: 0.24rem 0.5rem;
+    }
+
+    @media (max-width: 991px) {
+        .register-page {
+            min-height: auto;
+            display: block;
+            padding-top: 0.5rem;
+        }
+
+        .register-hero {
+            min-height: auto;
+            border-radius: 21px;
+        }
+
+        .register-copy {
+            padding: 0.5rem 0.4rem 1rem;
+        }
+
+        .register-copy-card-grid {
+            max-width: none;
+        }
+    }
+
+    @media (max-width: 575px) {
+        .register-hero {
+            border-radius: 20px;
+            padding: 0.92rem;
+        }
+
+        .register-form-card {
+            border-radius: 16px;
+            padding: 0.95rem;
+        }
+
+        .register-badges .badge {
+            font-size: 0.75rem;
+        }
+
+        .register-copy-card-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .register-hero::before,
+        .register-hero::after,
+        .register-copy-card {
+            animation: none;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
+<div class="dashboard-shell user-shell register-page">
+    <div class="dashboard-container">
+        <section class="register-hero">
+            <div class="row g-4 align-items-stretch">
+                <div class="col-lg-6 d-flex">
+                    <div class="register-form-card w-100">
+                        <h2>Create a New Account</h2>
+                        <p class="text-muted mb-3">Enter your details to start your personalized nutrition plan.</p>
+                        <form method="POST" action="{{ url_for('auth.register') }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card shadow-sm border-0">
-            <div class="card-header bg-success text-white">
-                <h4 class="mb-0">Create a New Account</h4>
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="username"
+                                    name="username"
+                                    placeholder="Choose a username"
+                                    value="{{ username or '' }}"
+                                    required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input
+                                    type="email"
+                                    class="form-control"
+                                    id="email"
+                                    name="email"
+                                    placeholder="Your email address"
+                                    value="{{ email or '' }}"
+                                    required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="full_name" class="form-label">Full Name</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="full_name"
+                                    name="full_name"
+                                    placeholder="Your full name"
+                                    value="{{ full_name or '' }}"
+                                    required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input
+                                    type="password"
+                                    class="form-control"
+                                    id="password"
+                                    name="password"
+                                    placeholder="Enter a strong password"
+                                    required>
+                            </div>
+
+                            <div class="mb-2">
+                                <label for="confirm_password" class="form-label">Confirm Password</label>
+                                <input
+                                    type="password"
+                                    class="form-control"
+                                    id="confirm_password"
+                                    name="confirm_password"
+                                    placeholder="Re-enter your password"
+                                    required>
+                            </div>
+
+                            <div class="d-grid mt-4">
+                                <button type="submit" class="btn register-submit">Sign Up Free</button>
+                            </div>
+                        </form>
+                        <div class="register-form-footer small">
+                            Already have an account?
+                            <a href="{{ url_for('auth.login') }}">Log In</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 d-flex">
+                    <div class="register-copy w-100">
+                        <span class="hero-chip">
+                            <i class="fas fa-leaf"></i>
+                            Nutrition Intelligence
+                        </span>
+                        <h1 class="register-title">Create Your Account and Get Personalized Diet Guidance</h1>
+                        <p class="register-subtitle">
+                            Join the Nutrition &amp; Diet Expert System to receive health-aware meal recommendations
+                            based on your profile, goals, and daily habits.
+                        </p>
+                        <div class="register-badges">
+                            <span class="badge"><i class="fas fa-apple-alt me-1"></i>Smart Food Analysis</span>
+                            <span class="badge"><i class="fas fa-heartbeat me-1"></i>Health-Based Rules</span>
+                            <span class="badge"><i class="fas fa-chart-line me-1"></i>Progress Tracking</span>
+                        </div>
+                        <ul class="register-points">
+                            <li>
+                                <i class="fas fa-check-circle"></i>
+                                Build your nutrition profile in under two minutes.
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle"></i>
+                                Get recommendations aligned with your health conditions.
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle"></i>
+                                Track and improve your plan over time.
+                            </li>
+                        </ul>
+                        <div class="register-copy-card-grid">
+                            <div class="register-copy-card">
+                                <span>Setup</span>
+                                <strong>Quick onboarding</strong>
+                                <p>Start with the essentials and refine your profile later.</p>
+                            </div>
+                            <div class="register-copy-card">
+                                <span>Result</span>
+                                <strong>Useful from day one</strong>
+                                <p>Enter your details once and get a more focused nutrition path.</p>
+                            </div>
+                        </div>
+                        <a class="register-login-link" href="{{ url_for('auth.login') }}">
+                            Already registered? Log in
+                        </a>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
-                <form method="POST" action="{{ url_for('auth.register') }}">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-
-                    <div class="mb-3">
-                        <label for="username" class="form-label">Username</label>
-                        <input 
-                        type="text"
-                        class="form-control"
-                        id="username"
-                        name="username"
-                        placeholder="Choose a username"
-                        value="{{ username or '' }}"
-                        required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input 
-                        type="email"
-                        class="form-control"
-                        id="email"
-                        name="email"
-                        placeholder="Your email address"
-                        value="{{ email or '' }}"
-                        required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="full_name" class="form-label">Full Name</label>
-                        <input 
-                        type="text"
-                        class="form-control"
-                        id="full_name"
-                        name="full_name"
-                        placeholder="Your full name"
-                        value="{{ full_name or '' }}"
-                        required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input 
-                        type="password"
-                        class="form-control"
-                        id="password"
-                        name="password"
-                        placeholder="Enter a strong password"
-                        required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="confirm_password" class="form-label">Confirm Password</label>
-                        <input 
-                        type="password"
-                        class="form-control"
-                        id="confirm_password"
-                        name="confirm_password"
-                        placeholder="Re-enter your password"
-                        required>
-                    </div>
-
-                    <div class="d-grid mb-3">
-                        <button type="submit" class="btn btn-success">Sign Up</button>
-                    </div>
-                </form>
-
-                <hr>
-                <p class="mb-0 small text-center">
-                    Already have an account?
-                    <a href="{{ url_for('auth.login') }}">Log In</a>
-                </p>
-            </div>
-        </div>
+        </section>
     </div>
 </div>
 {% endblock %}

@@ -3,43 +3,122 @@
 {% block title %}Nutrition & Diet Expert System{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard_theme.css') }}">
 <style>
     .home-shell {
         padding-bottom: 2.5rem;
     }
 
     .hero-section {
-        background: linear-gradient(135deg, #0e6557, #177f6c 52%, #2d64c3);
+        background: var(--dash-primary);
         color: white;
-        padding: 4.5rem 0;
+        padding: 4.4rem 0 4.8rem;
         border-radius: 0 0 80px 80px;
         position: relative;
         overflow: hidden;
-        box-shadow: 0 26px 60px rgba(12, 45, 66, 0.24);
+        box-shadow: 0 26px 60px rgba(var(--dash-primary-rgb), 0.22);
     }
 
     .hero-section::before {
         content: '';
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="3" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="70" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="70" cy="80" r="4" fill="rgba(255,255,255,0.1)"/></svg>');
-        animation: float 20s ease-in-out infinite;
+        top: 14%;
+        left: 8%;
+        width: 180px;
+        height: 180px;
+        border-radius: 44px;
+        background: rgba(var(--dash-secondary-rgb), 0.34);
+        box-shadow:
+            840px 32px 0 -38px rgba(var(--dash-warm-rgb), 0.28),
+            640px 280px 0 8px rgba(var(--dash-highlight-rgb), 0.22);
+        animation: orbDrift 18s ease-in-out infinite;
     }
 
-    @keyframes float {
+    .hero-section::after {
+        content: '';
+        position: absolute;
+        right: 12%;
+        bottom: 10%;
+        width: 240px;
+        height: 240px;
+        border-radius: 999px;
+        background: rgba(var(--dash-accent-rgb), 0.12);
+        animation: orbDrift 22s ease-in-out infinite reverse;
+    }
 
-        0%,
-        100% {
-            transform: translateY(0px);
-        }
+    .hero-chip-home {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        border-radius: 999px;
+        padding: 0.55rem 0.96rem;
+        background: var(--dash-accent);
+        color: var(--dash-primary);
+        font-weight: 700;
+        font-size: 0.8rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        box-shadow: 0 12px 24px rgba(70, 81, 59, 0.16);
+    }
 
-        50% {
-            transform: translateY(-20px);
-        }
+    .hero-grid {
+        row-gap: 3rem;
+    }
+
+    .hero-content {
+        max-width: 640px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-title-home {
+        margin: 1.05rem 0 1.3rem;
+        font-family: 'Sora', 'Segoe UI', sans-serif;
+        font-size: clamp(2.9rem, 5vw, 4.5rem);
+        line-height: 0.94;
+        letter-spacing: -0.05em;
+        max-width: 8ch;
+    }
+
+    .hero-copy-home {
+        margin: 0 0 1.75rem;
+        max-width: 31ch;
+        color: rgba(248, 252, 255, 0.92);
+        font-size: clamp(1.02rem, 1.55vw, 1.3rem);
+        line-height: 1.58;
+    }
+
+    .hero-tag-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.7rem;
+        margin: 0 0 1.9rem;
+    }
+
+    .hero-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.48rem;
+        padding: 0.72rem 0.94rem;
+        border-radius: 14px;
+        background: rgba(255, 253, 246, 0.98);
+        color: var(--dash-ink);
+        font-size: 0.94rem;
+        font-weight: 700;
+        box-shadow: 0 12px 28px rgba(70, 81, 59, 0.12);
+    }
+
+    .hero-actions-home {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .hero-actions-home .btn {
+        min-width: 208px;
+        border-radius: 16px;
+        padding: 0.95rem 1.4rem;
+        font-size: 1.02rem;
+        font-weight: 700;
     }
 
     .feature-card {
@@ -57,22 +136,209 @@
         box-shadow: var(--dash-glow);
     }
 
+    .hero-section .btn-light,
+    .cta-section .btn-light {
+        background: var(--dash-accent);
+        border-color: var(--dash-accent);
+        color: var(--dash-primary);
+        font-weight: 700;
+        box-shadow: 0 12px 24px rgba(var(--dash-primary-rgb), 0.14);
+    }
+
+    .hero-section .btn-light:hover,
+    .hero-section .btn-light:focus,
+    .cta-section .btn-light:hover,
+    .cta-section .btn-light:focus {
+        background: var(--dash-warm);
+        border-color: var(--dash-warm);
+        color: var(--dash-primary);
+    }
+
+    .hero-section .btn-outline-light,
+    .cta-section .btn-outline-light {
+        border-color: rgba(var(--dash-accent-rgb), 0.88);
+        color: #ffffff;
+        background: transparent;
+    }
+
+    .hero-section .btn-outline-light:hover,
+    .hero-section .btn-outline-light:focus,
+    .cta-section .btn-outline-light:hover,
+    .cta-section .btn-outline-light:focus {
+        background: rgba(var(--dash-accent-rgb), 0.16);
+        border-color: var(--dash-accent);
+        color: #ffffff;
+    }
+
     .feature-icon {
         font-size: 3.5rem;
         margin-bottom: 1.5rem;
-        background: linear-gradient(135deg, var(--dash-primary), var(--dash-secondary));
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+        color: var(--dash-highlight);
     }
 
-    .nutrition-icon {
-        font-size: 10rem;
-        opacity: 0.2;
+    .hero-visual {
+        position: relative;
+        min-height: 430px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        max-width: 500px;
+        margin-left: auto;
+        padding: 1rem 1.25rem 1rem 1rem;
+    }
+
+    .hero-visual::before {
+        content: '';
         position: absolute;
-        right: 50px;
-        top: 50%;
-        transform: translateY(-50%);
+        left: 6%;
+        top: 3%;
+        width: 210px;
+        height: 210px;
+        border-radius: 34px;
+        background: rgba(var(--dash-secondary-rgb), 0.18);
+    }
+
+    .hero-visual::after {
+        content: '';
+        position: absolute;
+        right: 16%;
+        bottom: 4%;
+        width: 190px;
+        height: 190px;
+        border-radius: 999px;
+        background: rgba(var(--dash-accent-rgb), 0.12);
+    }
+
+    .hero-visual-main {
+        position: relative;
+        z-index: 2;
+        width: min(100%, 430px);
+        background: rgba(255, 253, 246, 0.98);
+        border-radius: 34px;
+        padding: 1.75rem;
+        box-shadow: 0 32px 64px rgba(70, 81, 59, 0.2);
+        color: var(--dash-ink);
+        animation: floatCard 8s ease-in-out infinite;
+    }
+
+    .hero-visual-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.74rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--dash-muted);
+    }
+
+    .hero-visual-title {
+        margin: 0.75rem 0 0.65rem;
+        font-family: 'Sora', 'Segoe UI', sans-serif;
+        font-size: 1.95rem;
+        line-height: 1.1;
+        color: var(--dash-primary);
+    }
+
+    .hero-visual-copy {
+        margin: 0;
+        color: var(--dash-muted);
+        font-size: 1rem;
+        line-height: 1.55;
+    }
+
+    .hero-visual-pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.55rem;
+        margin-top: 1rem;
+    }
+
+    .hero-visual-pills span {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.42rem;
+        border-radius: 999px;
+        padding: 0.5rem 0.74rem;
+        background: rgba(var(--dash-soft-rgb), 0.96);
+        color: var(--dash-primary);
+        font-size: 0.78rem;
+        font-weight: 700;
+    }
+
+    .hero-visual-card {
+        position: absolute;
+        z-index: 1;
+        border-radius: 22px;
+        padding: 0.9rem 0.98rem;
+        box-shadow: 0 20px 36px rgba(70, 81, 59, 0.16);
+        font-weight: 700;
+        animation: orbDrift 16s ease-in-out infinite;
+    }
+
+    .hero-visual-card small {
+        display: block;
+        margin-bottom: 0.25rem;
+        font-size: 0.7rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        opacity: 0.72;
+    }
+
+    .hero-visual-card-top {
+        top: 6%;
+        right: 2%;
+        width: 160px;
+        background: var(--dash-accent);
+        color: var(--dash-primary);
+    }
+
+    .hero-visual-card-bottom {
+        left: 4%;
+        bottom: 6%;
+        width: 174px;
+        background: rgba(var(--dash-secondary-rgb), 0.92);
+        color: var(--dash-primary);
+        animation-direction: reverse;
+    }
+
+    .hero-visual-card-side {
+        right: 2%;
+        bottom: -1%;
+        width: 156px;
+        background: rgba(var(--dash-soft-rgb), 0.98);
+        color: var(--dash-ink);
+        animation-duration: 20s;
+    }
+
+    .hero-floating-icon {
+        position: absolute;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        color: var(--dash-primary);
+        animation: orbDrift 14s ease-in-out infinite;
+    }
+
+    .hero-floating-icon-a {
+        top: 1%;
+        left: 6%;
+        width: 62px;
+        height: 62px;
+        background: rgba(var(--dash-warm-rgb), 0.88);
+        font-size: 1.35rem;
+    }
+
+    .hero-floating-icon-b {
+        right: 5%;
+        top: 47%;
+        width: 58px;
+        height: 58px;
+        background: rgba(var(--dash-secondary-rgb), 0.92);
+        font-size: 1.2rem;
+        animation-duration: 18s;
+        animation-direction: reverse;
     }
 
     .workflow-step {
@@ -89,7 +355,7 @@
         right: -20px;
         top: 50%;
         transform: translateY(-50%);
-        color: #28a745;
+        color: var(--dash-accent);
         font-size: 2rem;
     }
 
@@ -129,10 +395,7 @@
     .stat-number {
         font-size: 3.5rem;
         font-weight: 700;
-        background: linear-gradient(135deg, var(--dash-primary), var(--dash-secondary));
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+        color: var(--dash-primary);
     }
 
     .food-category {
@@ -146,16 +409,17 @@
     }
 
     .food-category:hover {
-        border-color: rgba(15, 118, 110, 0.35);
-        background: rgba(15, 118, 110, 0.06);
+        border-color: rgba(var(--dash-primary-rgb), 0.3);
+        background: rgba(var(--dash-highlight-rgb), 0.18);
     }
 
     .cta-section {
-        background: linear-gradient(135deg, #0e6557, #177f6c 52%, #2d64c3);
+        background: var(--dash-primary);
         color: white;
         padding: 4rem 0;
         margin-top: 3rem;
         border-radius: 80px 80px 0 0;
+        box-shadow: 0 -12px 28px rgba(var(--dash-primary-rgb), 0.12);
     }
 
     .benefit-card {
@@ -171,21 +435,21 @@
 
     .benefit-card:hover {
         transform: translateY(-10px);
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        box-shadow: var(--dash-glow);
     }
 
     .benefit-icon {
         font-size: 2.5rem;
         margin-bottom: 1rem;
-        color: var(--dash-primary);
+        color: var(--dash-accent);
     }
 
     .diet-plan-preview {
-        background: linear-gradient(135deg, rgba(245, 158, 11, 0.16), rgba(255, 255, 255, 0.9));
+        background: rgba(var(--dash-accent-rgb), 0.82);
         border-radius: 18px;
         padding: 2rem;
         border-left: 5px solid var(--dash-accent);
-        border: 1px solid rgba(245, 158, 11, 0.2);
+        border: 1px solid rgba(var(--dash-secondary-rgb), 0.24);
     }
 
     .home-section {
@@ -198,6 +462,90 @@
         box-shadow: var(--dash-shadow);
         border: 1px solid var(--dash-line);
     }
+
+    @media (max-width: 991px) {
+        .hero-section {
+            padding: 3.8rem 0;
+        }
+
+        .hero-content {
+            max-width: none;
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        .hero-title-home,
+        .hero-copy-home {
+            max-width: none;
+        }
+
+        .hero-tag-list,
+        .hero-actions-home {
+            justify-content: center;
+        }
+
+        .hero-visual {
+            min-height: 320px;
+            margin: 0 auto;
+            padding-inline: 0.75rem;
+            justify-content: center;
+        }
+
+        .hero-visual-card-top {
+            right: 8%;
+        }
+    }
+
+    @media (max-width: 575px) {
+        .hero-section {
+            border-radius: 0 0 38px 38px;
+        }
+
+        .hero-title-home {
+            font-size: 2.75rem;
+        }
+
+        .hero-copy-home {
+            font-size: 1rem;
+        }
+
+        .hero-tag {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .hero-actions-home .btn {
+            width: 100%;
+            min-width: 0;
+        }
+
+        .hero-visual {
+            min-height: 310px;
+        }
+
+        .hero-visual-main {
+            padding: 1.22rem;
+            border-radius: 24px;
+        }
+
+        .hero-visual-title {
+            font-size: 1.42rem;
+        }
+
+        .hero-visual-card {
+            display: none;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .hero-section::before,
+        .hero-section::after,
+        .hero-visual-main,
+        .hero-visual-card,
+        .hero-floating-icon {
+            animation: none;
+        }
+    }
 </style>
 {% endblock %}
 
@@ -207,41 +555,75 @@
         <!-- Hero Section -->
         <section class="hero-section">
             <div class="container position-relative">
-                <div class="row align-items-center">
-                    <div class="col-lg-7">
-                        <h1 class="display-3 fw-bold mb-4">Nutrition & Diet Expert System</h1>
-                        <p class="lead mb-4">
+                <div class="row hero-grid align-items-center">
+                    <div class="col-lg-6">
+                        <div class="hero-content">
+                            <span class="hero-chip-home">
+                                <i class="fas fa-seedling"></i>
+                                Simple Nutrition Intelligence
+                            </span>
+                            <h1 class="hero-title-home">Nutrition & Diet Expert System</h1>
+                            <p class="hero-copy-home">
                             Personalized nutrition recommendations powered by Expert System technology. Get expert
                             dietary advice tailored to your health conditions, goals, and lifestyle.
-                        </p>
-                        <div class="mb-4">
-                            <span class="badge bg-light text-dark me-2 p-2"><i class="fas fa-apple-alt me-1"></i>Smart
-                                Food Analysis</span>
-                            <span class="badge bg-light text-dark me-2 p-2"><i
-                                    class="fas fa-heartbeat me-1"></i>Health-Based</span>
-                            <span class="badge bg-light text-dark p-2"><i class="fas fa-chart-line me-1"></i>Progress
-                                Tracking</span>
+                            </p>
+                            <div class="hero-tag-list">
+                                <span class="hero-tag"><i class="fas fa-apple-alt"></i>Smart Food Analysis</span>
+                                <span class="hero-tag"><i class="fas fa-heartbeat"></i>Health-Based</span>
+                                <span class="hero-tag"><i class="fas fa-chart-line"></i>Progress Tracking</span>
+                            </div>
+                            <div class="hero-actions-home">
+                                {% if current_user.is_authenticated %}
+                                <a href="{{ url_for('dashboard.dashboard_home') }}" class="btn btn-light">
+                                    <i class="fas fa-utensils me-2"></i>Go to Dashboard
+                                </a>
+                                {% else %}
+                                <a href="{{ url_for('auth.login') }}" class="btn btn-light">
+                                    <i class="fas fa-sign-in-alt me-2"></i>Get Started
+                                </a>
+                                <a href="{{ url_for('auth.register') }}" class="btn btn-outline-light">
+                                    <i class="fas fa-user-plus me-2"></i>Sign Up Free
+                                </a>
+                                {% endif %}
+                            </div>
                         </div>
-                        {% if current_user.is_authenticated %}
-                        <a href="{{ url_for('dashboard.dashboard_home') }}" class="btn btn-light btn-lg me-3">
-                            <i class="fas fa-utensils me-2"></i>Go to Dashboard
-                        </a>
-                        {% else %}
-                        <a href="{{ url_for('auth.login') }}" class="btn btn-light btn-lg me-3">
-                            <i class="fas fa-sign-in-alt me-2"></i>Get Started
-                        </a>
-                        <a href="{{ url_for('auth.register') }}" class="btn btn-outline-light btn-lg">
-                            <i class="fas fa-user-plus me-2"></i>Sign Up Free
-                        </a>
-                        {% endif %}
                     </div>
-                    <div class="col-lg-5">
-                        <div class="text-center position-relative">
-                            <i class="fas fa-carrot nutrition-icon"></i>
-                            <i class="fas fa-lemon"
-                                style="font-size: 3rem; opacity: 0.3; position: absolute; top: 20px; left: 20px;"></i>
-                            <i class="fas fa-apple-alt"
-                                style="font-size: 2rem; opacity: 0.3; position: absolute; bottom: 30px; right: 30px;"></i>
+                    <div class="col-lg-6">
+                        <div class="hero-visual">
+                            <div class="hero-floating-icon hero-floating-icon-a">
+                                <i class="fas fa-carrot"></i>
+                            </div>
+                            <div class="hero-floating-icon hero-floating-icon-b">
+                                <i class="fas fa-apple-alt"></i>
+                            </div>
+                            <div class="hero-visual-card hero-visual-card-top">
+                                <small>Today</small>
+                                24 smart food rules active
+                            </div>
+                            <div class="hero-visual-card hero-visual-card-bottom">
+                                <small>Profile</small>
+                                Condition-aware meal guidance
+                            </div>
+                            <div class="hero-visual-card hero-visual-card-side">
+                                <small>Tracking</small>
+                                Daily progress made clear
+                            </div>
+                            <div class="hero-visual-main">
+                                <span class="hero-visual-label">
+                                    <i class="fas fa-leaf"></i>
+                                    Personalized plan
+                                </span>
+                                <h3 class="hero-visual-title">Balanced advice built for real daily habits.</h3>
+                                <p class="hero-visual-copy">
+                                    A calmer interface, one clear palette, and recommendations shaped around health
+                                    conditions, goals, and food preferences.
+                                </p>
+                                <div class="hero-visual-pills">
+                                    <span><i class="fas fa-heartbeat"></i> Health aware</span>
+                                    <span><i class="fas fa-utensils"></i> Meal guidance</span>
+                                    <span><i class="fas fa-chart-line"></i> Track progress</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

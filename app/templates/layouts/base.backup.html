@@ -12,17 +12,15 @@
 
   <!--Custom CSS-->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
-  {% set dashboard_theme_endpoints = ['main.home', 'auth.login', 'auth.register', 'dashboard.admin_dashboard'] %}
-  {% set dashboard_theme_blueprints = ['tbl_users', 'tbl_roles', 'tbl_permissions'] %}
-  {% set use_dashboard_theme = request.endpoint in dashboard_theme_endpoints or request.blueprint in dashboard_theme_blueprints %}
-  {% if use_dashboard_theme %}
+  {% set dashboard_theme_endpoints = ['main.home', 'auth.login', 'auth.register'] %}
+  {% if request.endpoint in dashboard_theme_endpoints %}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard_theme.css') }}" />
   {% endif %}
   {% block extra_css %}{% endblock %}
 </head>
 
-<body {% if use_dashboard_theme %}data-dashboard-theme="1"{% endif %}>
-  {% set use_modern_nav = use_dashboard_theme %}
+<body>
+  {% set use_modern_nav = request.endpoint in dashboard_theme_endpoints %}
   {% set auth_clean_pages = ['auth.login', 'auth.register'] %}
   {% set hide_nav_links = request.endpoint in auth_clean_pages %}
   <nav

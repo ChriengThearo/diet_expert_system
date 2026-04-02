@@ -1,68 +1,432 @@
-{% extends "layouts/base.html" %} {% block title %}Login{% endblock %} {% block
-content %}
-<div class="row justify-content-center align-items-center min-vh-50">
-  <div class="col-md-6 col-lg-4">
-    <div class="card shadow-lg border-0 login-card">
-      <div class="card-header bg-gradient-primary text-white text-center py-4">
-        <i class="fas fa-lock fa-3x mb-3"></i>
-        <h4 class="mb-0 fw-bold">Welcome Back</h4>
-        <p class="mb-0 opacity-75">Sign in to your account</p>
-      </div>
-      <div class="card-body p-4">
-        <form method="POST" action="{{ url_for('auth.login') }}" class="login-form">
-          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+{% extends "layouts/base.html" %}
 
-          <div class="mb-4">
-            <label for="username" class="form-label fw-semibold">
-              <i class="fas fa-user me-2"></i>Username
-            </label>
-            <div class="input-group">
-              <span class="input-group-text"><i class="fas fa-at"></i></span>
-              <input
-                type="text"
-                class="form-control form-control-lg"
-                id="username"
-                name="username"
-                placeholder="Enter your username"
-                required
-                autofocus
-              />
+{% block title %}Login{% endblock %}
+
+{% block extra_css %}
+<style>
+    .login-page {
+        min-height: calc(100vh - 170px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem 0 2rem;
+    }
+
+    .login-page .dashboard-container {
+        max-width: 1008px;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .login-hero {
+        position: relative;
+        overflow: hidden;
+        border-radius: 29px;
+        background: var(--dash-primary);
+        box-shadow: 0 28px 60px rgba(var(--dash-primary-rgb), 0.24);
+        padding: clamp(0.96rem, 1.68vw, 1.76rem);
+        min-height: 480px;
+        margin: 0 auto;
+    }
+
+    .login-hero::before {
+        content: '';
+        position: absolute;
+        top: 12%;
+        left: 10%;
+        width: 110px;
+        height: 110px;
+        border-radius: 999px;
+        background: rgba(var(--dash-accent-rgb), 0.2);
+        box-shadow:
+            520px 22px 0 -8px rgba(var(--dash-warm-rgb), 0.18),
+            420px 220px 0 -20px rgba(var(--dash-secondary-rgb), 0.14),
+            80px 200px 0 -34px rgba(255, 255, 255, 0.12);
+        animation: orbDrift 18s ease-in-out infinite;
+        pointer-events: none;
+    }
+
+    .login-hero::after {
+        content: '';
+        position: absolute;
+        right: 7%;
+        bottom: 10%;
+        width: 240px;
+        height: 220px;
+        border-radius: 36px;
+        background: rgba(var(--dash-secondary-rgb), 0.24);
+        animation: orbDrift 22s ease-in-out infinite reverse;
+        pointer-events: none;
+    }
+
+    .login-hero .row {
+        position: relative;
+        z-index: 1;
+    }
+
+    .login-form-card {
+        background: rgba(255, 253, 246, 0.97);
+        border: 1px solid rgba(255, 255, 255, 0.52);
+        border-radius: 19px;
+        box-shadow: 0 26px 52px rgba(var(--dash-primary-rgb), 0.18);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        padding: clamp(0.8rem, 1.6vw, 1.32rem);
+        height: 100%;
+    }
+
+    .login-form-card h2 {
+        font-family: 'Sora', 'Segoe UI', sans-serif;
+        margin: 0;
+        font-size: clamp(1.16rem, 2.08vw, 1.6rem);
+        color: var(--dash-ink);
+    }
+
+    .login-form-card .form-label {
+        font-weight: 600;
+        color: var(--dash-primary);
+        margin-bottom: 0.3rem;
+        font-size: 0.9rem;
+    }
+
+    .login-form-card .input-group-text {
+        border: 1px solid rgba(var(--dash-primary-rgb), 0.22);
+        border-right: 0;
+        background: rgba(var(--dash-soft-rgb), 0.92);
+        color: var(--dash-primary);
+        border-radius: 9px 0 0 9px;
+        font-size: 0.9rem;
+    }
+
+    .login-form-card .form-control {
+        border-radius: 0 9px 9px 0;
+        border: 1px solid rgba(var(--dash-primary-rgb), 0.22);
+        padding: 0.56rem 0.68rem;
+        background: #fffdf7;
+        font-size: 0.9rem;
+    }
+
+    .login-form-card .form-control:focus {
+        border-color: rgba(var(--dash-primary-rgb), 0.7);
+        box-shadow: 0 0 0 0.2rem rgba(var(--dash-secondary-rgb), 0.16);
+    }
+
+    .login-submit {
+        border: 0;
+        border-radius: 9px;
+        font-weight: 700;
+        color: var(--dash-primary);
+        background: var(--dash-accent);
+        padding: 0.59rem 0.76rem;
+        font-size: 0.9rem;
+    }
+
+    .login-submit:hover,
+    .login-submit:focus {
+        color: var(--dash-primary);
+        background: var(--dash-warm);
+        box-shadow: 0 14px 24px rgba(var(--dash-primary-rgb), 0.26);
+        transform: translateY(-1px);
+    }
+
+    .login-form-footer {
+        border-top: 1px solid rgba(16, 40, 58, 0.12);
+        margin-top: 0.8rem;
+        padding-top: 0.76rem;
+        text-align: center;
+        color: var(--dash-muted);
+        font-size: 0.9rem;
+    }
+
+    .login-form-footer a {
+        font-weight: 700;
+    }
+
+    .login-copy {
+        color: #f7fdff;
+        padding: clamp(0.64rem, 1.28vw, 1.2rem);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 0.8rem;
+    }
+
+    .login-title {
+        font-family: 'Sora', 'Segoe UI', sans-serif;
+        font-size: clamp(1.6rem, 3.2vw, 2.56rem);
+        line-height: 1.12;
+        margin: 0;
+        max-width: 14ch;
+    }
+
+    .login-subtitle {
+        margin: 0;
+        color: rgba(247, 253, 255, 0.9);
+        font-size: 0.86rem;
+        max-width: 48ch;
+    }
+
+    .login-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.44rem;
+        margin-top: 0.4rem;
+    }
+
+    .login-badges .badge {
+        border-radius: 999px;
+        font-size: 0.68rem;
+        padding: 0.42rem 0.62rem;
+        background: rgba(var(--dash-soft-rgb), 0.94);
+        border: 1px solid rgba(var(--dash-secondary-rgb), 0.2);
+        color: var(--dash-primary);
+        font-weight: 600;
+    }
+
+    .login-points {
+        display: grid;
+        gap: 0.5rem;
+        margin: 0.2rem 0 0;
+        padding: 0;
+        list-style: none;
+        max-width: 46ch;
+        font-size: 0.9rem;
+    }
+
+    .login-points li {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.58rem;
+        color: rgba(247, 253, 255, 0.96);
+    }
+
+    .login-points i {
+        margin-top: 0.2rem;
+        color: var(--dash-accent);
+    }
+
+    .login-register-link {
+        width: fit-content;
+        margin-top: 0.32rem;
+        color: #ffffff;
+        text-decoration: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .login-register-link:hover {
+        color: #ffffff;
+        border-bottom-color: #ffffff;
+    }
+
+    .login-copy-card-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.65rem;
+        margin-top: 0.1rem;
+        max-width: 430px;
+    }
+
+    .login-copy-card {
+        border-radius: 16px;
+        padding: 0.82rem 0.88rem;
+        box-shadow: 0 18px 32px rgba(70, 81, 59, 0.14);
+        animation: floatCard 7s ease-in-out infinite;
+    }
+
+    .login-copy-card:nth-child(1) {
+        background: rgba(var(--dash-secondary-rgb), 0.92);
+        color: var(--dash-primary);
+    }
+
+    .login-copy-card:nth-child(2) {
+        background: rgba(var(--dash-accent-rgb), 0.94);
+        color: var(--dash-primary);
+        animation-delay: 0.3s;
+    }
+
+    .login-copy-card strong {
+        display: block;
+        font-size: 1.15rem;
+        line-height: 1;
+        margin-bottom: 0.28rem;
+    }
+
+    .login-copy-card span {
+        display: block;
+        font-size: 0.76rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        opacity: 0.72;
+    }
+
+    .login-copy-card p {
+        margin: 0.34rem 0 0;
+        font-size: 0.8rem;
+        line-height: 1.45;
+    }
+
+    .login-page .hero-chip {
+        font-size: 0.64rem;
+        padding: 0.3rem 0.64rem;
+    }
+
+    @media (max-width: 991px) {
+        .login-page {
+            min-height: auto;
+            display: block;
+            padding-top: 0.5rem;
+        }
+
+        .login-hero {
+            min-height: auto;
+            border-radius: 21px;
+        }
+
+        .login-copy {
+            padding: 0.5rem 0.4rem 1rem;
+        }
+
+        .login-copy-card-grid {
+            max-width: none;
+        }
+    }
+
+    @media (max-width: 575px) {
+        .login-hero {
+            border-radius: 20px;
+            padding: 0.92rem;
+        }
+
+        .login-form-card {
+            border-radius: 16px;
+            padding: 0.95rem;
+        }
+
+        .login-badges .badge {
+            font-size: 0.75rem;
+        }
+
+        .login-copy-card-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .login-hero::before,
+        .login-hero::after,
+        .login-copy-card {
+            animation: none;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-shell user-shell login-page">
+    <div class="dashboard-container">
+        <section class="login-hero">
+            <div class="row g-4 align-items-stretch">
+                <div class="col-lg-6 d-flex">
+                    <div class="login-form-card w-100">
+                        <h2>Welcome Back</h2>
+                        <p class="text-muted mb-3">Sign in to continue your personalized nutrition journey.</p>
+                        <form method="POST" action="{{ url_for('auth.login') }}" class="login-form">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-at"></i></span>
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        id="username"
+                                        name="username"
+                                        placeholder="Enter your username"
+                                        required
+                                        autofocus>
+                                </div>
+                            </div>
+
+                            <div class="mb-2">
+                                <label for="password" class="form-label">Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                    <input
+                                        type="password"
+                                        class="form-control"
+                                        id="password"
+                                        name="password"
+                                        placeholder="Enter your password"
+                                        required>
+                                </div>
+                            </div>
+
+                            <div class="d-grid mt-4">
+                                <button type="submit" class="btn login-submit">
+                                    <i class="fas fa-sign-in-alt me-2"></i>Log In
+                                </button>
+                            </div>
+                        </form>
+                        <div class="login-form-footer small">
+                            Don't have an account?
+                            <a href="{{ url_for('auth.register') }}">Create Account</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 d-flex">
+                    <div class="login-copy w-100">
+                        <span class="hero-chip">
+                            <i class="fas fa-heartbeat"></i>
+                            Smart Nutrition Platform
+                        </span>
+                        <h1 class="login-title">Log In and Continue Your Health Plan</h1>
+                        <p class="login-subtitle">
+                            Access your personalized recommendations, track progress, and manage your diet profile with
+                            the Nutrition &amp; Diet Expert System.
+                        </p>
+                        <div class="login-badges">
+                            <span class="badge"><i class="fas fa-apple-alt me-1"></i>Smart Food Analysis</span>
+                            <span class="badge"><i class="fas fa-stethoscope me-1"></i>Doctor-Aware Advice</span>
+                            <span class="badge"><i class="fas fa-chart-line me-1"></i>Progress Insights</span>
+                        </div>
+                        <ul class="login-points">
+                            <li>
+                                <i class="fas fa-check-circle"></i>
+                                View your tailored nutrition recommendations instantly.
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle"></i>
+                                Update your profile and keep advice aligned to your goals.
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle"></i>
+                                Stay consistent with practical meal guidance and tracking.
+                            </li>
+                        </ul>
+                        <div class="login-copy-card-grid">
+                            <div class="login-copy-card">
+                                <span>Access</span>
+                                <strong>Fast sign in</strong>
+                                <p>Open your plan, meals, and progress without extra steps.</p>
+                            </div>
+                            <div class="login-copy-card">
+                                <span>Flow</span>
+                                <strong>Clear next action</strong>
+                                <p>One primary button, one calm palette, and less visual noise.</p>
+                            </div>
+                        </div>
+                        <a class="login-register-link" href="{{ url_for('auth.register') }}">
+                            New here? Create your account
+                        </a>
+                    </div>
+                </div>
             </div>
-          </div>
-
-          <div class="mb-4">
-            <label for="password" class="form-label fw-semibold">
-              <i class="fas fa-key me-2"></i>Password
-            </label>
-            <div class="input-group">
-              <span class="input-group-text"><i class="fas fa-lock"></i></span>
-              <input
-                type="password"
-                class="form-control form-control-lg"
-                id="password"
-                name="password"
-                placeholder="Enter your password"
-                required
-              />
-            </div>
-          </div>
-
-          <div class="d-grid mb-4">
-            <button type="submit" class="btn btn-primary btn-lg fw-bold">
-              <i class="fas fa-sign-in-alt me-2"></i>Log In
-            </button>
-          </div>
-        </form>
-
-        <hr class="my-4" />
-        <p class="mb-0 text-center">
-          <small class="text-muted">Don't have an account?</small><br>
-          <a href="{{ url_for('auth.register') }}" class="text-decoration-none fw-semibold">
-            <i class="fas fa-user-plus me-1"></i>Create Account
-          </a>
-        </p>
-      </div>
+        </section>
     </div>
-  </div>
 </div>
 {% endblock %}
