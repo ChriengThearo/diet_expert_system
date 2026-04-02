@@ -3,6 +3,7 @@ from extensions import db
 from app.models.associations import tbl_goal_diet_rules
 
 
+
 class DietRulesTable(db.Model):
     __tablename__ = "tbl_diet_rules"
 
