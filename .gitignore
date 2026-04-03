@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .venv/
 __pycache__/
 *.pyc
@@ -5,3 +6,9 @@ __pycache__/
 instance/
 .env
 migrations/versions/*.py
+=======
+__pycache__/
+.vscode/
+.venv/
+.env/
+>>>>>>> b0929549251ab7b30db9bf8b561062b1d7f96893
