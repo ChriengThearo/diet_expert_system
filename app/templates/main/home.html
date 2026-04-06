@@ -275,12 +275,28 @@
       animation-fill-mode: both;
     }
 
-    .hero-photo {
+    .img-slider {
       width: 100%;
-      min-height: 100%;
+      height: 100%;
+      min-height: 380px;
+      overflow: hidden;
       border-radius: 22px;
+      position: relative;
+    }
+
+    .img-slider-track {
+      display: flex;
+      width: 400%;
+      height: 100%;
+      will-change: transform;
+    }
+
+    .img-slider-track img {
+      width: 25%;
+      height: 100%;
       object-fit: cover;
-      background: #f3efea;
+      flex-shrink: 0;
+      display: block;
     }
 
     .hero-floating {
@@ -654,11 +670,14 @@
         </div>
 
         <div class="hero-panel">
-          <img
-            class="hero-photo"
-            src="{{ url_for('static', filename='images/woman.png') }}"
-            alt="Healthy food lifestyle"
-          />
+          <div class="img-slider">
+            <div class="img-slider-track" id="homeSlider">
+              <img src="{{ url_for('static', filename='images/woman.png') }}" alt="Healthy food lifestyle" />
+              <img src="{{ url_for('static', filename='images/a_dish_of_food.png') }}" alt="Healthy dish" />
+              <img src="{{ url_for('static', filename='images/recommendation.jpg') }}" alt="Nutrition recommendation" />
+              <img src="{{ url_for('static', filename='images/woman.png') }}" alt="Healthy food lifestyle" />
+            </div>
+          </div>
           <div class="hero-floating float-a">
             <i class="fas fa-apple-whole"></i>
             <div>
@@ -741,6 +760,26 @@
   </div>
 
   <script>
+    (function () {
+      const track = document.getElementById("homeSlider");
+      if (track) {
+        let idx = 0;
+        const total = 3;
+        setInterval(function () {
+          idx++;
+          track.style.transition = "transform 0.85s cubic-bezier(0.4, 0, 0.2, 1)";
+          track.style.transform = "translateX(-" + (idx * 25) + "%)";
+          if (idx === total) {
+            setTimeout(function () {
+              track.style.transition = "none";
+              track.style.transform = "translateX(0)";
+              idx = 0;
+            }, 900);
+          }
+        }, 3000);
+      }
+    })();
+
     (function () {
       const toggle = document.getElementById("mobileMenuToggle");
       const menu = document.getElementById("siteMenuWrap");
