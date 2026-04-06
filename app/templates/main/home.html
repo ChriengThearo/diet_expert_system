@@ -74,11 +74,11 @@
     }
 
     .brand img {
-      width: 40px;
-      height: 40px;
+      width: 56px;
+      height: 56px;
       object-fit: contain;
       border-radius: 10px;
-      background: #fff;
+      background: #2f9e7a;
       padding: 0.35rem;
       box-shadow: 0 8px 16px rgba(27, 37, 49, 0.12);
     }
@@ -607,10 +607,6 @@
         <div class="site-menu-wrap" id="siteMenuWrap">
           <ul class="site-menu">
             <li><a href="{{ url_for('main.home') }}"><i class="fas fa-house"></i>Home</a></li>
-            <li><a href="{{ url_for('main.bmi') }}"><i class="fas fa-calculator"></i>BMI</a></li>
-            <li><a href="{{ url_for('main.match') }}"><i class="fas fa-bullseye"></i>Goal Match</a></li>
-            <li><a href="{{ url_for('main.rules') }}"><i class="fas fa-list-check"></i>Rules</a></li>
-            <li><a href="{{ url_for('main.qa') }}"><i class="fas fa-circle-question"></i>Q and A</a></li>
           </ul>
           {% if current_user.is_authenticated %}
           <a class="nav-cta" href="{{ url_for('dashboard.dashboard_home') }}">
@@ -628,14 +624,9 @@
     <main>
       <section class="hero">
         <div class="hero-copy">
-          <span class="eyebrow">Nutrition Guidance Platform</span>
-          <h1>Build smarter diet decisions with practical daily tools.</h1>
-          <p>
-            This expert system helps you assess BMI, match your goals with diet logic, and explore
-            food recommendations designed for consistent and healthy progress.
-          </p>
+<h1>Build smarter diet decisions with practical daily tools.</h1>
 
-          <div class="hero-actions">
+<div class="hero-actions">
             {% if current_user.is_authenticated %}
             <a class="btn-main" href="{{ url_for('dashboard.dashboard_home') }}">
               <i class="fas fa-chart-line"></i>Go to Dashboard
@@ -648,9 +639,6 @@
               <i class="fas fa-right-to-bracket"></i>Sign In
             </a>
             {% endif %}
-            <a class="btn-subtle" href="{{ url_for('main.match') }}">
-              <i class="fas fa-compass"></i>Try Goal Match
-            </a>
           </div>
 
           <div class="trust-grid">
@@ -680,13 +668,6 @@
             <div>
               <strong>Balanced Choices</strong>
               <span>Nutrition-first recommendations</span>
-            </div>
-          </div>
-          <div class="hero-floating float-b">
-            <i class="fas fa-shield-heart"></i>
-            <div>
-              <strong>Track Outcomes</strong>
-              <span>See progress over time</span>
             </div>
           </div>
         </div>
