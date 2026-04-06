@@ -10,148 +10,54 @@
 />
 <style>
   :root {
-    --register-primary: #0f766e;
-    --register-primary-soft: #d9faf3;
-    --register-secondary: #e97752;
+    --register-primary: #2a8f6f;
+    --register-primary-deep: #1f6d54;
+    --register-primary-soft: #d6f5ec;
+    --register-accent: #ef6f51;
+    --register-accent-strong: #d95435;
     --register-ink: #132630;
     --register-muted: #5f7281;
     --register-border: #d7e2e8;
-    --register-bg-a: #fff8f3;
-    --register-bg-b: #eaf8f5;
+    --register-bg-a: #fff9f3;
+    --register-bg-b: #edf9f2;
+    --register-card: #ffffff;
   }
 
   body {
     font-family: "DM Sans", sans-serif;
     background:
-      radial-gradient(circle at 12% 10%, #ffd9ca 0%, transparent 35%),
-      radial-gradient(circle at 90% 90%, #c5f4e8 0%, transparent 32%),
+      radial-gradient(circle at 8% 14%, #ffd7c8 0%, transparent 35%),
+      radial-gradient(circle at 95% 87%, #c7f4e8 0%, transparent 34%),
       linear-gradient(140deg, var(--register-bg-a), var(--register-bg-b));
   }
 
   .register-page {
-    padding-top: 1rem;
-    padding-bottom: 1rem;
+    padding-top: 0.85rem;
+    padding-bottom: 0.85rem;
   }
 
   .register-shell {
     position: relative;
-    overflow: hidden;
+    overflow: clip;
     border-radius: 28px;
     display: grid;
-    grid-template-columns: 1.05fr 1fr;
+    grid-template-columns: 0.94fr 1.06fr;
     min-height: 690px;
-    background: #ffffff;
+    background: var(--register-card);
     box-shadow: 0 24px 60px rgba(17, 24, 39, 0.16);
   }
 
   .register-shell::before {
     content: "";
     position: absolute;
-    width: 300px;
-    height: 300px;
+    width: 340px;
+    height: 340px;
     border-radius: 50%;
-    background: rgba(233, 119, 82, 0.08);
-    top: -120px;
-    right: -70px;
+    background: rgba(42, 143, 111, 0.08);
+    top: -140px;
+    left: -100px;
     pointer-events: none;
-  }
-
-  .register-story {
-    position: relative;
-    padding: 2.45rem 2.35rem;
-    color: #ffffff;
-    background: linear-gradient(165deg, #0f766e 0%, #105f58 58%, #0a4a45 100%);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-
-  .register-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.48rem;
-    width: fit-content;
-    padding: 0.48rem 0.82rem;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.16);
-    font-weight: 600;
-    font-size: 0.81rem;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
-  }
-
-  .register-story h2 {
-    font-family: "Sora", sans-serif;
-    font-size: clamp(1.7rem, 3.5vw, 2.3rem);
-    line-height: 1.2;
-    margin: 1.35rem 0 0.85rem;
-  }
-
-  .register-story p {
-    margin: 0;
-    color: rgba(255, 255, 255, 0.88);
-    line-height: 1.6;
-    max-width: 35ch;
-  }
-
-  .register-highlights {
-    margin: 1.8rem 0 0;
-    padding: 0;
-    list-style: none;
-    display: grid;
-    gap: 0.62rem;
-  }
-
-  .register-highlights li {
-    display: flex;
-    align-items: center;
-    gap: 0.55rem;
-    font-weight: 500;
-  }
-
-  .register-highlights i {
-    width: 22px;
-    text-align: center;
-    color: #b7f9ef;
-  }
-
-  .nutrition-meter {
-    margin-top: 1.45rem;
-    border-radius: 14px;
-    padding: 0.9rem;
-    background: rgba(255, 255, 255, 0.14);
-  }
-
-  .nutrition-meter-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.52rem;
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: rgba(255, 255, 255, 0.92);
-  }
-
-  .nutrition-bar {
-    width: 100%;
-    height: 8px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.25);
-    overflow: hidden;
-  }
-
-  .nutrition-bar-fill {
-    width: 76%;
-    height: 100%;
-    border-radius: inherit;
-    background: linear-gradient(90deg, #fff2b7, #ffd08f);
-  }
-
-  .register-story small {
-    margin-top: 1.5rem;
-    display: block;
-    color: rgba(255, 255, 255, 0.72);
-    letter-spacing: 0.012em;
+    z-index: 0;
   }
 
   .register-form-wrap {
@@ -160,18 +66,18 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 2.55rem 2.35rem;
+    padding: 2.55rem 2.45rem 2.5rem;
   }
 
   .register-form-wrap h1 {
     margin: 0;
     color: var(--register-ink);
     font-family: "Sora", sans-serif;
-    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-size: clamp(1.55rem, 3.2vw, 2.05rem);
   }
 
   .register-subtitle {
-    margin: 0.5rem 0 1.35rem;
+    margin: 0.55rem 0 1.35rem;
     color: var(--register-muted);
     line-height: 1.5;
   }
@@ -179,14 +85,14 @@
   .register-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 0.7rem;
+    gap: 0.68rem;
   }
 
   .register-label {
     font-weight: 600;
     color: var(--register-ink);
     margin-bottom: 0.42rem;
-    font-size: 0.94rem;
+    font-size: 0.93rem;
   }
 
   .register-input-group .input-group-text {
@@ -208,8 +114,8 @@
   }
 
   .register-input-group .form-control:focus {
-    border-color: #8fd2ca;
-    box-shadow: 0 0 0 0.22rem rgba(15, 118, 110, 0.14);
+    border-color: #89cfbd;
+    box-shadow: 0 0 0 0.22rem rgba(47, 158, 122, 0.15);
   }
 
   .register-toggle {
@@ -226,17 +132,17 @@
   }
 
   .password-note {
-    margin: 0.35rem 0 0;
+    margin: 0.36rem 0 0;
     font-size: 0.8rem;
     color: #587286;
   }
 
   .register-submit {
-    margin-top: 0.75rem;
+    margin-top: 0.78rem;
     min-height: 47px;
     border: 0;
     border-radius: 12px;
-    background: linear-gradient(120deg, var(--register-secondary), #d95d37);
+    background: linear-gradient(120deg, var(--register-accent), var(--register-accent-strong));
     color: #ffffff;
     font-weight: 700;
     letter-spacing: 0.01em;
@@ -245,18 +151,18 @@
 
   .register-submit:hover {
     transform: translateY(-1px);
-    box-shadow: 0 12px 22px rgba(233, 119, 82, 0.28);
+    box-shadow: 0 12px 22px rgba(239, 111, 81, 0.28);
     color: #ffffff;
   }
 
   .register-links {
-    margin-top: 0.9rem;
+    margin-top: 0.92rem;
     color: var(--register-muted);
     font-size: 0.94rem;
   }
 
   .register-links a {
-    color: #0e6b64;
+    color: var(--register-primary-deep);
     font-weight: 600;
     text-decoration: none;
   }
@@ -265,14 +171,100 @@
     text-decoration: underline;
   }
 
+  .register-visual {
+    position: relative;
+    overflow: hidden;
+    border-radius: 24px;
+    margin: 1rem;
+    min-height: calc(100% - 2rem);
+    background: #dfe9e4;
+  }
+
+  .register-visual img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  .register-visual-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(165deg, rgba(20, 44, 34, 0.22) 0%, rgba(20, 55, 43, 0.72) 62%, rgba(10, 36, 28, 0.88) 100%),
+      linear-gradient(24deg, rgba(239, 111, 81, 0.2) 0%, transparent 40%);
+  }
+
+  .register-visual-content {
+    position: absolute;
+    inset: auto 1.35rem 1.35rem 1.35rem;
+    z-index: 2;
+    color: #ffffff;
+  }
+
+  .register-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    width: fit-content;
+    padding: 0.48rem 0.8rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(3px);
+    font-weight: 600;
+    font-size: 0.81rem;
+    letter-spacing: 0.02em;
+  }
+
+  .register-visual h2 {
+    font-family: "Sora", sans-serif;
+    font-size: clamp(1.7rem, 3.4vw, 2.25rem);
+    line-height: 1.2;
+    margin: 0.92rem 0 0.56rem;
+    max-width: 18ch;
+  }
+
+  .register-visual p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.55;
+    max-width: 42ch;
+    font-size: 0.95rem;
+  }
+
+  .register-highlights {
+    margin: 1rem 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.48rem;
+  }
+
+  .register-highlights li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    font-size: 0.93rem;
+  }
+
+  .register-highlights i {
+    width: 20px;
+    text-align: center;
+    color: #ffd6c6;
+  }
+
   @media (max-width: 991.98px) {
     .register-shell {
       grid-template-columns: 1fr;
       min-height: auto;
     }
 
-    .register-story {
-      border-radius: 0 0 24px 24px;
+    .register-visual {
+      min-height: 360px;
+      margin-bottom: 0;
+      border-radius: 24px 24px 0 0;
     }
 
     .register-form-wrap {
@@ -286,9 +278,22 @@
       gap: 0;
     }
 
-    .register-story,
+    .register-visual {
+      min-height: 320px;
+      margin: 0.7rem 0.7rem 0;
+      border-radius: 18px 18px 0 0;
+    }
+
+    .register-visual-content {
+      inset: auto 1rem 1rem 1rem;
+    }
+
+    .register-visual h2 {
+      font-size: 1.42rem;
+    }
+
     .register-form-wrap {
-      padding: 1.6rem 1.2rem;
+      padding: 1.45rem 1.1rem 1.55rem;
     }
   }
 </style>
@@ -297,35 +302,9 @@
 {% block content %}
 <section class="register-page">
   <div class="register-shell">
-    <aside class="register-story">
-      <div>
-        <span class="register-pill"><i class="fas fa-seedling"></i> Nutrition Journey</span>
-        <h2>Create your profile and start your diet plan with guided insights.</h2>
-        <p>
-          Your account helps the system personalize recommendations around BMI, goal matching,
-          and sustainable food choices.
-        </p>
-        <ul class="register-highlights">
-          <li><i class="fas fa-check-circle"></i> Personalized nutrition path</li>
-          <li><i class="fas fa-check-circle"></i> Goal-based meal recommendations</li>
-          <li><i class="fas fa-check-circle"></i> Progress-aware dashboard tools</li>
-        </ul>
-        <div class="nutrition-meter">
-          <div class="nutrition-meter-header">
-            <span>Diet readiness</span>
-            <span>76%</span>
-          </div>
-          <div class="nutrition-bar">
-            <div class="nutrition-bar-fill"></div>
-          </div>
-        </div>
-      </div>
-      <small>Healthy habits are easier when your plan is structured.</small>
-    </aside>
-
     <div class="register-form-wrap">
       <h1>Create Account</h1>
-      <p class="register-subtitle">Join Diet Expert to access your nutrition and diet dashboard.</p>
+      <p class="register-subtitle">Join Diet Expert and unlock your personalized nutrition workspace.</p>
 
       <form method="POST" action="{{ url_for('auth.register') }}" novalidate>
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
@@ -433,9 +412,8 @@
             </div>
           </div>
         </div>
-        <p class="password-note">
-          Use at least 8 characters with letters and numbers for better security.
-        </p>
+
+        <p class="password-note">Use at least 8 characters with letters and numbers for better security.</p>
 
         <button type="submit" class="btn register-submit w-100">
           <i class="fas fa-user-plus me-2"></i>Create My Account
@@ -450,6 +428,24 @@
         <a href="{{ url_for('main.home') }}">Back to homepage</a>
       </p>
     </div>
+
+    <aside class="register-visual">
+      <img
+        src="{{ url_for('main.images', filename='public/woman.png') }}"
+        alt="Healthy woman with nutrition lifestyle"
+      />
+      <div class="register-visual-overlay"></div>
+      <div class="register-visual-content">
+        <span class="register-pill"><i class="fas fa-seedling"></i> Nutrition and Diet</span>
+        <h2>Start your healthy profile with one simple registration.</h2>
+        <p>Set up your account and access a structured space for diet goals, BMI tracking, and better choices.</p>
+        <ul class="register-highlights">
+          <li><i class="fas fa-check-circle"></i> Personalized diet journey</li>
+          <li><i class="fas fa-check-circle"></i> Goal-focused recommendations</li>
+          <li><i class="fas fa-check-circle"></i> Progress-ready dashboard access</li>
+        </ul>
+      </div>
+    </aside>
   </div>
 </section>
 {% endblock %}
