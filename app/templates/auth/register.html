@@ -1,89 +1,478 @@
 {% extends "layouts/base.html" %}
+{% block title %}Register | Diet Expert{% endblock %}
 
-{% block title %}Sign Up{% endblock %}
+{% block extra_css %}
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Sora:wght@600;700&display=swap"
+  rel="stylesheet"
+/>
+<style>
+  :root {
+    --register-primary: #0f766e;
+    --register-primary-soft: #d9faf3;
+    --register-secondary: #e97752;
+    --register-ink: #132630;
+    --register-muted: #5f7281;
+    --register-border: #d7e2e8;
+    --register-bg-a: #fff8f3;
+    --register-bg-b: #eaf8f5;
+  }
+
+  body {
+    font-family: "DM Sans", sans-serif;
+    background:
+      radial-gradient(circle at 12% 10%, #ffd9ca 0%, transparent 35%),
+      radial-gradient(circle at 90% 90%, #c5f4e8 0%, transparent 32%),
+      linear-gradient(140deg, var(--register-bg-a), var(--register-bg-b));
+  }
+
+  .register-page {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .register-shell {
+    position: relative;
+    overflow: hidden;
+    border-radius: 28px;
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    min-height: 690px;
+    background: #ffffff;
+    box-shadow: 0 24px 60px rgba(17, 24, 39, 0.16);
+  }
+
+  .register-shell::before {
+    content: "";
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: rgba(233, 119, 82, 0.08);
+    top: -120px;
+    right: -70px;
+    pointer-events: none;
+  }
+
+  .register-story {
+    position: relative;
+    padding: 2.45rem 2.35rem;
+    color: #ffffff;
+    background: linear-gradient(165deg, #0f766e 0%, #105f58 58%, #0a4a45 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .register-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.48rem;
+    width: fit-content;
+    padding: 0.48rem 0.82rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.16);
+    font-weight: 600;
+    font-size: 0.81rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  .register-story h2 {
+    font-family: "Sora", sans-serif;
+    font-size: clamp(1.7rem, 3.5vw, 2.3rem);
+    line-height: 1.2;
+    margin: 1.35rem 0 0.85rem;
+  }
+
+  .register-story p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.88);
+    line-height: 1.6;
+    max-width: 35ch;
+  }
+
+  .register-highlights {
+    margin: 1.8rem 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.62rem;
+  }
+
+  .register-highlights li {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-weight: 500;
+  }
+
+  .register-highlights i {
+    width: 22px;
+    text-align: center;
+    color: #b7f9ef;
+  }
+
+  .nutrition-meter {
+    margin-top: 1.45rem;
+    border-radius: 14px;
+    padding: 0.9rem;
+    background: rgba(255, 255, 255, 0.14);
+  }
+
+  .nutrition-meter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.52rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  .nutrition-bar {
+    width: 100%;
+    height: 8px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.25);
+    overflow: hidden;
+  }
+
+  .nutrition-bar-fill {
+    width: 76%;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #fff2b7, #ffd08f);
+  }
+
+  .register-story small {
+    margin-top: 1.5rem;
+    display: block;
+    color: rgba(255, 255, 255, 0.72);
+    letter-spacing: 0.012em;
+  }
+
+  .register-form-wrap {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2.55rem 2.35rem;
+  }
+
+  .register-form-wrap h1 {
+    margin: 0;
+    color: var(--register-ink);
+    font-family: "Sora", sans-serif;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+  }
+
+  .register-subtitle {
+    margin: 0.5rem 0 1.35rem;
+    color: var(--register-muted);
+    line-height: 1.5;
+  }
+
+  .register-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.7rem;
+  }
+
+  .register-label {
+    font-weight: 600;
+    color: var(--register-ink);
+    margin-bottom: 0.42rem;
+    font-size: 0.94rem;
+  }
+
+  .register-input-group .input-group-text {
+    border: 1px solid var(--register-border);
+    border-right: 0;
+    background: #f9fbfc;
+    color: #527287;
+  }
+
+  .register-input-group .form-control {
+    border: 1px solid var(--register-border);
+    border-left: 0;
+    min-height: 46px;
+  }
+
+  .register-input-group .form-control,
+  .register-input-group .input-group-text {
+    border-radius: 12px;
+  }
+
+  .register-input-group .form-control:focus {
+    border-color: #8fd2ca;
+    box-shadow: 0 0 0 0.22rem rgba(15, 118, 110, 0.14);
+  }
+
+  .register-toggle {
+    border: 1px solid var(--register-border);
+    border-left: 0;
+    background: #f9fbfc;
+    border-radius: 0 12px 12px 0;
+    color: #5f7281;
+  }
+
+  .register-toggle:hover {
+    background: #eef5f8;
+    color: #264255;
+  }
+
+  .password-note {
+    margin: 0.35rem 0 0;
+    font-size: 0.8rem;
+    color: #587286;
+  }
+
+  .register-submit {
+    margin-top: 0.75rem;
+    min-height: 47px;
+    border: 0;
+    border-radius: 12px;
+    background: linear-gradient(120deg, var(--register-secondary), #d95d37);
+    color: #ffffff;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .register-submit:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 22px rgba(233, 119, 82, 0.28);
+    color: #ffffff;
+  }
+
+  .register-links {
+    margin-top: 0.9rem;
+    color: var(--register-muted);
+    font-size: 0.94rem;
+  }
+
+  .register-links a {
+    color: #0e6b64;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .register-links a:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 991.98px) {
+    .register-shell {
+      grid-template-columns: 1fr;
+      min-height: auto;
+    }
+
+    .register-story {
+      border-radius: 0 0 24px 24px;
+    }
+
+    .register-form-wrap {
+      padding-top: 2rem;
+    }
+  }
+
+  @media (max-width: 575.98px) {
+    .register-grid {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    .register-story,
+    .register-form-wrap {
+      padding: 1.6rem 1.2rem;
+    }
+  }
+</style>
+{% endblock %}
 
 {% block content %}
-
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card shadow-sm border-0">
-            <div class="card-header bg-success text-white">
-                <h4 class="mb-0">Create a New Account</h4>
-            </div>
-            <div class="card-body">
-                <form method="POST" action="{{ url_for('auth.register') }}">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-
-                    <div class="mb-3">
-                        <label for="username" class="form-label">Username</label>
-                        <input 
-                        type="text"
-                        class="form-control"
-                        id="username"
-                        name="username"
-                        placeholder="Choose a username"
-                        value="{{ username or '' }}"
-                        required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input 
-                        type="email"
-                        class="form-control"
-                        id="email"
-                        name="email"
-                        placeholder="Your email address"
-                        value="{{ email or '' }}"
-                        required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="full_name" class="form-label">Full Name</label>
-                        <input 
-                        type="text"
-                        class="form-control"
-                        id="full_name"
-                        name="full_name"
-                        placeholder="Your full name"
-                        value="{{ full_name or '' }}"
-                        required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input 
-                        type="password"
-                        class="form-control"
-                        id="password"
-                        name="password"
-                        placeholder="Enter a strong password"
-                        required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="confirm_password" class="form-label">Confirm Password</label>
-                        <input 
-                        type="password"
-                        class="form-control"
-                        id="confirm_password"
-                        name="confirm_password"
-                        placeholder="Re-enter your password"
-                        required>
-                    </div>
-
-                    <div class="d-grid mb-3">
-                        <button type="submit" class="btn btn-success">Sign Up</button>
-                    </div>
-                </form>
-
-                <hr>
-                <p class="mb-0 small text-center">
-                    Already have an account?
-                    <a href="{{ url_for('auth.login') }}">Log In</a>
-                </p>
-            </div>
+<section class="register-page">
+  <div class="register-shell">
+    <aside class="register-story">
+      <div>
+        <span class="register-pill"><i class="fas fa-seedling"></i> Nutrition Journey</span>
+        <h2>Create your profile and start your diet plan with guided insights.</h2>
+        <p>
+          Your account helps the system personalize recommendations around BMI, goal matching,
+          and sustainable food choices.
+        </p>
+        <ul class="register-highlights">
+          <li><i class="fas fa-check-circle"></i> Personalized nutrition path</li>
+          <li><i class="fas fa-check-circle"></i> Goal-based meal recommendations</li>
+          <li><i class="fas fa-check-circle"></i> Progress-aware dashboard tools</li>
+        </ul>
+        <div class="nutrition-meter">
+          <div class="nutrition-meter-header">
+            <span>Diet readiness</span>
+            <span>76%</span>
+          </div>
+          <div class="nutrition-bar">
+            <div class="nutrition-bar-fill"></div>
+          </div>
         </div>
+      </div>
+      <small>Healthy habits are easier when your plan is structured.</small>
+    </aside>
+
+    <div class="register-form-wrap">
+      <h1>Create Account</h1>
+      <p class="register-subtitle">Join Diet Expert to access your nutrition and diet dashboard.</p>
+
+      <form method="POST" action="{{ url_for('auth.register') }}" novalidate>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+        <div class="register-grid">
+          <div class="mb-3">
+            <label for="username" class="form-label register-label">Username</label>
+            <div class="input-group register-input-group">
+              <span class="input-group-text"><i class="fas fa-user"></i></span>
+              <input
+                type="text"
+                class="form-control"
+                id="username"
+                name="username"
+                placeholder="Choose a username"
+                value="{{ username or '' }}"
+                autocomplete="username"
+                required
+                autofocus
+              />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="full_name" class="form-label register-label">Full Name</label>
+            <div class="input-group register-input-group">
+              <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+              <input
+                type="text"
+                class="form-control"
+                id="full_name"
+                name="full_name"
+                placeholder="Your full name"
+                value="{{ full_name or '' }}"
+                autocomplete="name"
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label register-label">Email</label>
+          <div class="input-group register-input-group">
+            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              name="email"
+              placeholder="you@example.com"
+              value="{{ email or '' }}"
+              autocomplete="email"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="register-grid">
+          <div class="mb-2">
+            <label for="password" class="form-label register-label">Password</label>
+            <div class="input-group register-input-group">
+              <span class="input-group-text"><i class="fas fa-lock"></i></span>
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                name="password"
+                placeholder="Create password"
+                autocomplete="new-password"
+                required
+              />
+              <button
+                type="button"
+                class="btn register-toggle"
+                id="passwordToggle"
+                aria-label="Show or hide password"
+              >
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="mb-2">
+            <label for="confirm_password" class="form-label register-label">Confirm Password</label>
+            <div class="input-group register-input-group">
+              <span class="input-group-text"><i class="fas fa-shield-halved"></i></span>
+              <input
+                type="password"
+                class="form-control"
+                id="confirm_password"
+                name="confirm_password"
+                placeholder="Re-enter password"
+                autocomplete="new-password"
+                required
+              />
+              <button
+                type="button"
+                class="btn register-toggle"
+                id="confirmPasswordToggle"
+                aria-label="Show or hide confirm password"
+              >
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <p class="password-note">
+          Use at least 8 characters with letters and numbers for better security.
+        </p>
+
+        <button type="submit" class="btn register-submit w-100">
+          <i class="fas fa-user-plus me-2"></i>Create My Account
+        </button>
+      </form>
+
+      <p class="register-links mb-1">
+        Already have an account?
+        <a href="{{ url_for('auth.login') }}">Sign in</a>
+      </p>
+      <p class="register-links mb-0">
+        <a href="{{ url_for('main.home') }}">Back to homepage</a>
+      </p>
     </div>
-</div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    function setupPasswordToggle(inputId, buttonId) {
+      const input = document.getElementById(inputId);
+      const button = document.getElementById(buttonId);
+      if (!input || !button) return;
+
+      button.addEventListener("click", function () {
+        const isPassword = input.type === "password";
+        input.type = isPassword ? "text" : "password";
+        button.innerHTML = isPassword
+          ? '<i class="fas fa-eye-slash"></i>'
+          : '<i class="fas fa-eye"></i>';
+      });
+    }
+
+    setupPasswordToggle("password", "passwordToggle");
+    setupPasswordToggle("confirm_password", "confirmPasswordToggle");
+  });
+</script>
 {% endblock %}
