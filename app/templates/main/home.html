@@ -2,342 +2,799 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Dietfit - Eating Diet Salad</title>
+  <title>Diet Expert System</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="A nutrition expert system for BMI checks, goal matching, diet rules, and guided healthy planning."
+  />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Sora:wght@600;700&display=swap"
+    rel="stylesheet"
+  />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --pink: #e91e8c;
-      --pink-light: #fef0f7;
+      --brand: #ef6f51;
+      --brand-strong: #d95435;
+      --brand-soft: #ffe8df;
+      --accent: #2f9e7a;
+      --ink: #1b2531;
+      --ink-soft: #576473;
+      --line: #dfe7ec;
+      --card: #ffffff;
+      --bg-a: #fff8f3;
+      --bg-b: #edf7f2;
+      --bg-c: #ecf4ff;
     }
 
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html,
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #fff;
-      overflow-x: hidden;
-      min-height: 100vh;
+      margin: 0;
+      min-height: 100%;
+      font-family: "Manrope", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 5% 14%, #ffd8c8 0%, transparent 34%),
+        radial-gradient(circle at 95% 8%, #d9f4ea 0%, transparent 30%),
+        linear-gradient(130deg, var(--bg-a) 0%, var(--bg-b) 44%, var(--bg-c) 100%);
     }
 
-    /* ── NAVBAR ────────────────────────────────────────── */
-    .df-navbar {
+    .site-wrap {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 1.1rem 1.2rem 2.5rem;
+    }
+
+    .site-nav {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 1.1rem 3rem;
-      background: #fff;
+      gap: 1rem;
+      padding: 0.55rem 0;
     }
 
-    .df-nav-links {
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-family: "Sora", sans-serif;
+      font-weight: 700;
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    .brand img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+      border-radius: 10px;
+      background: #fff;
+      padding: 0.35rem;
+      box-shadow: 0 8px 16px rgba(27, 37, 49, 0.12);
+    }
+
+    .site-menu {
       display: flex;
       align-items: center;
-      gap: 2.2rem;
-      list-style: none;
+      gap: 0.55rem;
       margin: 0;
+      padding: 0;
+      list-style: none;
     }
 
-    .df-nav-links a {
-      text-decoration: none;
-      color: #555;
-      font-weight: 500;
-      font-size: 0.97rem;
-      transition: color 0.2s;
-    }
-
-    .df-nav-links a:hover { color: var(--pink); }
-
-    .df-nav-links li.active a {
-      background: var(--pink);
-      color: #fff;
-      padding: 0.48rem 1.5rem;
+    .site-menu a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
       border-radius: 999px;
+      padding: 0.5rem 0.95rem;
+      color: #2d3a45;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.93rem;
+      transition: background-color 0.2s ease, color 0.2s ease;
     }
 
-    .df-btn-support {
+    .site-menu a:hover {
+      background: #ffffff;
+      color: var(--brand-strong);
+    }
+
+    .site-menu-wrap {
       display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .mobile-toggle {
+      display: none;
+      border: 0;
+      border-radius: 10px;
+      width: 42px;
+      height: 42px;
+      background: #ffffff;
+      color: var(--ink);
+      box-shadow: 0 8px 16px rgba(27, 37, 49, 0.12);
+    }
+
+    .nav-cta {
+      display: inline-flex;
       align-items: center;
       gap: 0.45rem;
-      background: var(--pink);
-      color: #fff;
-      padding: 0.5rem 1.35rem;
+      padding: 0.56rem 1.05rem;
       border-radius: 999px;
       text-decoration: none;
-      font-weight: 600;
-      font-size: 0.95rem;
-      transition: opacity 0.2s;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #ffffff;
+      background: linear-gradient(130deg, var(--brand), var(--brand-strong));
+      box-shadow: 0 12px 18px rgba(217, 84, 53, 0.25);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .df-btn-support:hover { opacity: 0.88; color: #fff; }
-
-    /* ── HERO ──────────────────────────────────────────── */
-    .df-hero {
-      display: grid;
-      grid-template-columns: 420px 1fr;
-      min-height: calc(100vh - 76px);
-      align-items: center;
-      position: relative;
-      overflow: hidden;
-      padding: 0 0 0 3rem;
-    }
-
-    /* Decorative pink blobs / food doodles */
-    .df-deco {
-      position: absolute;
-      pointer-events: none;
-      color: var(--pink);
-      opacity: 0.13;
-    }
-
-    .df-deco-carrot {
-      top: 3.5rem;
-      left: 48%;
-      font-size: 3.8rem;
-      transform: rotate(-28deg);
-    }
-
-    .df-deco-leaf1 {
-      top: 1.5rem;
-      right: 3rem;
-      font-size: 2.2rem;
-      transform: rotate(15deg);
-    }
-
-    .df-deco-leaf2 {
-      bottom: 2rem;
-      left: 2rem;
-      font-size: 1.8rem;
-      transform: rotate(-10deg);
-    }
-
-    .df-deco-circle {
-      position: absolute;
-      width: 320px;
-      height: 320px;
-      border-radius: 50%;
-      border: 1.5px solid var(--pink);
-      opacity: 0.06;
-      top: -60px;
-      left: -80px;
-      pointer-events: none;
-    }
-
-    /* ── LEFT COLUMN ───────────────────────────────────── */
-    .df-hero-left {
-      position: relative;
-      z-index: 2;
-      padding: 3rem 0;
-    }
-
-    .df-hero-title {
-      font-size: clamp(3.5rem, 5.5vw, 5rem);
-      font-weight: 800;
-      color: var(--pink);
-      line-height: 1.05;
-      margin-bottom: 0.65rem;
-    }
-
-    .df-hero-subtitle {
-      font-size: 1.22rem;
-      color: #2d2d2d;
-      font-weight: 600;
-      margin-bottom: 0.75rem;
-    }
-
-    .df-hero-desc {
-      font-size: 0.875rem;
-      color: #999;
-      line-height: 1.65;
-      margin-bottom: 1.65rem;
-      max-width: 34ch;
-    }
-
-    .df-hero-actions {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      margin-bottom: 2.4rem;
-    }
-
-    .df-btn-login,
-    .df-btn-register {
-      padding: 0.6rem 1.9rem;
-      border-radius: 999px;
-      font-weight: 600;
-      font-size: 0.95rem;
-      text-decoration: none;
-      display: inline-block;
-      transition: opacity 0.2s, transform 0.15s;
-    }
-
-    .df-btn-login {
-      background: rgba(233, 30, 140, 0.18);
-      color: var(--pink);
-      border: 1.5px solid var(--pink);
-    }
-
-    .df-btn-register {
-      background: var(--pink);
-      color: #fff;
-      border: 1.5px solid var(--pink);
-    }
-
-    .df-btn-login:hover,
-    .df-btn-register:hover {
-      opacity: 0.85;
+    .nav-cta:hover {
       transform: translateY(-1px);
-      color: inherit;
+      box-shadow: 0 16px 24px rgba(217, 84, 53, 0.3);
+      color: #ffffff;
     }
 
-    .df-btn-register:hover { color: #fff; }
-
-    /* Social icons */
-    .df-social {
-      display: flex;
-      gap: 0.7rem;
-    }
-
-    .df-social a {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      border: 1.5px solid #ddd;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #777;
-      text-decoration: none;
-      font-size: 0.82rem;
-      transition: border-color 0.2s, color 0.2s;
-    }
-
-    .df-social a:hover {
-      border-color: var(--pink);
-      color: var(--pink);
-    }
-
-    /* ── RIGHT COLUMN – PHOTO ──────────────────────────── */
-    .df-hero-right {
-      position: relative;
-      height: 100%;
-      min-height: calc(100vh - 76px);
-      display: flex;
+    .hero {
+      margin-top: 1.1rem;
+      display: grid;
+      grid-template-columns: 1.02fr 0.98fr;
+      gap: 1.2rem;
       align-items: stretch;
     }
 
-    .df-photo-wrap {
-      flex: 1;
-      margin-left: 2.5rem;
-      border-radius: 40px 0 0 40px;
-      overflow: hidden;
-      background: #f0ede8;
-      position: relative;
+    .hero-copy,
+    .hero-panel {
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid rgba(255, 255, 255, 0.74);
+      border-radius: 28px;
+      box-shadow: 0 20px 44px rgba(27, 37, 49, 0.12);
+      backdrop-filter: blur(6px);
     }
 
-    .df-photo-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center top;
+    .hero-copy {
+      padding: clamp(1.45rem, 3.8vw, 2.4rem);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1rem;
+      animation: rise-in 0.72s ease-out;
+    }
+
+    .eyebrow {
+      width: fit-content;
+      border-radius: 999px;
+      background: var(--brand-soft);
+      color: var(--brand-strong);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      padding: 0.42rem 0.8rem;
+      font-size: 0.79rem;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-family: "Sora", sans-serif;
+      font-size: clamp(2rem, 5.5vw, 3.25rem);
+      line-height: 1.07;
+      max-width: 14ch;
+      color: #162028;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--ink-soft);
+      max-width: 56ch;
+      line-height: 1.66;
+      font-size: 1rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      margin-top: 0.3rem;
+    }
+
+    .btn-main,
+    .btn-subtle {
+      text-decoration: none;
+      border-radius: 999px;
+      padding: 0.72rem 1.12rem;
+      font-weight: 700;
+      font-size: 0.94rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    }
+
+    .btn-main {
+      color: #fff;
+      background: linear-gradient(130deg, var(--brand), var(--brand-strong));
+      box-shadow: 0 14px 24px rgba(217, 84, 53, 0.24);
+    }
+
+    .btn-main:hover {
+      transform: translateY(-1px);
+      color: #fff;
+    }
+
+    .btn-subtle {
+      color: #264254;
+      background: #ffffff;
+      border: 1px solid var(--line);
+    }
+
+    .btn-subtle:hover {
+      background: #f6fafb;
+      color: #193243;
+    }
+
+    .trust-grid {
+      margin-top: 1rem;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.75rem;
+    }
+
+    .trust-item {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 0.7rem 0.82rem;
+    }
+
+    .trust-item strong {
       display: block;
+      font-size: 1.05rem;
+      color: #123346;
     }
 
-    /* Small decorative food elements on the photo */
-    .df-photo-deco {
+    .trust-item span {
+      font-size: 0.82rem;
+      color: var(--ink-soft);
+    }
+
+    .hero-panel {
+      position: relative;
+      overflow: hidden;
+      padding: 1rem;
+      animation: rise-in 0.86s ease-out;
+      animation-delay: 0.08s;
+      animation-fill-mode: both;
+    }
+
+    .hero-photo {
+      width: 100%;
+      min-height: 100%;
+      border-radius: 22px;
+      object-fit: cover;
+      background: #f3efea;
+    }
+
+    .hero-floating {
       position: absolute;
-      pointer-events: none;
-      font-size: 2rem;
-      opacity: 0.85;
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 12px 24px rgba(27, 37, 49, 0.16);
+      padding: 0.6rem 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      backdrop-filter: blur(4px);
+      animation: floaty 4.4s ease-in-out infinite;
     }
 
-    .df-photo-deco-1 {
-      top: 1.2rem;
-      right: 2rem;
-      transform: rotate(10deg);
+    .hero-floating i {
+      width: 28px;
+      height: 28px;
+      border-radius: 9px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      background: var(--accent);
+      font-size: 0.84rem;
     }
 
-    .df-photo-deco-2 {
-      bottom: 1.5rem;
-      right: 1.5rem;
-      font-size: 1.5rem;
-      transform: rotate(-15deg);
+    .hero-floating strong {
+      display: block;
+      font-size: 0.88rem;
+      color: #173042;
+      line-height: 1.2;
+    }
+
+    .hero-floating span {
+      display: block;
+      font-size: 0.78rem;
+      color: #5b6d7c;
+      line-height: 1.2;
+    }
+
+    .float-a {
+      top: 1.3rem;
+      left: 1.3rem;
+    }
+
+    .float-b {
+      right: 1.3rem;
+      bottom: 1.6rem;
+      animation-delay: 0.7s;
+    }
+
+    .section-title {
+      margin: 3rem 0 0.95rem;
+      font-family: "Sora", sans-serif;
+      font-size: clamp(1.35rem, 3vw, 1.9rem);
+      color: #1a2530;
+    }
+
+    .section-subtitle {
+      color: var(--ink-soft);
+      margin: 0 0 1.2rem;
+      max-width: 65ch;
+    }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.85rem;
+    }
+
+    .tool-card {
+      text-decoration: none;
+      color: inherit;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 1rem;
+      box-shadow: 0 12px 22px rgba(27, 37, 49, 0.08);
+      transform: translateY(14px);
+      opacity: 0;
+      transition: transform 0.45s ease, box-shadow 0.2s ease, border-color 0.2s ease, opacity 0.45s ease;
+    }
+
+    .tool-card.is-visible {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .tool-card:hover {
+      border-color: #bcd1db;
+      box-shadow: 0 16px 26px rgba(27, 37, 49, 0.13);
+    }
+
+    .tool-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--brand-soft);
+      color: var(--brand-strong);
+      margin-bottom: 0.7rem;
+    }
+
+    .tool-card h3 {
+      margin: 0 0 0.45rem;
+      font-size: 1.02rem;
+      font-family: "Sora", sans-serif;
+      color: #162835;
+    }
+
+    .tool-card p {
+      margin: 0;
+      font-size: 0.92rem;
+      color: var(--ink-soft);
+      line-height: 1.55;
+    }
+
+    .steps {
+      margin-top: 2.3rem;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.85rem;
+    }
+
+    .step {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 1rem;
+    }
+
+    .step-index {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), #25795f);
+      margin-bottom: 0.65rem;
+    }
+
+    .step h4 {
+      font-size: 1rem;
+      margin: 0 0 0.45rem;
+      color: #162835;
+      font-family: "Sora", sans-serif;
+    }
+
+    .step p {
+      margin: 0;
+      font-size: 0.92rem;
+      color: var(--ink-soft);
+      line-height: 1.55;
+    }
+
+    .bottom-cta {
+      margin-top: 2.5rem;
+      background: linear-gradient(130deg, #153345, #1f566b);
+      color: #fff;
+      border-radius: 24px;
+      padding: clamp(1.2rem, 3vw, 2rem);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .bottom-cta h3 {
+      margin: 0 0 0.35rem;
+      font-family: "Sora", sans-serif;
+      font-size: clamp(1.2rem, 2.8vw, 1.8rem);
+    }
+
+    .bottom-cta p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.84);
+      max-width: 62ch;
+    }
+
+    .bottom-cta a {
+      text-decoration: none;
+      border-radius: 999px;
+      padding: 0.72rem 1.2rem;
+      font-weight: 700;
+      color: #143040;
+      background: #fff8f1;
+    }
+
+    .bottom-cta a:hover {
+      color: #0f2735;
+      background: #ffffff;
+    }
+
+    .page-footer {
+      margin-top: 1.6rem;
+      text-align: center;
+      color: #5d6f7c;
+      font-size: 0.84rem;
+    }
+
+    @keyframes rise-in {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes floaty {
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-6px);
+      }
+    }
+
+    @media (max-width: 991.98px) {
+      .mobile-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .site-menu-wrap {
+        display: none;
+        width: 100%;
+      }
+
+      .site-menu-wrap.is-open {
+        display: block;
+      }
+
+      .site-nav {
+        flex-wrap: wrap;
+      }
+
+      .site-menu {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.35rem;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 14px;
+        padding: 0.8rem;
+        border: 1px solid var(--line);
+        margin-top: 0.55rem;
+      }
+
+      .nav-cta {
+        margin-top: 0.6rem;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-panel {
+        min-height: 430px;
+      }
+
+      .tool-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .steps {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 575.98px) {
+      .site-wrap {
+        padding: 0.9rem 0.82rem 1.8rem;
+      }
+
+      .hero-copy,
+      .hero-panel {
+        border-radius: 20px;
+      }
+
+      .hero-panel {
+        min-height: 330px;
+      }
+
+      .hero-floating {
+        display: none;
+      }
+
+      .trust-grid,
+      .tool-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
+  <div class="site-wrap">
+    <header>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a class="brand" href="{{ url_for('main.home') }}">
+          <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Diet Expert logo" />
+          <span>Diet Expert</span>
+        </a>
 
-  <!-- ── NAVBAR ── -->
-  <nav class="df-navbar">
-    <a href="{{ url_for('main.home') }}">
-      <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Dietfit Logo" style="height:42px; width:auto;" />
-    </a>
+        <button class="mobile-toggle" type="button" id="mobileMenuToggle" aria-label="Toggle navigation menu">
+          <i class="fas fa-bars"></i>
+        </button>
 
-    <ul class="df-nav-links">
-      <li class="active"><a href="{{ url_for('main.home') }}">Home</a></li>
-      <li><a href="#">Recipes</a></li>
-      <li><a href="#">Blog</a></li>
-      <li><a href="#">Contact Us</a></li>
-    </ul>
+        <div class="site-menu-wrap" id="siteMenuWrap">
+          <ul class="site-menu">
+            <li><a href="{{ url_for('main.home') }}"><i class="fas fa-house"></i>Home</a></li>
+            <li><a href="{{ url_for('main.bmi') }}"><i class="fas fa-calculator"></i>BMI</a></li>
+            <li><a href="{{ url_for('main.match') }}"><i class="fas fa-bullseye"></i>Goal Match</a></li>
+            <li><a href="{{ url_for('main.rules') }}"><i class="fas fa-list-check"></i>Rules</a></li>
+            <li><a href="{{ url_for('main.qa') }}"><i class="fas fa-circle-question"></i>Q and A</a></li>
+          </ul>
+          {% if current_user.is_authenticated %}
+          <a class="nav-cta" href="{{ url_for('dashboard.dashboard_home') }}">
+            <i class="fas fa-gauge-high"></i>Open Dashboard
+          </a>
+          {% else %}
+          <a class="nav-cta" href="{{ url_for('auth.login') }}">
+            <i class="fas fa-right-to-bracket"></i>Log In
+          </a>
+          {% endif %}
+        </div>
+      </nav>
+    </header>
 
-    <a href="#" class="df-btn-support">
-      <i class="fas fa-headset"></i> Support
-    </a>
-  </nav>
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <span class="eyebrow">Nutrition Guidance Platform</span>
+          <h1>Build smarter diet decisions with practical daily tools.</h1>
+          <p>
+            This expert system helps you assess BMI, match your goals with diet logic, and explore
+            food recommendations designed for consistent and healthy progress.
+          </p>
 
-  <!-- ── HERO ── -->
-  <section class="df-hero">
+          <div class="hero-actions">
+            {% if current_user.is_authenticated %}
+            <a class="btn-main" href="{{ url_for('dashboard.dashboard_home') }}">
+              <i class="fas fa-chart-line"></i>Go to Dashboard
+            </a>
+            {% else %}
+            <a class="btn-main" href="{{ url_for('auth.register') }}">
+              <i class="fas fa-user-plus"></i>Create Account
+            </a>
+            <a class="btn-subtle" href="{{ url_for('auth.login') }}">
+              <i class="fas fa-right-to-bracket"></i>Sign In
+            </a>
+            {% endif %}
+            <a class="btn-subtle" href="{{ url_for('main.match') }}">
+              <i class="fas fa-compass"></i>Try Goal Match
+            </a>
+          </div>
 
-    <!-- Decorative elements -->
-    <div class="df-deco-circle"></div>
-    <span class="df-deco df-deco-carrot">🥕</span>
-    <span class="df-deco df-deco-leaf1">🍃</span>
-    <span class="df-deco df-deco-leaf2">🍃</span>
+          <div class="trust-grid">
+            <div class="trust-item">
+              <strong>BMI Check</strong>
+              <span>Quick health status input</span>
+            </div>
+            <div class="trust-item">
+              <strong>Diet Rules</strong>
+              <span>Structured recommendations</span>
+            </div>
+            <div class="trust-item">
+              <strong>Goal Focused</strong>
+              <span>Plans aligned to your intent</span>
+            </div>
+          </div>
+        </div>
 
-    <!-- Left column -->
-    <div class="df-hero-left">
-      <h1 class="df-hero-title">
-        Eating<br>
-        Diet<br>
-        Salad
-      </h1>
+        <div class="hero-panel">
+          <img
+            class="hero-photo"
+            src="{{ url_for('static', filename='images/woman.png') }}"
+            alt="Healthy food lifestyle"
+          />
+          <div class="hero-floating float-a">
+            <i class="fas fa-apple-whole"></i>
+            <div>
+              <strong>Balanced Choices</strong>
+              <span>Nutrition-first recommendations</span>
+            </div>
+          </div>
+          <div class="hero-floating float-b">
+            <i class="fas fa-shield-heart"></i>
+            <div>
+              <strong>Track Outcomes</strong>
+              <span>See progress over time</span>
+            </div>
+          </div>
+        </div>
+      </section>
 
-      <p class="df-hero-subtitle">Clean food, good life</p>
+      <section>
+        <h2 class="section-title">Core Tools</h2>
+        <p class="section-subtitle">
+          Open the modules below to move from assessment to action in one workflow.
+        </p>
+        <div class="tool-grid" id="toolGrid">
+          <a class="tool-card" href="{{ url_for('main.bmi') }}">
+            <span class="tool-icon"><i class="fas fa-calculator"></i></span>
+            <h3>BMI Calculator</h3>
+            <p>Measure body mass index and immediately view your category.</p>
+          </a>
+          <a class="tool-card" href="{{ url_for('main.match') }}">
+            <span class="tool-icon"><i class="fas fa-bullseye"></i></span>
+            <h3>Goal Matcher</h3>
+            <p>Match your target with a suitable diet strategy from the system.</p>
+          </a>
+          <a class="tool-card" href="{{ url_for('main.rules') }}">
+            <span class="tool-icon"><i class="fas fa-list-check"></i></span>
+            <h3>Diet Rules</h3>
+            <p>Browse expert rules and rule-based meal recommendation logic.</p>
+          </a>
+          <a class="tool-card" href="{{ url_for('main.qa') }}">
+            <span class="tool-icon"><i class="fas fa-comments"></i></span>
+            <h3>Nutrition Q and A</h3>
+            <p>Ask questions and review guided responses from the system.</p>
+          </a>
+        </div>
+      </section>
 
-      <p class="df-hero-desc">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-        do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        Ut enim ad minim veniam, quis nostrud exercitation ullamco
-        laboris nisi ut aliquip ex ea commodo consequat.
-      </p>
+      <section>
+        <h2 class="section-title">How It Works</h2>
+        <p class="section-subtitle">
+          A simple three-step process to make your plan practical and repeatable.
+        </p>
+        <div class="steps">
+          <article class="step">
+            <span class="step-index">1</span>
+            <h4>Assess Your Baseline</h4>
+            <p>Start with BMI and your health goals so the system has a clear context.</p>
+          </article>
+          <article class="step">
+            <span class="step-index">2</span>
+            <h4>Get Rule-Based Suggestions</h4>
+            <p>Review diet recommendations generated from validated rules and goal matching.</p>
+          </article>
+          <article class="step">
+            <span class="step-index">3</span>
+            <h4>Track and Adjust</h4>
+            <p>Use your dashboard to monitor outcomes and refine the plan when needed.</p>
+          </article>
+        </div>
+      </section>
 
-      <div class="df-hero-actions">
-        <a href="{{ url_for('auth.login') }}" class="df-btn-login">Log in</a>
-        <a href="{{ url_for('auth.register') }}" class="df-btn-register">Register</a>
-      </div>
+      <section class="bottom-cta">
+        <div>
+          <h3>Ready to personalize your nutrition plan?</h3>
+          <p>Join now and move from generic advice to role-based, actionable recommendations.</p>
+        </div>
+        {% if current_user.is_authenticated %}
+        <a href="{{ url_for('dashboard.dashboard_home') }}">Open Dashboard</a>
+        {% else %}
+        <a href="{{ url_for('auth.register') }}">Start Free</a>
+        {% endif %}
+      </section>
+    </main>
 
-      <div class="df-social">
-        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-      </div>
-    </div>
+    <footer class="page-footer">
+      <small>&copy; 2026 Diet Expert System</small>
+    </footer>
+  </div>
 
-    <!-- Right column – photo -->
-    <div class="df-hero-right">
-      <div class="df-photo-wrap">
-        <img
-          src="{{ url_for('static', filename='images/woman.png') }}"
-          alt="Woman eating healthy food"
-        />
-        <span class="df-photo-deco df-photo-deco-1">🥦</span>
-        <span class="df-photo-deco df-photo-deco-2">🍅</span>
-      </div>
-    </div>
+  <script>
+    (function () {
+      const toggle = document.getElementById("mobileMenuToggle");
+      const menu = document.getElementById("siteMenuWrap");
+      if (toggle && menu) {
+        toggle.addEventListener("click", function () {
+          menu.classList.toggle("is-open");
+        });
+      }
 
-  </section>
+      const cards = document.querySelectorAll(".tool-card");
+      if (!cards.length || !("IntersectionObserver" in window)) {
+        cards.forEach((card) => card.classList.add("is-visible"));
+        return;
+      }
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+      const io = new IntersectionObserver(
+        (entries, observer) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          });
+        },
+        { threshold: 0.2 }
+      );
+
+      cards.forEach((card, idx) => {
+        card.style.transitionDelay = `${Math.min(idx * 80, 240)}ms`;
+        io.observe(card);
+      });
+    })();
+  </script>
 </body>
 </html>

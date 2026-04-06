@@ -1,68 +1,343 @@
-{% extends "layouts/base.html" %} {% block title %}Login{% endblock %} {% block
-content %}
-<div class="row justify-content-center align-items-center min-vh-50">
-  <div class="col-md-6 col-lg-4">
-    <div class="card shadow-lg border-0 login-card">
-      <div class="card-header bg-gradient-primary text-white text-center py-4">
-        <i class="fas fa-lock fa-3x mb-3"></i>
-        <h4 class="mb-0 fw-bold">Welcome Back</h4>
-        <p class="mb-0 opacity-75">Sign in to your account</p>
+{% extends "layouts/base.html" %}
+{% block title %}Login | Diet Expert{% endblock %}
+
+{% block extra_css %}
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Sora:wght@600;700&display=swap"
+  rel="stylesheet"
+/>
+<style>
+  :root {
+    --login-primary: #0f766e;
+    --login-primary-soft: #ccfbf1;
+    --login-ink: #132630;
+    --login-muted: #5f7281;
+    --login-border: #d7e2e8;
+    --login-bg-a: #fff9f2;
+    --login-bg-b: #e9f8f6;
+  }
+
+  body {
+    font-family: "DM Sans", sans-serif;
+    background:
+      radial-gradient(circle at 10% 20%, #fcdac7 0%, transparent 38%),
+      radial-gradient(circle at 95% 90%, #c6f7eb 0%, transparent 35%),
+      linear-gradient(140deg, var(--login-bg-a), var(--login-bg-b));
+  }
+
+  .login-page {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .login-shell {
+    position: relative;
+    overflow: hidden;
+    border-radius: 28px;
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    min-height: 620px;
+    background: #ffffff;
+    box-shadow: 0 24px 60px rgba(17, 24, 39, 0.16);
+  }
+
+  .login-shell::before {
+    content: "";
+    position: absolute;
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    background: rgba(15, 118, 110, 0.08);
+    top: -120px;
+    right: -80px;
+    pointer-events: none;
+  }
+
+  .login-story {
+    position: relative;
+    padding: 2.6rem 2.4rem;
+    color: #ffffff;
+    background: linear-gradient(165deg, #0f766e 0%, #115e59 56%, #0b4844 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .login-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: fit-content;
+    padding: 0.5rem 0.85rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.16);
+    font-weight: 600;
+    font-size: 0.82rem;
+    letter-spacing: 0.02em;
+  }
+
+  .login-story h2 {
+    font-family: "Sora", sans-serif;
+    font-size: clamp(1.8rem, 3.6vw, 2.35rem);
+    line-height: 1.18;
+    margin: 1.4rem 0 0.8rem;
+  }
+
+  .login-story p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.88);
+    line-height: 1.6;
+    max-width: 34ch;
+  }
+
+  .login-highlights {
+    margin: 1.9rem 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.65rem;
+  }
+
+  .login-highlights li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+  }
+
+  .login-highlights i {
+    width: 22px;
+    text-align: center;
+    color: #b4f8ee;
+  }
+
+  .login-story small {
+    margin-top: 1.8rem;
+    display: block;
+    color: rgba(255, 255, 255, 0.72);
+    letter-spacing: 0.015em;
+  }
+
+  .login-form-wrap {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2.8rem 2.4rem;
+  }
+
+  .login-form-wrap h1 {
+    margin: 0;
+    color: var(--login-ink);
+    font-family: "Sora", sans-serif;
+    font-size: clamp(1.5rem, 3.1vw, 2rem);
+  }
+
+  .login-subtitle {
+    margin: 0.55rem 0 1.6rem;
+    color: var(--login-muted);
+  }
+
+  .login-label {
+    font-weight: 600;
+    color: var(--login-ink);
+    margin-bottom: 0.45rem;
+  }
+
+  .login-input-group .input-group-text {
+    border: 1px solid var(--login-border);
+    border-right: 0;
+    background: #f9fbfc;
+    color: #527287;
+  }
+
+  .login-input-group .form-control {
+    border: 1px solid var(--login-border);
+    border-left: 0;
+    min-height: 48px;
+  }
+
+  .login-input-group .form-control,
+  .login-input-group .input-group-text {
+    border-radius: 12px;
+  }
+
+  .login-input-group .form-control:focus {
+    border-color: #8fd2ca;
+    box-shadow: 0 0 0 0.22rem rgba(15, 118, 110, 0.15);
+  }
+
+  .password-toggle {
+    border: 1px solid var(--login-border);
+    border-left: 0;
+    background: #f9fbfc;
+    border-radius: 0 12px 12px 0;
+    color: #5f7281;
+  }
+
+  .password-toggle:hover {
+    background: #eef5f8;
+    color: #264255;
+  }
+
+  .login-submit {
+    margin-top: 0.6rem;
+    min-height: 48px;
+    border: 0;
+    border-radius: 12px;
+    background: linear-gradient(120deg, #0f766e, #148a81);
+    color: #ffffff;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .login-submit:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 22px rgba(15, 118, 110, 0.24);
+    color: #ffffff;
+  }
+
+  .login-links {
+    margin-top: 1rem;
+    color: var(--login-muted);
+  }
+
+  .login-links a {
+    color: #0e6b64;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .login-links a:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 991.98px) {
+    .login-shell {
+      grid-template-columns: 1fr;
+      min-height: auto;
+    }
+
+    .login-story {
+      border-radius: 0 0 24px 24px;
+    }
+
+    .login-form-wrap {
+      padding-top: 2.1rem;
+    }
+  }
+
+  @media (max-width: 575.98px) {
+    .login-story,
+    .login-form-wrap {
+      padding: 1.6rem 1.25rem;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="login-page">
+  <div class="login-shell">
+    <aside class="login-story">
+      <div>
+        <span class="login-pill"><i class="fas fa-leaf"></i> Diet Expert System</span>
+        <h2>Track healthier choices with your personalized nutrition workspace.</h2>
+        <p>
+          Access your dashboard to review diet rules, monitor progress, and stay consistent with your
+          health targets.
+        </p>
+        <ul class="login-highlights">
+          <li><i class="fas fa-check-circle"></i> Personalized meal guidance</li>
+          <li><i class="fas fa-check-circle"></i> BMI and progress insights</li>
+          <li><i class="fas fa-check-circle"></i> Role-based dashboards</li>
+        </ul>
       </div>
-      <div class="card-body p-4">
-        <form method="POST" action="{{ url_for('auth.login') }}" class="login-form">
-          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+      <small>Use your username and password to continue.</small>
+    </aside>
 
-          <div class="mb-4">
-            <label for="username" class="form-label fw-semibold">
-              <i class="fas fa-user me-2"></i>Username
-            </label>
-            <div class="input-group">
-              <span class="input-group-text"><i class="fas fa-at"></i></span>
-              <input
-                type="text"
-                class="form-control form-control-lg"
-                id="username"
-                name="username"
-                placeholder="Enter your username"
-                required
-                autofocus
-              />
-            </div>
+    <div class="login-form-wrap">
+      <h1>Welcome Back</h1>
+      <p class="login-subtitle">Sign in to continue to your account.</p>
+
+      <form method="POST" action="{{ url_for('auth.login') }}" novalidate>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+        <div class="mb-3">
+          <label for="username" class="form-label login-label">Username</label>
+          <div class="input-group login-input-group">
+            <span class="input-group-text"><i class="fas fa-user"></i></span>
+            <input
+              type="text"
+              class="form-control"
+              id="username"
+              name="username"
+              placeholder="Enter your username"
+              value="{{ request.form.get('username', '') }}"
+              required
+              autofocus
+            />
           </div>
+        </div>
 
-          <div class="mb-4">
-            <label for="password" class="form-label fw-semibold">
-              <i class="fas fa-key me-2"></i>Password
-            </label>
-            <div class="input-group">
-              <span class="input-group-text"><i class="fas fa-lock"></i></span>
-              <input
-                type="password"
-                class="form-control form-control-lg"
-                id="password"
-                name="password"
-                placeholder="Enter your password"
-                required
-              />
-            </div>
-          </div>
-
-          <div class="d-grid mb-4">
-            <button type="submit" class="btn btn-primary btn-lg fw-bold">
-              <i class="fas fa-sign-in-alt me-2"></i>Log In
+        <div class="mb-2">
+          <label for="password" class="form-label login-label">Password</label>
+          <div class="input-group login-input-group">
+            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              name="password"
+              placeholder="Enter your password"
+              required
+            />
+            <button
+              type="button"
+              class="btn password-toggle"
+              id="passwordToggle"
+              aria-label="Show or hide password"
+            >
+              <i class="fas fa-eye"></i>
             </button>
           </div>
-        </form>
+        </div>
 
-        <hr class="my-4" />
-        <p class="mb-0 text-center">
-          <small class="text-muted">Don't have an account?</small><br>
-          <a href="{{ url_for('auth.register') }}" class="text-decoration-none fw-semibold">
-            <i class="fas fa-user-plus me-1"></i>Create Account
-          </a>
-        </p>
-      </div>
+        <button type="submit" class="btn login-submit w-100">
+          <i class="fas fa-right-to-bracket me-2"></i>Sign In
+        </button>
+      </form>
+
+      <p class="login-links mb-1">
+        Need an account?
+        <a href="{{ url_for('auth.register') }}">Create one</a>
+      </p>
+      <p class="login-links mb-0">
+        <a href="{{ url_for('main.home') }}">Back to homepage</a>
+      </p>
     </div>
   </div>
-</div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const passwordInput = document.getElementById("password");
+    const toggleBtn = document.getElementById("passwordToggle");
+    if (!passwordInput || !toggleBtn) return;
+
+    toggleBtn.addEventListener("click", function () {
+      const isPassword = passwordInput.type === "password";
+      passwordInput.type = isPassword ? "text" : "password";
+      toggleBtn.innerHTML = isPassword
+        ? '<i class="fas fa-eye-slash"></i>'
+        : '<i class="fas fa-eye"></i>';
+    });
+  });
+</script>
 {% endblock %}
