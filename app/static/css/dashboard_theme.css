@@ -858,33 +858,36 @@
     border-radius: 14px;
     border: 1px solid rgba(255, 255, 255, 0.34);
     background: rgba(17, 67, 53, 0.3);
-    padding: 0.92rem 0.92rem;
+    padding: 0.95rem;
+    padding-right: 4rem;
 }
 
 .doctor-kpi-icon {
     position: absolute;
-    right: 0.82rem;
-    top: 0.58rem;
-    width: 2.65rem;
-    height: 2.65rem;
-    border-radius: 14px;
+    right: 0.74rem;
+    top: 0.5rem;
+    width: 3.15rem;
+    height: 3.15rem;
+    border-radius: 16px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     color: rgba(248, 253, 255, 0.96);
-    font-size: 1.24rem;
-    background: rgba(255, 255, 255, 0.24);
+    font-size: 1.44rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.2));
     box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.18),
-        0 10px 20px rgba(7, 28, 41, 0.18);
-    transition: transform 0.22s ease, box-shadow 0.22s ease;
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        0 12px 24px rgba(7, 28, 41, 0.2);
+    transition: transform 0.22s ease, box-shadow 0.22s ease, filter 0.22s ease;
 }
 
 .doctor-kpi-card:hover .doctor-kpi-icon {
-    transform: translateY(-2px) scale(1.03);
+    transform: translateY(-2px) scale(1.04);
+    filter: brightness(1.06);
     box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.18),
-        0 14px 26px rgba(7, 28, 41, 0.22);
+        inset 0 1px 0 rgba(255, 255, 255, 0.22),
+        0 18px 28px rgba(7, 28, 41, 0.24);
 }
 
 .doctor-kpi-label {
@@ -895,8 +898,10 @@
 }
 
 .doctor-kpi-value {
-    margin-top: 0.22rem;
-    font-size: 1.22rem;
+    margin-top: 0.28rem;
+    font-size: clamp(1.95rem, 2.8vw, 2.75rem);
+    line-height: 1;
+    letter-spacing: 0.01em;
     font-weight: 800;
 }
 
@@ -1506,9 +1511,13 @@
     }
 
     .doctor-kpi-icon {
-        width: 2.3rem;
-        height: 2.3rem;
-        font-size: 1.08rem;
+        width: 2.65rem;
+        height: 2.65rem;
+        font-size: 1.2rem;
+    }
+
+    .doctor-kpi-value {
+        font-size: clamp(1.7rem, 7.4vw, 2.3rem);
     }
 
     .doctor-dashboard-app .workspace-tabs .nav-item,
