@@ -723,6 +723,10 @@
     padding: 1.1rem 0 0.45rem;
 }
 
+.doctor-dashboard-app .doctor-layout-container {
+    max-width: 1360px;
+}
+
 .doctor-hero-panel {
     position: relative;
     overflow: hidden;
