@@ -650,13 +650,51 @@
     {% endblock %}
 
     {% block extra_js %}
+    <script id="lastFormDataJson" type="application/json">{{ last_form_data | tojson }}</script>
     <script>
         let currentSection = 1;
         const totalSections = 4;
 
+        const lastFormData = (function() {
+            try {
+                var el = document.getElementById('lastFormDataJson');
+                return el ? JSON.parse(el.textContent) : null;
+            } catch(e) { return null; }
+        }());
+
+        function prefillFromLastPlan() {
+            if (!lastFormData || typeof lastFormData !== 'object') return;
+
+            const personal = lastFormData.personal || {};
+            const health = lastFormData.health || {};
+            const preferences = lastFormData.preferences || {};
+
+            if (personal.age) document.getElementById('age').value = personal.age;
+            if (personal.gender) document.getElementById('gender').value = personal.gender;
+            if (personal.weight) document.getElementById('weight').value = personal.weight;
+            if (personal.height) document.getElementById('height').value = personal.height;
+
+            const allergies = health.allergies || [];
+            allergies.forEach(function(a) {
+                const cb = document.getElementById('allergy_' + a);
+                if (cb) cb.checked = true;
+            });
+
+            if (health.dietType) {
+                const dietRadio = document.querySelector('input[name="dietType"][value="' + health.dietType + '"]');
+                if (dietRadio) dietRadio.checked = true;
+            }
+
+            if (preferences.mealsPerDay) {
+                const mealsRadio = document.querySelector('input[name="mealsPerDay"][value="' + preferences.mealsPerDay + '"]');
+                if (mealsRadio) mealsRadio.checked = true;
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
             updateProgressBar();
             setupAnalystGate();
+            prefillFromLastPlan();
         });
 
         function setupAnalystGate() {

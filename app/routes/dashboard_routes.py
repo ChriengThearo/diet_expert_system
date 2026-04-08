@@ -1296,7 +1296,21 @@ def user_profile_edit():
 )
 def user_diet_expert():
     """Diet expert system page for users."""
-    return render_template("dashboard/user_diet_expert.html")
+    last_form_data = None
+    latest_result = (
+        UserResultsTable.query.filter_by(user_id=current_user.id)
+        .filter(UserResultsTable.result_data.isnot(None))
+        .order_by(UserResultsTable.generated_at.desc())
+        .first()
+    )
+    if latest_result and latest_result.result_data:
+        try:
+            payload = json.loads(latest_result.result_data)
+            if isinstance(payload, dict) and payload.get("form_data"):
+                last_form_data = payload["form_data"]
+        except Exception:
+            pass
+    return render_template("dashboard/user_diet_expert.html", last_form_data=last_form_data)
 
 
 @dashboard_bp.route("/user/data")
