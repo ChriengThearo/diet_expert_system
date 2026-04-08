@@ -915,8 +915,8 @@
 }
 
 .doctor-dashboard-app .control-sidebar {
-    position: sticky;
-    top: 1.1rem;
+    position: static;
+    top: auto;
 }
 
 .doctor-dashboard-app .control-panel-title {
