@@ -4,154 +4,530 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expert Profile</title>
+    <title>Doctor Profile | Diet Expert Rule Studio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard_theme.css') }}">
     <style>
-        :root {
-            --primary-color: #4361ee;
+        .doctor-profile-app {
+            min-height: 100vh;
         }
 
-        body {
-            background: #f8f9fa;
+        .doctor-profile-wrap {
+            max-width: 1220px;
+            margin: 0 auto;
+            padding: 1.2rem 1rem 2.2rem;
         }
 
-        .navbar-custom {
-            background: linear-gradient(135deg, var(--primary-color), #3f37c9);
+        .doctor-profile-navbar .navbar-brand {
+            text-decoration: none;
         }
 
-        .profile-card {
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        .profile-hero-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 22px;
+            padding: clamp(1.2rem, 2.4vw, 1.8rem);
+            color: #f6fffb;
+            background: linear-gradient(135deg, var(--doc-brand-strong, #0e6557), var(--doc-brand, #177f6c) 52%, var(--doc-secondary, #2d64c3));
+            box-shadow: 0 26px 60px rgba(12, 45, 66, 0.24);
+        }
+
+        .profile-hero-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(circle at 12% 15%, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0) 45%),
+                radial-gradient(circle at 88% 25%, rgba(59, 130, 246, 0.28), rgba(59, 130, 246, 0) 50%);
+        }
+
+        .profile-hero-content {
+            position: relative;
+            z-index: 1;
         }
 
         .profile-avatar {
-            width: 72px;
-            height: 72px;
+            width: 86px;
+            height: 86px;
             border-radius: 50%;
-            background: #e9ecef;
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.2);
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
-            color: #6c757d;
+            color: #f8fcff;
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
         }
 
-        .pill {
-            display: inline-block;
-            padding: 4px 10px;
+        .profile-label {
+            font-size: 0.74rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: rgba(245, 251, 255, 0.8);
+            margin-bottom: 0.35rem;
+        }
+
+        .profile-name {
+            margin: 0;
+            font-size: clamp(1.45rem, 3vw, 2.1rem);
+            line-height: 1.15;
+        }
+
+        .profile-email {
+            margin: 0.35rem 0 0;
+            color: rgba(245, 251, 255, 0.9);
+            word-break: break-word;
+        }
+
+        .profile-meta-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
             border-radius: 999px;
-            background: #e7f1ff;
-            color: #1d4ed8;
-            font-size: 0.85rem;
+            padding: 0.32rem 0.72rem;
+            background: rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.34);
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #f7fcff;
         }
 
-        .action-row {
+        .profile-action-row {
+            margin-top: 1rem;
             display: flex;
             flex-wrap: wrap;
-            gap: 0.75rem;
-            margin-top: 1.5rem;
+            gap: 0.62rem;
+        }
+
+        .profile-action-row .btn {
+            border-radius: 999px;
+            font-weight: 700;
+            padding-inline: 0.95rem;
+        }
+
+        .profile-grid {
+            margin-top: 1rem;
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 0.95rem;
+        }
+
+        .profile-panel {
+            border-radius: 18px;
+            border: 1px solid rgba(16, 40, 58, 0.14);
+            background: rgba(255, 255, 255, 0.94);
+            box-shadow: 0 12px 24px rgba(27, 37, 49, 0.08);
+            overflow: hidden;
+        }
+
+        .profile-panel-head {
+            padding: 1rem 1.1rem 0.45rem;
+            border-bottom: 1px solid rgba(16, 40, 58, 0.08);
+        }
+
+        .profile-panel-title {
+            margin: 0;
+            font-size: 1.02rem;
+            font-weight: 800;
+            color: #1d3547;
+        }
+
+        .profile-panel-subtitle {
+            margin: 0.25rem 0 0;
+            color: #5f7b8e;
+            font-size: 0.86rem;
+        }
+
+        .profile-panel-body {
+            padding: 1rem 1.1rem 1.1rem;
+        }
+
+        .profile-list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            display: grid;
+            gap: 0.65rem;
+        }
+
+        .profile-item {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            gap: 0.6rem;
+            align-items: start;
+            padding-bottom: 0.55rem;
+            border-bottom: 1px dashed rgba(16, 40, 58, 0.1);
+        }
+
+        .profile-item:last-child {
+            border-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .profile-item-label {
+            color: #617a8d;
+            font-weight: 700;
+            font-size: 0.86rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .profile-item-value {
+            color: #203848;
+            font-size: 0.95rem;
+            word-break: break-word;
+        }
+
+        .role-chip {
+            display: inline-flex;
+            align-items: center;
+            border-radius: 999px;
+            padding: 0.28rem 0.62rem;
+            margin: 0 0.4rem 0.4rem 0;
+            background: linear-gradient(120deg, rgba(15, 118, 110, 0.16), rgba(59, 130, 246, 0.12));
+            color: #0c6259;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .shortcut-list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            display: grid;
+            gap: 0.58rem;
+        }
+
+        .shortcut-list a {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-decoration: none;
+            color: #21485f;
+            border: 1px solid rgba(16, 40, 58, 0.12);
+            border-radius: 12px;
+            padding: 0.6rem 0.72rem;
+            background: #fbfdfc;
+            transition: all 0.2s ease;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .shortcut-list a:hover {
+            color: #0f625a;
+            border-color: rgba(15, 118, 110, 0.28);
+            background: #f2faf7;
+            transform: translateY(-1px);
+        }
+
+        .profile-note {
+            margin-top: 0.85rem;
+            border-radius: 12px;
+            border: 1px solid rgba(15, 118, 110, 0.2);
+            background: linear-gradient(120deg, rgba(219, 247, 239, 0.74), rgba(255, 255, 255, 0.94));
+            color: #1f5f4a;
+            padding: 0.75rem 0.82rem;
+            font-size: 0.88rem;
+        }
+
+        .profile-anim {
+            opacity: 0;
+            transform: translateY(14px);
+            animation: profileRise 0.48s ease forwards;
+            animation-delay: var(--anim-delay, 0ms);
+        }
+
+        @keyframes profileRise {
+            from {
+                opacity: 0;
+                transform: translateY(14px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 991.98px) {
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .doctor-profile-wrap {
+                padding: 1rem 0.85rem 1.6rem;
+            }
+
+            .profile-item {
+                grid-template-columns: 1fr;
+                gap: 0.22rem;
+            }
+
+            .profile-action-row .btn {
+                width: 100%;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .profile-anim,
+            .shortcut-list a {
+                animation: none !important;
+                transition: none !important;
+                transform: none !important;
+                opacity: 1 !important;
+            }
         }
     </style>
 </head>
 
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
-        <div class="container">
-            <a class="navbar-brand" href="{{ url_for('dashboard.doctor_dashboard') }}">
-                <i class="fas fa-brain me-2"></i>Diet Expert Rule Manager
+<body class="doctor-dashboard-app doctor-profile-app">
+    {% set dashboard_permissions = current_user.get_permission_codes() if current_user.is_authenticated else [] %}
+    {% set dashboard_option_count =
+    (1 if 'dashboard.admin' in dashboard_permissions else 0) +
+    (1 if 'dashboard.doctor' in dashboard_permissions else 0) +
+    (1 if 'dashboard.user' in dashboard_permissions else 0)
+    %}
+    {% set show_dashboard_switcher = dashboard_option_count > 1 %}
+    {% set display_name = user.full_name or user.username %}
+    {% set doctor_default_avatar_url = url_for('main.images', filename='public/avatar.png') %}
+    {% set doctor_photo_path = (current_user.photo or '')|trim %}
+    {% set doctor_avatar_url = doctor_default_avatar_url if session.get('user_guest_mode') else
+    (url_for('main.images', filename=doctor_photo_path|replace('images/', '')) if doctor_photo_path else
+    doctor_default_avatar_url) %}
+
+    <nav
+        class="navbar navbar-expand-lg shadow-sm sticky-top navbar-light navbar-user-dashboard navbar-custom doctor-profile-navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url_for('main.home') }}">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Diet Expert logo" class="doctor-brand-logo">
+                <span class="doctor-brand-text">NDES</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-lg-center">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('dashboard.doctor_dashboard') }}">
-                            <i class="fas fa-home me-1"></i> Dashboard
+                        <a class="btn btn-light btn-sm me-2 doctor-nav-pill" href="{{ url_for('dashboard.doctor_dashboard') }}">
+                            <i class="fas fa-gauge-high me-1"></i>Dashboard
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ url_for('dashboard.doctor_profile') }}">
-                            <i class="fas fa-user me-1"></i> Expert Profile
+                        <a class="btn btn-light btn-sm me-2 doctor-nav-pill" href="{{ url_for('main.home') }}">
+                            <i class="fas fa-home me-1"></i>Home
                         </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-light btn-sm me-2 doctor-nav-pill" href="{{ url_for('dashboard.doctor_dashboard') }}">
+                            <i class="fas fa-list-check me-1"></i>Rule Studio
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-light btn-sm doctor-nav-pill active" href="{{ url_for('dashboard.doctor_profile') }}">
+                            <i class="fas fa-user-doctor me-1"></i>Profile
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav align-items-center ms-lg-2">
+                    {% if show_dashboard_switcher %}
+                    <li class="nav-item dropdown d-flex align-items-center me-2">
+                        {% include "dashboard/_dashboard_switcher.html" %}
+                    </li>
+                    {% endif %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle doctor-nav-user d-flex align-items-center" href="#"
+                            id="doctorProfileNavDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{{ doctor_avatar_url }}" alt="Avatar" class="doctor-nav-avatar me-2"
+                                onerror="this.onerror=null;this.src='{{ doctor_default_avatar_url }}';">
+                            <span>{{ display_name }}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="doctorProfileNavDropdown">
+                            <li>
+                                <h6 class="dropdown-header">{{ display_name }}</h6>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ url_for('dashboard.doctor_profile') }}">
+                                    <i class="fas fa-user-doctor me-2"></i>Profile
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ url_for('dashboard.doctor_profile_edit') }}"
+                                    data-permission="dashboard.doctor" data-action="edit profile info">
+                                    <i class="fas fa-user-pen me-2"></i>Edit Profile
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-danger" href="{{ url_for('auth.logout') }}">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div class="container py-5">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div class="card profile-card">
-                    <div class="card-body p-4">
-                        <div class="d-flex align-items-center gap-3 mb-4">
+    <main class="doctor-profile-wrap">
+        <section class="profile-hero-card profile-anim" style="--anim-delay: 0ms;">
+            <div class="profile-hero-content">
+                <div class="row align-items-center g-3">
+                    <div class="col-lg-8">
+                        <div class="d-flex align-items-center gap-3">
                             <div class="profile-avatar">
-                                <i class="fas fa-user"></i>
+                                {{ display_name[0]|upper if display_name else 'D' }}
                             </div>
                             <div>
-                                <h4 class="mb-1">{{ user.full_name }}</h4>
-                                <div class="text-muted">{{ user.email }}</div>
+                                <p class="profile-label mb-0">Doctor Workspace Identity</p>
+                                <h1 class="profile-name">{{ display_name }}</h1>
+                                <p class="profile-email">{{ user.email }}</p>
                             </div>
                         </div>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h6 class="text-uppercase text-muted">Account</h6>
-                                <p class="mb-2"><strong>Username:</strong> {{ user.username }}</p>
-                                <p class="mb-2"><strong>Status:</strong> {{ 'Active' if user.is_active else 'Inactive'
-                                    }}</p>
-                            </div>
-                            <div class="col-md-6">
-                                <h6 class="text-uppercase text-muted">Roles</h6>
-                                <div>
-                                    {% if user.roles %}
-                                    {% for role in user.roles %}
-                                    <span class="pill me-2 mb-2">{{ role.name }}</span>
-                                    {% endfor %}
-                                    {% else %}
-                                    <span class="text-muted">No roles assigned</span>
-                                    {% endif %}
-                                </div>
-                            </div>
+                        <div class="d-flex flex-wrap gap-2 mt-3">
+                            <span class="profile-meta-chip">
+                                <i class="fas fa-user-circle"></i>
+                                {{ user.username }}
+                            </span>
+                            <span class="profile-meta-chip">
+                                <i class="fas fa-circle-check"></i>
+                                {{ 'Active account' if user.is_active else 'Inactive account' }}
+                            </span>
+                            <span class="profile-meta-chip">
+                                <i class="fas fa-shield-halved"></i>
+                                {{ user.roles|length if user.roles else 0 }} role{{ '' if (user.roles|length == 1) else 's' }}
+                            </span>
                         </div>
-
-                        <hr class="my-4">
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h6 class="text-uppercase text-muted">Created</h6>
-                                <p class="mb-0">{{ user.created_at.strftime('%Y-%m-%d %H:%M') if user.created_at else
-                                    'N/A' }}</p>
-                            </div>
-                            <div class="col-md-6">
-                                <h6 class="text-uppercase text-muted">Last Updated</h6>
-                                <p class="mb-0">{{ user.updated_at.strftime('%Y-%m-%d %H:%M') if user.updated_at else
-                                    'N/A' }}</p>
-                            </div>
-                        </div>
-
-                        <div class="action-row">
-                            <a class="btn btn-primary" href="{{ url_for('dashboard.doctor_profile_edit') }}"
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="profile-action-row">
+                            <a class="btn btn-light" href="{{ url_for('dashboard.doctor_profile_edit') }}"
                                 data-permission="dashboard.doctor" data-action="edit profile info">
-                                <i class="fas fa-pen me-2"></i>Edit Info
+                                <i class="fas fa-pen me-2"></i>Edit Profile
                             </a>
-                            <a class="btn btn-outline-secondary" href="{{ url_for('dashboard.doctor_dashboard') }}"
+                            <a class="btn btn-outline-light" href="{{ url_for('dashboard.doctor_dashboard') }}"
                                 data-permission="dashboard.doctor" data-action="access the doctor dashboard">
-                                <i class="fas fa-arrow-left me-2"></i>Back
-                            </a>
-                            <a class="btn btn-outline-danger" href="{{ url_for('auth.logout') }}">
-                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+        <section class="profile-grid">
+            <article class="profile-panel profile-anim" style="--anim-delay: 90ms;">
+                <header class="profile-panel-head">
+                    <h2 class="profile-panel-title"><i class="fas fa-id-badge me-2"></i>Account Overview</h2>
+                    <p class="profile-panel-subtitle">Core profile fields used across doctor dashboard tools.</p>
+                </header>
+                <div class="profile-panel-body">
+                    <ul class="profile-list">
+                        <li class="profile-item">
+                            <span class="profile-item-label">Full Name</span>
+                            <span class="profile-item-value">{{ user.full_name or 'Not provided' }}</span>
+                        </li>
+                        <li class="profile-item">
+                            <span class="profile-item-label">Email</span>
+                            <span class="profile-item-value">{{ user.email }}</span>
+                        </li>
+                        <li class="profile-item">
+                            <span class="profile-item-label">Username</span>
+                            <span class="profile-item-value">{{ user.username }}</span>
+                        </li>
+                        <li class="profile-item">
+                            <span class="profile-item-label">Status</span>
+                            <span class="profile-item-value">{{ 'Active' if user.is_active else 'Inactive' }}</span>
+                        </li>
+                        <li class="profile-item">
+                            <span class="profile-item-label">Created At</span>
+                            <span class="profile-item-value">{{ user.created_at.strftime('%b %d, %Y %H:%M') if user.created_at else 'N/A' }}</span>
+                        </li>
+                        <li class="profile-item">
+                            <span class="profile-item-label">Last Updated</span>
+                            <span class="profile-item-value">{{ user.updated_at.strftime('%b %d, %Y %H:%M') if user.updated_at else 'N/A' }}</span>
+                        </li>
+                    </ul>
+                </div>
+            </article>
+
+            <div class="d-grid gap-3">
+                <article class="profile-panel profile-anim" style="--anim-delay: 140ms;">
+                    <header class="profile-panel-head">
+                        <h2 class="profile-panel-title"><i class="fas fa-shield-halved me-2"></i>Roles & Access</h2>
+                        <p class="profile-panel-subtitle">Permissions assigned to this doctor account.</p>
+                    </header>
+                    <div class="profile-panel-body">
+                        {% if user.roles %}
+                        <div>
+                            {% for role in user.roles %}
+                            <span class="role-chip">{{ role.name|title }}</span>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <p class="text-muted mb-0">No roles assigned.</p>
+                        {% endif %}
+                        <div class="profile-note">
+                            <i class="fas fa-lightbulb me-2"></i>
+                            Keep your profile and access role current to avoid dashboard permission issues.
+                        </div>
+                    </div>
+                </article>
+
+                <article class="profile-panel profile-anim" style="--anim-delay: 190ms;">
+                    <header class="profile-panel-head">
+                        <h2 class="profile-panel-title"><i class="fas fa-compass me-2"></i>Workflow Shortcuts</h2>
+                        <p class="profile-panel-subtitle">Fast links for daily rule operations.</p>
+                    </header>
+                    <div class="profile-panel-body">
+                        <ul class="shortcut-list">
+                            <li>
+                                <a href="{{ url_for('dashboard.doctor_dashboard') }}"
+                                    data-permission="dashboard.doctor" data-action="create rules">
+                                    <span><i class="fas fa-plus-circle me-2"></i>Create Or Edit Rules</span>
+                                    <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ url_for('dashboard.doctor_dashboard') }}"
+                                    data-permission="dashboard.doctor" data-action="test rules">
+                                    <span><i class="fas fa-vial me-2"></i>Test Rule Scenarios</span>
+                                    <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ url_for('dashboard.doctor_profile_edit') }}"
+                                    data-permission="dashboard.doctor" data-action="edit profile info">
+                                    <span><i class="fas fa-user-gear me-2"></i>Update Doctor Profile</span>
+                                    <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ url_for('auth.logout') }}">
+                                    <span><i class="fas fa-sign-out-alt me-2"></i>Secure Logout</span>
+                                    <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         window.APP_PERMISSIONS = {{ current_user.get_permission_codes()|list|tojson if current_user.is_authenticated else [] }};
     </script>

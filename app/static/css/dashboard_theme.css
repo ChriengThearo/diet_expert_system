@@ -605,39 +605,118 @@
 }
 
 .doctor-dashboard-app {
-    --doc-brand: #2f9e7a;
-    --doc-brand-strong: #247b60;
-    --doc-brand-soft: #dbf7ef;
-    --doc-accent: #ef6f51;
-    --doc-accent-strong: #d95435;
-    --doc-ink: #1b2531;
-    --doc-muted: #576473;
-    --doc-line: #dfe7ec;
+    --doc-brand: #177f6c;
+    --doc-brand-strong: #0e6557;
+    --doc-brand-soft: rgba(23, 127, 108, 0.14);
+    --doc-secondary: #2d64c3;
+    --doc-accent: #f59e0b;
+    --doc-ink: #10283a;
+    --doc-muted: #5f7b8e;
+    --doc-line: rgba(16, 40, 58, 0.14);
     --doc-surface: rgba(255, 255, 255, 0.94);
-    --doc-bg-a: #fff9f3;
-    --doc-bg-b: #edf9f2;
-    --doc-bg-c: #fff2e8;
+    --doc-bg-a: #f3f7fb;
+    --doc-bg-b: #eaf2f8;
     background:
-        radial-gradient(circle at 5% 8%, rgba(239, 111, 81, 0.18), rgba(239, 111, 81, 0)),
-        radial-gradient(circle at 95% 6%, rgba(47, 158, 122, 0.16), rgba(47, 158, 122, 0)),
-        linear-gradient(130deg, var(--doc-bg-a) 0%, var(--doc-bg-b) 45%, var(--doc-bg-c) 100%);
+        radial-gradient(circle at 12% 8%, rgba(15, 118, 110, 0.16), rgba(15, 118, 110, 0)),
+        radial-gradient(circle at 90% 4%, rgba(59, 130, 246, 0.14), rgba(59, 130, 246, 0)),
+        radial-gradient(circle at 92% 0%, rgba(245, 158, 11, 0.08), rgba(245, 158, 11, 0)),
+        linear-gradient(180deg, var(--doc-bg-a), var(--doc-bg-b));
     min-height: 100vh;
-    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
     color: var(--doc-ink);
 }
 
 .doctor-dashboard-app .navbar-custom {
-    background: linear-gradient(130deg, var(--doc-brand), var(--doc-brand-strong));
-    box-shadow: 0 12px 24px rgba(36, 123, 96, 0.28);
+    background: #ffffff;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
 }
 
 .doctor-dashboard-app .navbar-brand {
-    font-weight: 800;
+    color: #1a1a2e;
+    font-weight: 700;
     letter-spacing: 0.02em;
 }
 
-.doctor-dashboard-app .nav-link {
+.doctor-dashboard-app .navbar-custom .nav-link {
+    color: rgba(26, 26, 46, 0.8);
     font-weight: 600;
+    border-radius: 0.62rem;
+}
+
+.doctor-dashboard-app .navbar-custom .nav-link:hover,
+.doctor-dashboard-app .navbar-custom .nav-link:focus {
+    color: #1a1a2e;
+    background-color: rgba(0, 0, 0, 0.06);
+}
+
+.doctor-dashboard-app .navbar-custom .nav-link.active {
+    color: #0f766e;
+    background-color: rgba(15, 118, 110, 0.15);
+}
+
+.doctor-dashboard-app .doctor-brand-logo {
+    width: 95px;
+    height: auto;
+}
+
+.doctor-dashboard-app .doctor-brand-text {
+    color: #1a1a2e;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+.doctor-dashboard-app .doctor-nav-pill {
+    border-radius: 0.66rem;
+    border: 1px solid transparent;
+    font-weight: 700;
+    padding: 0.34rem 0.78rem;
+    transition: all 0.2s ease;
+}
+
+.doctor-dashboard-app .doctor-nav-pill.btn.btn-light {
+    background: rgba(0, 0, 0, 0.06);
+    border-color: transparent;
+    color: #1a1a2e;
+}
+
+.doctor-dashboard-app .doctor-nav-pill.btn.btn-light:hover,
+.doctor-dashboard-app .doctor-nav-pill.btn.btn-light:focus {
+    background: rgba(0, 0, 0, 0.12);
+    color: #1a1a2e;
+}
+
+.doctor-dashboard-app .doctor-nav-pill.btn.btn-light.active {
+    background: rgba(15, 118, 110, 0.15);
+    color: #0f766e;
+}
+
+.doctor-dashboard-app .doctor-nav-user {
+    color: #1a1a2e;
+    font-weight: 600;
+    padding: 0.3rem 0.5rem;
+    border-radius: 999px;
+}
+
+.doctor-dashboard-app .doctor-nav-user:hover,
+.doctor-dashboard-app .doctor-nav-user:focus {
+    color: #1a1a2e;
+    background: rgba(0, 0, 0, 0.06);
+}
+
+.doctor-dashboard-app .doctor-nav-user.dropdown-toggle::after {
+    margin-left: 0.42rem;
+}
+
+.doctor-dashboard-app .doctor-nav-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid rgba(15, 23, 42, 0.16);
+    background: #f1f5f9;
 }
 
 .doctor-hero {
@@ -648,10 +727,10 @@
     position: relative;
     overflow: hidden;
     border-radius: 22px;
-    background: linear-gradient(130deg, var(--doc-brand), var(--doc-brand-strong));
+    background: linear-gradient(135deg, var(--doc-brand-strong), var(--doc-brand) 52%, var(--doc-secondary));
     color: #f6fffb;
     padding: clamp(1.2rem, 2.2vw, 1.9rem);
-    box-shadow: 0 16px 34px rgba(28, 99, 78, 0.24);
+    box-shadow: 0 26px 60px rgba(12, 45, 66, 0.24);
     margin-bottom: 1rem;
 }
 
@@ -661,8 +740,8 @@
     inset: 0;
     pointer-events: none;
     background:
-        radial-gradient(circle at 10% 16%, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0) 42%),
-        radial-gradient(circle at 90% 22%, rgba(239, 111, 81, 0.2), rgba(239, 111, 81, 0) 46%);
+        radial-gradient(circle at 12% 15%, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0) 45%),
+        radial-gradient(circle at 88% 25%, rgba(59, 130, 246, 0.28), rgba(59, 130, 246, 0) 50%);
     animation: heroPulse 7.5s ease-in-out infinite;
 }
 
@@ -692,7 +771,7 @@
 }
 
 .doctor-dashboard-app .hero-meta-card {
-    background: rgba(16, 54, 42, 0.28);
+    background: rgba(8, 31, 46, 0.28);
     border-radius: 14px;
     border-color: rgba(255, 255, 255, 0.3);
     animation: doctorFloatSoft 6.2s ease-in-out infinite;
@@ -711,18 +790,18 @@
 }
 
 .doctor-dashboard-app .hero-actions .btn-light {
-    background: #fff3ea;
-    border-color: #ffe3d7;
-    color: #1f5f4b;
+    background: rgba(255, 255, 255, 0.16);
+    border-color: transparent;
+    color: #f8fbff;
 }
 
 .doctor-dashboard-app .hero-actions .btn-light:hover {
-    background: #ffffff;
-    color: #1e5645;
+    background: rgba(255, 255, 255, 0.26);
+    color: #ffffff;
 }
 
 .doctor-dashboard-app .hero-actions .btn-outline-light {
-    border-color: rgba(255, 255, 255, 0.65);
+    border-color: rgba(255, 255, 255, 0.45);
     color: #ffffff;
 }
 
@@ -864,7 +943,7 @@
 .doctor-dashboard-app .workspace-tabs .nav-link.active {
     color: #f4fbff;
     border-color: transparent;
-    background: linear-gradient(130deg, var(--doc-brand), var(--doc-brand-strong));
+    background: linear-gradient(135deg, var(--doc-brand-strong), var(--doc-brand) 52%, var(--doc-secondary));
     box-shadow: 0 10px 20px rgba(47, 158, 122, 0.28);
 }
 
@@ -988,7 +1067,7 @@
 }
 
 .doctor-dashboard-app .rule-chip.subtle {
-    background: rgba(47, 158, 122, 0.12);
+    background: linear-gradient(120deg, rgba(15, 118, 110, 0.16), rgba(59, 130, 246, 0.12));
     color: #1f5f4a;
 }
 
@@ -1029,13 +1108,13 @@
 }
 
 .doctor-dashboard-app .condition-tag {
-    background: rgba(219, 247, 239, 0.9);
-    color: #1f5f4a;
+    background: rgba(59, 130, 246, 0.13);
+    color: #1f4ea8;
 }
 
 .doctor-dashboard-app .action-tag {
-    background: rgba(255, 234, 224, 0.9);
-    color: #b3462d;
+    background: rgba(15, 118, 110, 0.13);
+    color: #0f625a;
 }
 
 .doctor-dashboard-app .rule-empty {
@@ -1059,20 +1138,20 @@
 }
 
 .doctor-dashboard-app .pagination .page-item.active .page-link {
-    background: linear-gradient(120deg, var(--doc-brand), var(--doc-brand-strong));
+    background: linear-gradient(135deg, var(--doc-brand-strong), var(--doc-brand) 52%, var(--doc-secondary));
     border-color: transparent;
 }
 
 .doctor-dashboard-app .btn-custom {
     border-radius: 999px;
     font-weight: 700;
-    background: linear-gradient(130deg, var(--doc-brand), var(--doc-brand-strong));
+    background: linear-gradient(135deg, var(--doc-brand-strong), var(--doc-brand) 52%, var(--doc-secondary));
     border-color: transparent;
     color: #ffffff;
 }
 
 .doctor-dashboard-app .btn-custom:hover {
-    background: linear-gradient(130deg, #2a8d6f, #216f56);
+    background: linear-gradient(135deg, #0b5a4b, #146f5f 52%, #2656a8);
     color: #ffffff;
 }
 
@@ -1090,7 +1169,7 @@
 }
 
 .doctor-dashboard-app .btn-primary {
-    background: linear-gradient(130deg, var(--doc-brand), var(--doc-brand-strong));
+    background: linear-gradient(135deg, var(--doc-brand-strong), var(--doc-brand) 52%, var(--doc-secondary));
     border-color: transparent;
 }
 
