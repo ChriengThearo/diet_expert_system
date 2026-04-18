@@ -16,6 +16,7 @@
   />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard_theme.css') }}" />
   <style>
     :root {
       --brand: #2f9e7a;
@@ -55,94 +56,55 @@
       padding: 1.1rem 2rem 2.5rem;
     }
 
-    .site-nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      padding: 0.55rem 0;
+    .home-dashboard-nav {
+      z-index: 1030;
     }
 
-    .brand {
+    .home-dashboard-nav .navbar-brand img {
+      width: 95px;
+      height: auto;
+    }
+
+    .home-dashboard-nav .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .home-dashboard-nav .dashboard-switcher-btn {
       display: inline-flex;
       align-items: center;
-      gap: 0.75rem;
-      font-family: "Sora", sans-serif;
-      font-weight: 700;
-      font-size: 1.35rem;
-      color: var(--ink);
-      text-decoration: none;
-    }
-
-    .brand img {
-      width: 72px;
-      height: 72px;
-      object-fit: contain;
-    }
-
-    .site-menu {
-      display: flex;
-      align-items: center;
-      gap: 0.55rem;
-      margin: 0;
+      justify-content: center;
       padding: 0;
-      list-style: none;
     }
 
-    .site-menu a {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
+    .home-dashboard-nav .dashboard-switcher-icon {
+      position: relative;
+      display: block;
+      width: 22px;
+      height: 3px;
       border-radius: 999px;
-      padding: 0.5rem 0.95rem;
-      color: #2d3a45;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.93rem;
-      transition: background-color 0.2s ease, color 0.2s ease;
+      background: #111827;
     }
 
-    .site-menu a:hover {
-      background: #ffffff;
-      color: var(--brand-strong);
-    }
-
-    .site-menu-wrap {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .mobile-toggle {
-      display: none;
-      border: 0;
-      border-radius: 10px;
-      width: 42px;
-      height: 42px;
-      background: #ffffff;
-      color: var(--ink);
-      box-shadow: 0 8px 16px rgba(27, 37, 49, 0.12);
-    }
-
-    .nav-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
-      padding: 0.56rem 1.05rem;
+    .home-dashboard-nav .dashboard-switcher-icon::before,
+    .home-dashboard-nav .dashboard-switcher-icon::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 22px;
+      height: 3px;
       border-radius: 999px;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 0.9rem;
-      color: #ffffff;
-      background: linear-gradient(130deg, var(--brand), var(--brand-strong));
-      box-shadow: 0 12px 18px rgba(47, 158, 122, 0.24);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      background: #111827;
     }
 
-    .nav-cta:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 16px 24px rgba(47, 158, 122, 0.3);
-      color: #ffffff;
+    .home-dashboard-nav .dashboard-switcher-icon::before {
+      top: -7px;
+    }
+
+    .home-dashboard-nav .dashboard-switcher-icon::after {
+      top: 7px;
     }
 
     .hero {
@@ -528,40 +490,6 @@
     }
 
     @media (max-width: 991.98px) {
-      .mobile-toggle {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .site-menu-wrap {
-        display: none;
-        width: 100%;
-      }
-
-      .site-menu-wrap.is-open {
-        display: block;
-      }
-
-      .site-nav {
-        flex-wrap: wrap;
-      }
-
-      .site-menu {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.35rem;
-        background: rgba(255, 255, 255, 0.9);
-        border-radius: 14px;
-        padding: 0.8rem;
-        border: 1px solid var(--line);
-        margin-top: 0.55rem;
-      }
-
-      .nav-cta {
-        margin-top: 0.6rem;
-      }
-
       .hero {
         grid-template-columns: 1fr;
       }
@@ -605,34 +533,136 @@
   </style>
 </head>
 <body>
-  <div class="site-wrap">
-    <header>
-      <nav class="site-nav" aria-label="Main navigation">
-        <a class="brand" href="{{ url_for('main.home') }}">
-          <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Diet Expert logo" />
-          <span>NDES</span>
-        </a>
+  <nav class="navbar navbar-expand-lg shadow-sm sticky-top navbar-light navbar-user-dashboard home-dashboard-nav">
+    <div class="container-fluid">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url_for('main.home') }}">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Diet Expert logo" />
+        <span style="font-weight:700;letter-spacing:0.04em;">NDES</span>
+      </a>
 
-        <button class="mobile-toggle" type="button" id="mobileMenuToggle" aria-label="Toggle navigation menu">
-          <i class="fas fa-bars"></i>
-        </button>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#homeNavbarNav"
+        aria-controls="homeNavbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-        <div class="site-menu-wrap" id="siteMenuWrap">
-          <ul class="site-menu">
-            <li><a href="{{ url_for('main.home') }}"><i class="fas fa-house"></i>Home</a></li>
-          </ul>
+      <div class="collapse navbar-collapse" id="homeNavbarNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-lg-center">
           {% if current_user.is_authenticated %}
-          <a class="nav-cta" href="{{ url_for('dashboard.dashboard_home') }}">
-            <i class="fas fa-gauge-high"></i>Open Dashboard
-          </a>
-          {% else %}
-          <a class="nav-cta" href="{{ url_for('auth.login') }}">
-            <i class="fas fa-right-to-bracket"></i>Log In
-          </a>
+          <li class="nav-item">
+            <a class="btn btn-light btn-sm me-2" href="{{ url_for('dashboard.dashboard_home') }}">
+              <i class="fas fa-gauge-high me-1"></i>Dashboard
+            </a>
+          </li>
           {% endif %}
-        </div>
-      </nav>
-    </header>
+
+          <li class="nav-item">
+            <a class="btn btn-light btn-sm me-2 active" href="{{ url_for('main.home') }}">
+              <i class="fas fa-house me-1"></i>Home
+            </a>
+          </li>
+
+          {% if current_user.is_authenticated %}
+          <li class="nav-item">
+            <a class="btn btn-light btn-sm me-2" href="{{ url_for('dashboard.user_diet_expert') }}">
+              <i class="fas fa-utensils me-1"></i>Generate Plan
+            </a>
+          </li>
+          {% endif %}
+
+          <li class="nav-item">
+            <a class="btn btn-light btn-sm" href="{{ url_for('main.bmi') }}">
+              <i class="fas fa-calculator me-1"></i>Calculate BMI
+            </a>
+          </li>
+
+          {% if current_user.is_authenticated and current_user.has_role('admin') %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="homeAdminDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              <i class="fas fa-cog me-1"></i>Admin
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="homeAdminDropdown">
+              <li>
+                <a class="dropdown-item" href="{{ url_for('tbl_users.index') }}">
+                  <i class="fas fa-users me-2"></i>Users
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{ url_for('tbl_roles.index') }}">
+                  <i class="fas fa-user-tag me-2"></i>Roles
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{ url_for('tbl_permissions.index') }}">
+                  <i class="fas fa-key me-2"></i>Permissions
+                </a>
+              </li>
+            </ul>
+          </li>
+          {% endif %}
+        </ul>
+
+        <ul class="navbar-nav align-items-center ms-lg-2">
+          {% if current_user.is_authenticated %}
+          {% set dashboard_permissions = current_user.get_permission_codes() if current_user.is_authenticated else [] %}
+          {% set dashboard_option_count =
+              (1 if 'dashboard.admin' in dashboard_permissions else 0) +
+              (1 if 'dashboard.doctor' in dashboard_permissions else 0) +
+              (1 if 'dashboard.user' in dashboard_permissions else 0)
+          %}
+          {% set show_dashboard_switcher = dashboard_option_count > 1 %}
+          {% if show_dashboard_switcher %}
+          <li class="nav-item dropdown d-flex align-items-center me-2">
+            {% include "dashboard/_dashboard_switcher.html" %}
+          </li>
+          {% endif %}
+
+          {% set nav_display_name = 'Guest' if session.get('user_guest_mode') else current_user.username %}
+          {% set nav_default_avatar_url = url_for('main.images', filename='public/avatar.png') %}
+          {% set nav_photo_path = (current_user.photo or '')|trim %}
+          {% set nav_avatar_url = nav_default_avatar_url if session.get('user_guest_mode') else
+              (url_for('main.images', filename=nav_photo_path|replace('images/', '')) if nav_photo_path else nav_default_avatar_url) %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="homeUserDropdown" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="{{ nav_avatar_url }}" alt="Avatar" class="user-avatar me-2"
+                onerror="this.onerror=null;this.src='{{ nav_default_avatar_url }}';">
+              <span>{{ nav_display_name }}</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="homeUserDropdown">
+              <li><h6 class="dropdown-header">{{ nav_display_name }}</h6></li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <a class="dropdown-item" href="{{ url_for('dashboard.user_profile') }}">
+                  <i class="fas fa-user me-2"></i>Profile
+                </a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <a class="dropdown-item text-danger" href="{{ url_for('auth.logout') }}">
+                  <i class="fas fa-sign-out-alt me-2"></i>Logout
+                </a>
+              </li>
+            </ul>
+          </li>
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('auth.login') }}">
+              <i class="fas fa-sign-in-alt me-1"></i>Login
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('auth.register') }}">
+              <i class="fas fa-user-plus me-1"></i>Register
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="site-wrap">
 
     <main>
       <section class="hero">
@@ -732,6 +762,7 @@
     </footer>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     (function () {
       const track = document.getElementById("homeSlider");
@@ -754,14 +785,6 @@
     })();
 
     (function () {
-      const toggle = document.getElementById("mobileMenuToggle");
-      const menu = document.getElementById("siteMenuWrap");
-      if (toggle && menu) {
-        toggle.addEventListener("click", function () {
-          menu.classList.toggle("is-open");
-        });
-      }
-
       const cards = document.querySelectorAll(".tool-card");
       if (!cards.length || !("IntersectionObserver" in window)) {
         cards.forEach((card) => card.classList.add("is-visible"));
