@@ -4,6 +4,7 @@ from .permission import PermissionTable
 from .goal import GoalsTable
 from .diet_rule import DietRulesTable
 from .food import FoodsTable
+from .cooked_food import CookedFoodsTable
 from .user_result import UserResultsTable
 from .associations import (
     tbl_user_roles,
@@ -19,5 +20,6 @@ __all__ = [
     "GoalsTable",
     "DietRulesTable",
     "FoodsTable",
+    "CookedFoodsTable",
     "UserResultsTable",
 ]
