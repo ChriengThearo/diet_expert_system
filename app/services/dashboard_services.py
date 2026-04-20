@@ -849,7 +849,7 @@ class DashboardService:
             note = (mapping.notes or "").strip().lower()
             if note == "avoid":
                 continue
-            food = mapping.food
+            food = mapping.food or mapping.cooked_food
             if not food:
                 continue
             foods.append(
@@ -875,7 +875,7 @@ class DashboardService:
             note = (mapping.notes or "").strip().lower()
             if note != "avoid":
                 continue
-            food = mapping.food
+            food = mapping.food or mapping.cooked_food
             if not food:
                 continue
             foods.append(

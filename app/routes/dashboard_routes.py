@@ -283,9 +283,11 @@ def doctor_rules():
         if not recommended_ids and not excluded_ids:
             for mapping in rule.rule_food_maps or []:
                 if mapping.notes == "recommended":
-                    recommended_ids.append(mapping.food_id)
+                    if mapping.food_id is not None:
+                        recommended_ids.append(mapping.food_id)
                 elif mapping.notes == "avoid":
-                    excluded_ids.append(mapping.food_id)
+                    if mapping.food_id is not None:
+                        excluded_ids.append(mapping.food_id)
 
         result.append(
             {

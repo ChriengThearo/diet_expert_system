@@ -144,7 +144,11 @@ def foods(rule_id):
     rule = DietRulesTable.query.get_or_404(rule_id)
     # Get foods associated with this rule via rule_food_map
     rule_food_maps = RuleFoodMapTable.query.filter_by(diet_rule_id=rule_id).all()
-    foods = [(rfm.food, rfm.notes) for rfm in rule_food_maps]
+    foods = [
+        (rfm.food or rfm.cooked_food, rfm.notes)
+        for rfm in rule_food_maps
+        if (rfm.food or rfm.cooked_food) is not None
+    ]
     return render_template("main/foods.html", rule=rule, foods=foods)
 
 

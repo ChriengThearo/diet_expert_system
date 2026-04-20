@@ -22,5 +22,7 @@ class CookedFoodsTable(db.Model):
         db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False
     )
 
+    rule_food_maps = db.relationship("RuleFoodMapTable", back_populates="cooked_food")
+
     def __repr__(self) -> str:
         return f"<CookedFood {self.name}>"
