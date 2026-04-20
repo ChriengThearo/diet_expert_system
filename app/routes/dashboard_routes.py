@@ -16,6 +16,7 @@ from app.models.role import RoleTable
 from app.models.goal import GoalsTable
 from app.models.diet_rule import DietRulesTable
 from app.models.food import FoodsTable
+from app.models.cooked_food import CookedFoodsTable
 from app.models.rule_food_map import RuleFoodMapTable
 from app.models.user_result import UserResultsTable
 from app.forms.dashboard_forms import UserProfileEditForm
@@ -579,6 +580,259 @@ def update_or_delete_doctor_food(food_id: int):
         db.session.rollback()
         current_app.logger.exception("Failed to update food")
         return jsonify({"success": False, "message": "Failed to update food"}), 500
+
+
+@dashboard_bp.route("/doctor/cooked-foods", methods=["GET"])
+@login_required
+@doctor_required
+@permission_required(
+    "food.read", "You have no permission to view cooked foods.", json_response=True
+)
+def doctor_cooked_foods():
+    """Return cooked foods for doctor dashboard."""
+    cooked_foods = (
+        CookedFoodsTable.query.order_by(CookedFoodsTable.created_at.desc())
+        .limit(100)
+        .all()
+    )
+    return jsonify(
+        {
+            "cooked_foods": [
+                {
+                    "id": cooked_food.id,
+                    "name": cooked_food.name,
+                    "photo": cooked_food.photo,
+                    "description": cooked_food.description or "",
+                    "is_vegan": 1 if getattr(cooked_food, "is_gevan", False) else 0,
+                    "food_type": getattr(cooked_food, "food_type", "cooked")
+                    or "cooked",
+                    "cooking_method": cooked_food.cooking_method or "",
+                    "calories": cooked_food.calories,
+                    "protein": cooked_food.protein,
+                    "carbs": cooked_food.carbs,
+                    "fat": cooked_food.fat,
+                }
+                for cooked_food in cooked_foods
+            ]
+        }
+    )
+
+
+@dashboard_bp.route("/doctor/cooked-foods", methods=["POST"])
+@login_required
+@doctor_required
+@csrf.exempt
+@permission_required(
+    "food.create", "You have no permission to create cooked foods.", json_response=True
+)
+def create_doctor_cooked_food():
+    payload = request.get_json(silent=True) or {}
+    form_data = request.form or {}
+    name = (payload.get("name") or form_data.get("name") or "").strip()
+    if not name:
+        return jsonify({"success": False, "message": "Cooked food name is required"}), 400
+
+    def to_float(value):
+        try:
+            return float(value) if value not in (None, "") else None
+        except Exception:
+            return None
+
+    def get_value(key):
+        return payload.get(key) if key in payload else form_data.get(key)
+
+    def to_bool(value):
+        if value is None:
+            return None
+        if isinstance(value, bool):
+            return value
+        if isinstance(value, (int, float)):
+            return value != 0
+        text = str(value).strip().lower()
+        return text in {"1", "true", "yes", "y", "on"}
+
+    photo_path = None
+    photo_file = request.files.get("photo")
+    if photo_file and photo_file.filename:
+        filename = secure_filename(photo_file.filename)
+        _, ext = os.path.splitext(filename)
+        safe_ext = ext if ext else ""
+        unique_name = f"cooked_food_{uuid.uuid4().hex}{safe_ext}"
+        project_root = os.path.dirname(current_app.root_path)
+        upload_dir = os.path.join(project_root, "images", "cooked_foods")
+        os.makedirs(upload_dir, exist_ok=True)
+        photo_file.save(os.path.join(upload_dir, unique_name))
+        photo_path = f"images/cooked_foods/{unique_name}"
+
+    cooked_food = CookedFoodsTable(
+        name=name,
+        photo=photo_path or (get_value("photo") or "").strip() or None,
+        description=(get_value("description") or "").strip(),
+        food_type=(get_value("food_type") or "cooked").strip().lower() or "cooked",
+        cooking_method=(get_value("cooking_method") or "").strip() or None,
+        calories=to_float(get_value("calories")),
+        protein=to_float(get_value("protein")),
+        carbs=to_float(get_value("carbs")),
+        fat=to_float(get_value("fat")),
+    )
+    vegan_value = to_bool(get_value("is_gevan"))
+    if vegan_value is not None:
+        cooked_food.is_gevan = vegan_value
+
+    try:
+        db.session.add(cooked_food)
+        db.session.commit()
+        return jsonify(
+            {
+                "success": True,
+                "cooked_food": {
+                    "id": cooked_food.id,
+                    "name": cooked_food.name,
+                    "photo": cooked_food.photo,
+                    "description": cooked_food.description or "",
+                    "food_type": cooked_food.food_type or "cooked",
+                    "cooking_method": cooked_food.cooking_method or "",
+                    "calories": cooked_food.calories,
+                    "protein": cooked_food.protein,
+                    "carbs": cooked_food.carbs,
+                    "fat": cooked_food.fat,
+                },
+            }
+        )
+    except Exception:
+        db.session.rollback()
+        current_app.logger.exception("Failed to create cooked food")
+        return jsonify({"success": False, "message": "Failed to create cooked food"}), 500
+
+
+@dashboard_bp.route("/doctor/cooked-foods/<int:cooked_food_id>", methods=["POST", "DELETE"])
+@login_required
+@doctor_required
+@csrf.exempt
+def update_or_delete_doctor_cooked_food(cooked_food_id: int):
+    if request.method == "DELETE":
+        if not current_user.has_permission("food.delete"):
+            return (
+                jsonify(
+                    {
+                        "success": False,
+                        "message": "You have no permission to delete cooked food.",
+                    }
+                ),
+                403,
+            )
+    else:
+        if not current_user.has_permission("food.edit"):
+            return (
+                jsonify(
+                    {
+                        "success": False,
+                        "message": "You have no permission to edit cooked food.",
+                    }
+                ),
+                403,
+            )
+
+    cooked_food = CookedFoodsTable.query.get(cooked_food_id)
+    if not cooked_food:
+        return jsonify({"success": False, "message": "Cooked food not found"}), 404
+
+    if request.method == "DELETE":
+        try:
+            RuleFoodMapTable.query.filter_by(cooked_food_id=cooked_food.id).delete(
+                synchronize_session=False
+            )
+            if cooked_food.photo:
+                project_root = os.path.dirname(current_app.root_path)
+                photo_path = os.path.join(project_root, cooked_food.photo)
+                if os.path.isfile(photo_path):
+                    os.remove(photo_path)
+            db.session.delete(cooked_food)
+            db.session.commit()
+            return jsonify({"success": True})
+        except Exception:
+            db.session.rollback()
+            current_app.logger.exception("Failed to delete cooked food")
+            return (
+                jsonify({"success": False, "message": "Failed to delete cooked food"}),
+                500,
+            )
+
+    payload = request.get_json(silent=True) or {}
+    form_data = request.form or {}
+    name = (payload.get("name") or form_data.get("name") or "").strip()
+    if not name:
+        return jsonify({"success": False, "message": "Cooked food name is required"}), 400
+
+    def to_float(value):
+        try:
+            return float(value) if value not in (None, "") else None
+        except Exception:
+            return None
+
+    def get_value(key):
+        return payload.get(key) if key in payload else form_data.get(key)
+
+    def to_bool(value):
+        if value is None:
+            return None
+        if isinstance(value, bool):
+            return value
+        if isinstance(value, (int, float)):
+            return value != 0
+        text = str(value).strip().lower()
+        return text in {"1", "true", "yes", "y", "on"}
+
+    photo_file = request.files.get("photo")
+    if photo_file and photo_file.filename:
+        filename = secure_filename(photo_file.filename)
+        _, ext = os.path.splitext(filename)
+        safe_ext = ext if ext else ""
+        unique_name = f"cooked_food_{uuid.uuid4().hex}{safe_ext}"
+        project_root = os.path.dirname(current_app.root_path)
+        upload_dir = os.path.join(project_root, "images", "cooked_foods")
+        os.makedirs(upload_dir, exist_ok=True)
+        photo_file.save(os.path.join(upload_dir, unique_name))
+        cooked_food.photo = f"images/cooked_foods/{unique_name}"
+
+    cooked_food.name = name
+    cooked_food.description = (get_value("description") or "").strip()
+    cooked_food.food_type = (get_value("food_type") or "cooked").strip().lower() or "cooked"
+    cooked_food.cooking_method = (get_value("cooking_method") or "").strip() or None
+    vegan_value = to_bool(get_value("is_gevan"))
+    if vegan_value is not None:
+        cooked_food.is_gevan = vegan_value
+    cooked_food.calories = to_float(get_value("calories"))
+    cooked_food.protein = to_float(get_value("protein"))
+    cooked_food.carbs = to_float(get_value("carbs"))
+    cooked_food.fat = to_float(get_value("fat"))
+
+    try:
+        db.session.commit()
+        return jsonify(
+            {
+                "success": True,
+                "cooked_food": {
+                    "id": cooked_food.id,
+                    "name": cooked_food.name,
+                    "photo": cooked_food.photo,
+                    "description": cooked_food.description or "",
+                    "food_type": cooked_food.food_type or "cooked",
+                    "cooking_method": cooked_food.cooking_method or "",
+                    "calories": cooked_food.calories,
+                    "protein": cooked_food.protein,
+                    "carbs": cooked_food.carbs,
+                    "fat": cooked_food.fat,
+                },
+            }
+        )
+    except Exception:
+        db.session.rollback()
+        current_app.logger.exception("Failed to update cooked food")
+        return (
+            jsonify({"success": False, "message": "Failed to update cooked food"}),
+            500,
+        )
 
 
 @dashboard_bp.route("/doctor/profile")

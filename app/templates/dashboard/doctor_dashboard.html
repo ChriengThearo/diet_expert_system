@@ -555,6 +555,14 @@
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="cooked-foods-tab" data-bs-toggle="tab"
+                            data-bs-target="#cooked-foods" data-permission="food.read" data-action="view cooked foods"
+                            type="button">
+                            <span class="tab-icon-wrap"><i class="fas fa-utensils"></i></span>
+                            <span>Cooked Food Catalog</span>
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
                         <button class="nav-link" id="builder-tab" data-bs-toggle="tab" data-bs-target="#builder"
                             data-permission="rule.create" data-action="build rules" type="button">
                             <span class="tab-icon-wrap"><i class="fas fa-tools"></i></span>
@@ -645,6 +653,51 @@
                         </div>
                         <nav aria-label="Food pagination" class="mt-4">
                             <ul class="pagination justify-content-center" id="foods-pagination"></ul>
+                        </nav>
+                    </div>
+
+                    <!-- Cooked Foods Tab -->
+                    <div class="tab-pane fade" id="cooked-foods" role="tabpanel">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4 class="mb-0"><i class="fas fa-utensils me-2"></i>Cooked Food Items</h4>
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-outline-secondary btn-sm"
+                                    id="refresh-cooked-foods-list">
+                                    <i class="fas fa-sync-alt me-1"></i>Refresh
+                                </button>
+                                <button type="button" class="btn btn-custom btn-sm" id="add-cooked-food-btn-tab"
+                                    data-permission="food.create" data-action="add cooked foods">
+                                    <i class="fas fa-plus-circle me-1"></i>Add Cooked Food
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle" id="cooked-foods-table">
+                                <thead>
+                                    <tr>
+                                        <th>Photo</th>
+                                        <th>Name</th>
+                                        <th>Cooking Method</th>
+                                        <th>Is Vegan</th>
+                                        <th>Calories</th>
+                                        <th>Protein</th>
+                                        <th>Carbs</th>
+                                        <th>Fat</th>
+                                        <th class="text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="cooked-foods-table-body">
+                                    <!-- Cooked foods will render here -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="alert alert-info d-none" id="cooked-foods-table-empty">
+                            <i class="fas fa-info-circle me-2"></i>No cooked foods found yet. Use "Add Cooked Food" to
+                            get started.
+                        </div>
+                        <nav aria-label="Cooked food pagination" class="mt-4">
+                            <ul class="pagination justify-content-center" id="cooked-foods-pagination"></ul>
                         </nav>
                     </div>
 
@@ -1098,6 +1151,76 @@
         </div>
     </div>
 
+    <!-- Add Cooked Food Modal -->
+    <div class="modal fade" id="addCookedFoodModal" tabindex="-1" aria-labelledby="addCookedFoodLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addCookedFoodLabel"><i class="fas fa-utensils me-2"></i>Add Cooked
+                        Food</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="cooked-food-id">
+                    <div class="mb-3">
+                        <label class="form-label">Cooked Food Name</label>
+                        <input type="text" class="form-control" id="cooked-food-name" placeholder="Enter cooked food name">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Photo</label>
+                        <input type="file" class="form-control" id="cooked-food-photo" accept="image/*">
+                        <div class="form-text">Upload an image for this cooked food item.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" id="cooked-food-description" rows="2"
+                            placeholder="Optional description"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Cooking Method</label>
+                        <input type="text" class="form-control" id="cooked-food-method"
+                            placeholder="e.g., grilled, steamed, baked">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Is Vegan</label>
+                        <select class="form-select" id="cooked-food-vegan">
+                            <option value="1">Yes</option>
+                            <option value="0" selected>No</option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label class="form-label">Calories</label>
+                            <input type="number" step="0.01" class="form-control" id="cooked-food-calories"
+                                placeholder="kcal">
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label class="form-label">Protein</label>
+                            <input type="number" step="0.01" class="form-control" id="cooked-food-protein"
+                                placeholder="g">
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label class="form-label">Carbs</label>
+                            <input type="number" step="0.01" class="form-control" id="cooked-food-carbs" placeholder="g">
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label class="form-label">Fat</label>
+                            <input type="number" step="0.01" class="form-control" id="cooked-food-fat" placeholder="g">
+                        </div>
+                    </div>
+                    <div class="alert alert-danger d-none" id="cooked-food-error"></div>
+                    <div class="alert alert-success d-none" id="cooked-food-success"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-custom" id="save-cooked-food-btn" data-permission="food.create"
+                        data-action="save cooked foods">Save Cooked Food</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Rule Details Modal -->
     <div class="modal fade" id="ruleDetailsModal" tabindex="-1" aria-labelledby="ruleDetailsLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -1160,11 +1283,15 @@
         let currentFoodPage = 1;
         const foodsPerPage = 12;
         let foodsCache = [];
+        let currentCookedFoodPage = 1;
+        const cookedFoodsPerPage = 12;
+        let cookedFoodsCache = [];
 
         // Initialize the page
         document.addEventListener('DOMContentLoaded', function () {
             loadRules();
             loadFoods();
+            loadCookedFoods();
             setupEventListeners();
             runInitialTest();
         });
@@ -1630,6 +1757,315 @@
                     populateFoodSelects([], 'Failed to load foods. Please refresh or try again.');
                     currentFoodPage = 1;
                     renderFoodTable([]);
+                });
+        }
+
+        function renderCookedFoodTable(cookedFoods) {
+            const tableBody = document.getElementById('cooked-foods-table-body');
+            const emptyState = document.getElementById('cooked-foods-table-empty');
+            if (!tableBody) {
+                return;
+            }
+
+            const items = Array.isArray(cookedFoods) ? cookedFoods : [];
+            const totalPages = Math.max(1, Math.ceil(items.length / cookedFoodsPerPage));
+            currentCookedFoodPage = Math.min(Math.max(1, currentCookedFoodPage), totalPages);
+            const start = (currentCookedFoodPage - 1) * cookedFoodsPerPage;
+            const pageFoods = items.slice(start, start + cookedFoodsPerPage);
+
+            if (items.length === 0) {
+                tableBody.innerHTML = '';
+                if (emptyState) {
+                    emptyState.classList.remove('d-none');
+                }
+                renderCookedFoodPagination(1);
+                return;
+            }
+
+            if (emptyState) {
+                emptyState.classList.add('d-none');
+            }
+
+            const cookedRows = pageFoods.map(food => {
+                const photoPath = food.photo
+                    ? (String(food.photo).startsWith('http') || String(food.photo).startsWith('/')
+                        ? food.photo
+                        : `/${food.photo}`)
+                    : '';
+                const photoCell = photoPath
+                    ? `<img src="${photoPath}" alt="${food.name || 'Cooked food photo'}" class="food-thumb">`
+                    : `<div class="food-thumb-placeholder">No Photo</div>`;
+
+                return `
+                    <tr data-id="${food.id}">
+                        <td>${photoCell}</td>
+                        <td>${food.name || 'Unnamed Food'}</td>
+                        <td>${food.cooking_method || '-'}</td>
+                        <td>${food.is_vegan ? 'Yes' : 'No'}</td>
+                        <td>${formatNutrient(food.calories, 'kcal')}</td>
+                        <td>${formatNutrient(food.protein, 'g')}</td>
+                        <td>${formatNutrient(food.carbs, 'g')}</td>
+                        <td>${formatNutrient(food.fat, 'g')}</td>
+                        <td class="text-end">
+                            <button class="btn btn-sm btn-outline-secondary view-cooked-food" data-id="${food.id}"
+                                data-permission="food.read" data-action="view cooked foods">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-primary edit-cooked-food" data-id="${food.id}"
+                                data-permission="food.edit" data-action="edit cooked foods">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger delete-cooked-food" data-id="${food.id}"
+                                data-permission="food.delete" data-action="delete cooked foods">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            const placeholdersNeeded = Math.max(0, cookedFoodsPerPage - pageFoods.length);
+            const placeholderRows = Array.from({ length: placeholdersNeeded }, () => `
+                <tr class="food-table-placeholder-row" aria-hidden="true">
+                    <td><div class="food-thumb-placeholder">-</div></td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td class="text-end">-</td>
+                </tr>
+            `).join('');
+
+            tableBody.innerHTML = cookedRows + placeholderRows;
+            renderCookedFoodPagination(totalPages);
+        }
+
+        function renderCookedFoodPagination(totalPages) {
+            const pagination = document.getElementById('cooked-foods-pagination');
+            if (!pagination) {
+                return;
+            }
+            pagination.innerHTML = '';
+            if (totalPages <= 1) {
+                return;
+            }
+
+            const makeItem = (label, page, disabled = false, active = false) => {
+                const li = document.createElement('li');
+                li.className = `page-item${disabled ? ' disabled' : ''}${active ? ' active' : ''}`;
+                const link = document.createElement('a');
+                link.className = 'page-link';
+                link.href = '#';
+                link.dataset.page = String(page);
+                link.textContent = label;
+                li.appendChild(link);
+                return li;
+            };
+
+            pagination.appendChild(
+                makeItem('Previous', Math.max(1, currentCookedFoodPage - 1), currentCookedFoodPage === 1)
+            );
+
+            for (let i = 1; i <= totalPages; i++) {
+                pagination.appendChild(makeItem(String(i), i, false, i === currentCookedFoodPage));
+            }
+
+            pagination.appendChild(
+                makeItem('Next', Math.min(totalPages, currentCookedFoodPage + 1), currentCookedFoodPage === totalPages)
+            );
+        }
+
+        function loadCookedFoods() {
+            return fetch('/dashboard/doctor/cooked-foods')
+                .then(response => response.json())
+                .then(data => {
+                    cookedFoodsCache = Array.isArray(data.cooked_foods) ? data.cooked_foods : [];
+                    currentCookedFoodPage = 1;
+                    renderCookedFoodTable(cookedFoodsCache);
+                })
+                .catch(error => {
+                    console.error('Error loading cooked foods:', error);
+                    cookedFoodsCache = [];
+                    currentCookedFoodPage = 1;
+                    renderCookedFoodTable([]);
+                });
+        }
+
+        function openCookedFoodModal(mode, food) {
+            const modalEl = document.getElementById('addCookedFoodModal');
+            if (!modalEl) {
+                return;
+            }
+
+            const titleEl = document.getElementById('addCookedFoodLabel');
+            const saveButton = document.getElementById('save-cooked-food-btn');
+            const idInput = document.getElementById('cooked-food-id');
+            const isEdit = mode === 'edit';
+
+            if (titleEl) {
+                titleEl.textContent = isEdit ? 'Edit Cooked Food' : 'Add Cooked Food';
+            }
+            if (saveButton) {
+                saveButton.textContent = isEdit ? 'Update Cooked Food' : 'Save Cooked Food';
+                saveButton.dataset.permission = isEdit ? 'food.edit' : 'food.create';
+                saveButton.dataset.action = isEdit ? 'edit cooked foods' : 'add cooked foods';
+            }
+            if (idInput) {
+                idInput.value = isEdit && food ? food.id : '';
+            }
+
+            document.getElementById('cooked-food-name').value = isEdit && food ? (food.name || '') : '';
+            document.getElementById('cooked-food-description').value = isEdit && food ? (food.description || '') : '';
+            document.getElementById('cooked-food-method').value = isEdit && food ? (food.cooking_method || '') : '';
+            document.getElementById('cooked-food-vegan').value = isEdit && food ? (food.is_vegan ? '1' : '0') : '0';
+            document.getElementById('cooked-food-calories').value = isEdit && food && food.calories != null ? food.calories : '';
+            document.getElementById('cooked-food-protein').value = isEdit && food && food.protein != null ? food.protein : '';
+            document.getElementById('cooked-food-carbs').value = isEdit && food && food.carbs != null ? food.carbs : '';
+            document.getElementById('cooked-food-fat').value = isEdit && food && food.fat != null ? food.fat : '';
+            document.getElementById('cooked-food-photo').value = '';
+
+            const errorEl = document.getElementById('cooked-food-error');
+            const successEl = document.getElementById('cooked-food-success');
+            if (errorEl) {
+                errorEl.textContent = '';
+                errorEl.classList.add('d-none');
+            }
+            if (successEl) {
+                successEl.textContent = '';
+                successEl.classList.add('d-none');
+            }
+
+            const modal = new bootstrap.Modal(modalEl);
+            modal.show();
+        }
+
+        function deleteCookedFood(foodId) {
+            if (!foodId) {
+                return;
+            }
+            if (!confirm('Are you sure you want to delete this cooked food item?')) {
+                return;
+            }
+
+            fetch(`/dashboard/doctor/cooked-foods/${foodId}`, {
+                method: 'DELETE'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.success) {
+                        throw new Error(data.message || 'Failed to delete cooked food');
+                    }
+                    loadCookedFoods();
+                })
+                .catch(error => {
+                    console.error('Error deleting cooked food:', error);
+                    alert('Failed to delete cooked food. Please try again.');
+                });
+        }
+
+        function openCookedFoodDetailsModal(food) {
+            const modalContent = document.getElementById('foodDetailsContent');
+            if (!modalContent || !food) {
+                return;
+            }
+
+            const photoPath = food.photo
+                ? (String(food.photo).startsWith('http') || String(food.photo).startsWith('/')
+                    ? food.photo
+                    : `/${food.photo}`)
+                : '';
+            const photoHtml = photoPath
+                ? `<img src="${photoPath}" alt="${food.name || 'Cooked food photo'}" class="img-fluid rounded mb-3">`
+                : '<div class="text-muted mb-3">No photo available</div>';
+
+            modalContent.innerHTML = `
+                ${photoHtml}
+                <h5 class="mb-1">${food.name || 'Cooked Food'}</h5>
+                <p class="text-muted">${food.description || 'No description'}</p>
+                <table class="table table-sm">
+                    <tr><td><strong>Cooking Method</strong></td><td>${food.cooking_method || '-'}</td></tr>
+                    <tr><td><strong>Is Vegan</strong></td><td>${food.is_vegan ? 'Yes' : 'No'}</td></tr>
+                    <tr><td><strong>Calories</strong></td><td>${formatNutrient(food.calories, 'kcal')}</td></tr>
+                    <tr><td><strong>Protein</strong></td><td>${formatNutrient(food.protein, 'g')}</td></tr>
+                    <tr><td><strong>Carbs</strong></td><td>${formatNutrient(food.carbs, 'g')}</td></tr>
+                    <tr><td><strong>Fat</strong></td><td>${formatNutrient(food.fat, 'g')}</td></tr>
+                </table>
+            `;
+
+            const modal = new bootstrap.Modal(document.getElementById('foodDetailsModal'));
+            modal.show();
+        }
+
+        function saveCookedFood() {
+            const foodId = document.getElementById('cooked-food-id').value;
+            const name = document.getElementById('cooked-food-name').value.trim();
+            const description = document.getElementById('cooked-food-description').value.trim();
+            const cookingMethod = document.getElementById('cooked-food-method').value.trim();
+            const isVegan = document.getElementById('cooked-food-vegan').value;
+            const calories = document.getElementById('cooked-food-calories').value;
+            const protein = document.getElementById('cooked-food-protein').value;
+            const carbs = document.getElementById('cooked-food-carbs').value;
+            const fat = document.getElementById('cooked-food-fat').value;
+            const photoFile = document.getElementById('cooked-food-photo').files[0];
+
+            const errorEl = document.getElementById('cooked-food-error');
+            const successEl = document.getElementById('cooked-food-success');
+            errorEl.classList.add('d-none');
+            successEl.classList.add('d-none');
+
+            if (!name) {
+                errorEl.textContent = 'Cooked food name is required.';
+                errorEl.classList.remove('d-none');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('description', description);
+            formData.append('food_type', 'cooked');
+            formData.append('cooking_method', cookingMethod);
+            formData.append('is_gevan', isVegan);
+            formData.append('calories', calories);
+            formData.append('protein', protein);
+            formData.append('carbs', carbs);
+            formData.append('fat', fat);
+            if (photoFile) {
+                formData.append('photo', photoFile);
+            }
+
+            const requestUrl = foodId ? `/dashboard/doctor/cooked-foods/${foodId}` : '/dashboard/doctor/cooked-foods';
+            fetch(requestUrl, {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.success) {
+                        throw new Error(data.message || 'Failed to save cooked food');
+                    }
+
+                    successEl.textContent = foodId ? 'Cooked food updated successfully.' : 'Cooked food saved successfully.';
+                    successEl.classList.remove('d-none');
+
+                    document.getElementById('cooked-food-name').value = '';
+                    document.getElementById('cooked-food-photo').value = '';
+                    document.getElementById('cooked-food-description').value = '';
+                    document.getElementById('cooked-food-method').value = '';
+                    document.getElementById('cooked-food-vegan').value = '0';
+                    document.getElementById('cooked-food-calories').value = '';
+                    document.getElementById('cooked-food-protein').value = '';
+                    document.getElementById('cooked-food-carbs').value = '';
+                    document.getElementById('cooked-food-fat').value = '';
+                    document.getElementById('cooked-food-id').value = '';
+
+                    loadCookedFoods();
+                })
+                .catch(error => {
+                    errorEl.textContent = error.message || 'Failed to save cooked food.';
+                    errorEl.classList.remove('d-none');
                 });
         }
 
@@ -2134,9 +2570,23 @@
                 });
             }
 
+            const addCookedFoodTabButton = document.getElementById('add-cooked-food-btn-tab');
+            if (addCookedFoodTabButton) {
+                addCookedFoodTabButton.addEventListener('click', function () {
+                    openCookedFoodModal('create');
+                });
+            }
+
             document.getElementById('save-food-btn').addEventListener('click', function () {
                 saveFood();
             });
+
+            const saveCookedFoodButton = document.getElementById('save-cooked-food-btn');
+            if (saveCookedFoodButton) {
+                saveCookedFoodButton.addEventListener('click', function () {
+                    saveCookedFood();
+                });
+            }
 
             const refreshFoodsButton = document.getElementById('refresh-foods');
             if (refreshFoodsButton) {
@@ -2149,6 +2599,13 @@
             if (refreshFoodsListButton) {
                 refreshFoodsListButton.addEventListener('click', function () {
                     loadFoods();
+                });
+            }
+
+            const refreshCookedFoodsListButton = document.getElementById('refresh-cooked-foods-list');
+            if (refreshCookedFoodsListButton) {
+                refreshCookedFoodsListButton.addEventListener('click', function () {
+                    loadCookedFoods();
                 });
             }
 
@@ -2176,6 +2633,34 @@
                     }
                     if (actionButton.classList.contains('delete-food')) {
                         deleteFood(foodId);
+                    }
+                });
+            }
+
+            const cookedFoodsTableBody = document.getElementById('cooked-foods-table-body');
+            if (cookedFoodsTableBody) {
+                cookedFoodsTableBody.addEventListener('click', function (event) {
+                    const actionButton = event.target.closest('button');
+                    if (!actionButton) {
+                        return;
+                    }
+                    const foodId = actionButton.getAttribute('data-id');
+                    if (actionButton.classList.contains('view-cooked-food')) {
+                        const food = cookedFoodsCache.find(item => String(item.id) === String(foodId));
+                        if (food) {
+                            openCookedFoodDetailsModal(food);
+                        }
+                        return;
+                    }
+                    if (actionButton.classList.contains('edit-cooked-food')) {
+                        const food = cookedFoodsCache.find(item => String(item.id) === String(foodId));
+                        if (food) {
+                            openCookedFoodModal('edit', food);
+                        }
+                        return;
+                    }
+                    if (actionButton.classList.contains('delete-cooked-food')) {
+                        deleteCookedFood(foodId);
                     }
                 });
             }
@@ -2381,6 +2866,23 @@
                     }
                     currentFoodPage = targetPage;
                     renderFoodTable(foodsCache);
+                });
+            }
+
+            const cookedFoodsPagination = document.getElementById('cooked-foods-pagination');
+            if (cookedFoodsPagination) {
+                cookedFoodsPagination.addEventListener('click', function (event) {
+                    const link = event.target.closest('a.page-link');
+                    if (!link) {
+                        return;
+                    }
+                    event.preventDefault();
+                    const targetPage = parseInt(link.dataset.page, 10);
+                    if (!Number.isFinite(targetPage)) {
+                        return;
+                    }
+                    currentCookedFoodPage = targetPage;
+                    renderCookedFoodTable(cookedFoodsCache);
                 });
             }
         }
