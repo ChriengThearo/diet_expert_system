@@ -251,6 +251,8 @@ def doctor_rules():
         actions = []
         recommended_ids = []
         excluded_ids = []
+        recommended_cooked_ids = []
+        excluded_cooked_ids = []
 
         if rule.conditions:
             try:
@@ -264,6 +266,10 @@ def doctor_rules():
                     priority = parsed.get("priority", priority)
                     recommended_ids = parsed.get("recommended_food_ids") or []
                     excluded_ids = parsed.get("excluded_food_ids") or []
+                    recommended_cooked_ids = (
+                        parsed.get("recommended_cooked_food_ids") or []
+                    )
+                    excluded_cooked_ids = parsed.get("excluded_cooked_food_ids") or []
                 elif isinstance(parsed, list):
                     conditions.extend([str(item) for item in parsed])
                 else:
@@ -281,14 +287,23 @@ def doctor_rules():
         if rule.goals and category == "diet":
             category = "goal"
 
-        if not recommended_ids and not excluded_ids:
+        if (
+            not recommended_ids
+            and not excluded_ids
+            and not recommended_cooked_ids
+            and not excluded_cooked_ids
+        ):
             for mapping in rule.rule_food_maps or []:
                 if mapping.notes == "recommended":
                     if mapping.food_id is not None:
                         recommended_ids.append(mapping.food_id)
+                    if mapping.cooked_food_id is not None:
+                        recommended_cooked_ids.append(mapping.cooked_food_id)
                 elif mapping.notes == "avoid":
                     if mapping.food_id is not None:
                         excluded_ids.append(mapping.food_id)
+                    if mapping.cooked_food_id is not None:
+                        excluded_cooked_ids.append(mapping.cooked_food_id)
 
         result.append(
             {
@@ -302,6 +317,8 @@ def doctor_rules():
                 "description": rule.description or "",
                 "recommended_food_ids": recommended_ids,
                 "excluded_food_ids": excluded_ids,
+                "recommended_cooked_food_ids": recommended_cooked_ids,
+                "excluded_cooked_food_ids": excluded_cooked_ids,
             }
         )
 
@@ -922,6 +939,8 @@ def create_doctor_rule():
 
     recommended_ids = to_int_list(payload.get("recommended_food_ids"))
     excluded_ids = to_int_list(payload.get("excluded_food_ids"))
+    recommended_cooked_ids = to_int_list(payload.get("recommended_cooked_food_ids"))
+    excluded_cooked_ids = to_int_list(payload.get("excluded_cooked_food_ids"))
 
     active = bool(payload.get("active", True))
     meta = {
@@ -932,6 +951,8 @@ def create_doctor_rule():
         "actions": payload.get("actions") or [],
         "recommended_food_ids": recommended_ids,
         "excluded_food_ids": excluded_ids,
+        "recommended_cooked_food_ids": recommended_cooked_ids,
+        "excluded_cooked_food_ids": excluded_cooked_ids,
     }
 
     try:
@@ -962,11 +983,24 @@ def create_doctor_rule():
             goal.diet_rule_id = rule.id
             db.session.commit()
 
-        if recommended_ids or excluded_ids:
+        if (
+            recommended_ids
+            or excluded_ids
+            or recommended_cooked_ids
+            or excluded_cooked_ids
+        ):
             valid_ids = {
                 food.id
                 for food in FoodsTable.query.filter(
                     FoodsTable.id.in_(set(recommended_ids + excluded_ids))
+                ).all()
+            }
+            valid_cooked_ids = {
+                cooked_food.id
+                for cooked_food in CookedFoodsTable.query.filter(
+                    CookedFoodsTable.id.in_(
+                        set(recommended_cooked_ids + excluded_cooked_ids)
+                    )
                 ).all()
             }
             for food_id in recommended_ids:
@@ -984,6 +1018,24 @@ def create_doctor_rule():
                         RuleFoodMapTable(
                             diet_rule_id=rule.id,
                             food_id=food_id,
+                            notes="avoid",
+                        )
+                    )
+            for cooked_food_id in recommended_cooked_ids:
+                if cooked_food_id in valid_cooked_ids:
+                    db.session.add(
+                        RuleFoodMapTable(
+                            diet_rule_id=rule.id,
+                            cooked_food_id=cooked_food_id,
+                            notes="recommended",
+                        )
+                    )
+            for cooked_food_id in excluded_cooked_ids:
+                if cooked_food_id in valid_cooked_ids:
+                    db.session.add(
+                        RuleFoodMapTable(
+                            diet_rule_id=rule.id,
+                            cooked_food_id=cooked_food_id,
                             notes="avoid",
                         )
                     )
@@ -1085,12 +1137,16 @@ def update_or_delete_doctor_rule(rule_id: int):
         "actions",
         "recommended_food_ids",
         "excluded_food_ids",
+        "recommended_cooked_food_ids",
+        "excluded_cooked_food_ids",
         "category",
         "priority",
     }
     update_meta = any(key in payload for key in meta_keys)
     recommended_ids = None
     excluded_ids = None
+    recommended_cooked_ids = None
+    excluded_cooked_ids = None
     meta_conditions = None
 
     if update_meta:
@@ -1131,14 +1187,31 @@ def update_or_delete_doctor_rule(rule_id: int):
             excluded_ids = to_int_list(payload.get("excluded_food_ids"))
             meta["excluded_food_ids"] = excluded_ids
 
+        if "recommended_cooked_food_ids" in payload:
+            recommended_cooked_ids = to_int_list(payload.get("recommended_cooked_food_ids"))
+            meta["recommended_cooked_food_ids"] = recommended_cooked_ids
+
+        if "excluded_cooked_food_ids" in payload:
+            excluded_cooked_ids = to_int_list(payload.get("excluded_cooked_food_ids"))
+            meta["excluded_cooked_food_ids"] = excluded_cooked_ids
+
         rule.conditions = json.dumps(meta)
         meta_conditions = meta.get("conditions") or []
 
-    if recommended_ids is not None or excluded_ids is not None:
+    if (
+        recommended_ids is not None
+        or excluded_ids is not None
+        or recommended_cooked_ids is not None
+        or excluded_cooked_ids is not None
+    ):
         if recommended_ids is None:
             recommended_ids = []
         if excluded_ids is None:
             excluded_ids = []
+        if recommended_cooked_ids is None:
+            recommended_cooked_ids = []
+        if excluded_cooked_ids is None:
+            excluded_cooked_ids = []
         RuleFoodMapTable.query.filter_by(diet_rule_id=rule.id).delete(
             synchronize_session=False
         )
@@ -1146,6 +1219,12 @@ def update_or_delete_doctor_rule(rule_id: int):
             food.id
             for food in FoodsTable.query.filter(
                 FoodsTable.id.in_(set(recommended_ids + excluded_ids))
+            ).all()
+        }
+        valid_cooked_ids = {
+            cooked_food.id
+            for cooked_food in CookedFoodsTable.query.filter(
+                CookedFoodsTable.id.in_(set(recommended_cooked_ids + excluded_cooked_ids))
             ).all()
         }
         for food_id in recommended_ids:
@@ -1163,6 +1242,24 @@ def update_or_delete_doctor_rule(rule_id: int):
                     RuleFoodMapTable(
                         diet_rule_id=rule.id,
                         food_id=food_id,
+                        notes="avoid",
+                    )
+                )
+        for cooked_food_id in recommended_cooked_ids:
+            if cooked_food_id in valid_cooked_ids:
+                db.session.add(
+                    RuleFoodMapTable(
+                        diet_rule_id=rule.id,
+                        cooked_food_id=cooked_food_id,
+                        notes="recommended",
+                    )
+                )
+        for cooked_food_id in excluded_cooked_ids:
+            if cooked_food_id in valid_cooked_ids:
+                db.session.add(
+                    RuleFoodMapTable(
+                        diet_rule_id=rule.id,
+                        cooked_food_id=cooked_food_id,
                         notes="avoid",
                     )
                 )

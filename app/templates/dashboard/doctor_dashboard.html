@@ -908,6 +908,93 @@
                                 <div class="small text-danger mt-2 d-none" id="foods-limit-warning"></div>
                             </div>
 
+                            <div class="border rounded p-3 mb-4 builder-section" id="rule-cooked-foods-section">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h6 class="mb-0"><i class="fas fa-utensils me-2"></i>Cooked Foods for This Rule</h6>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" id="refresh-cooked-foods">
+                                        <i class="fas fa-sync-alt me-1"></i>Refresh
+                                    </button>
+                                </div>
+                                <p class="text-muted small mb-3">Select cooked foods from the catalog to recommend or
+                                    avoid in this rule.</p>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Recommended Cooked Foods</label>
+                                        <select class="form-select" id="rule-recommended-cooked-foods" size="6" multiple>
+                                        </select>
+                                        <div class="table-responsive mt-2">
+                                            <table class="table table-sm table-bordered mb-0">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th>Food</th>
+                                                        <th>Vegan</th>
+                                                        <th>Calories</th>
+                                                        <th>Protein</th>
+                                                        <th>Carbs</th>
+                                                        <th>Fat</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="recommended-cooked-foods-details">
+                                                    <tr>
+                                                        <td colspan="6" class="text-muted text-center">No foods selected
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr class="table-light" id="recommended-cooked-foods-total">
+                                                        <th>Total</th>
+                                                        <th>-</th>
+                                                        <th>0 kcal</th>
+                                                        <th>0 g</th>
+                                                        <th>0 g</th>
+                                                        <th>0 g</th>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Avoid Cooked Foods</label>
+                                        <select class="form-select" id="rule-excluded-cooked-foods" size="6" multiple>
+                                        </select>
+                                        <div class="table-responsive mt-2">
+                                            <table class="table table-sm table-bordered mb-0">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th>Food</th>
+                                                        <th>Vegan</th>
+                                                        <th>Calories</th>
+                                                        <th>Protein</th>
+                                                        <th>Carbs</th>
+                                                        <th>Fat</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="excluded-cooked-foods-details">
+                                                    <tr>
+                                                        <td colspan="6" class="text-muted text-center">No foods selected
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr class="table-light" id="excluded-cooked-foods-total">
+                                                        <th>Total</th>
+                                                        <th>-</th>
+                                                        <th>0 kcal</th>
+                                                        <th>0 g</th>
+                                                        <th>0 g</th>
+                                                        <th>0 g</th>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="small text-muted mt-2 d-none" id="cooked-foods-empty">
+                                    No cooked foods found yet. Use "Add Cooked Food" to add items to the list.
+                                </div>
+                                <div class="small text-danger mt-2 d-none" id="cooked-foods-limit-warning"></div>
+                            </div>
+
                             <hr class="my-4">
 
                             <div class="d-flex justify-content-between">
@@ -1344,9 +1431,9 @@
             };
         }
 
-        function calculateTotals(selectedIds) {
+        function calculateTotals(selectedIds, sourceCache = foodsCache) {
             return selectedIds.reduce((totals, foodId) => {
-                const food = foodsCache.find(item => String(item.id) === String(foodId));
+                const food = sourceCache.find(item => String(item.id) === String(foodId));
                 if (!food) {
                     return totals;
                 }
@@ -1358,8 +1445,8 @@
             }, { calories: 0, protein: 0, carbs: 0, fat: 0 });
         }
 
-        function setLimitWarning(message) {
-            const warningEl = document.getElementById('foods-limit-warning');
+        function setLimitWarning(message, warningElementId = 'foods-limit-warning') {
+            const warningEl = document.getElementById(warningElementId);
             if (!warningEl) {
                 return;
             }
@@ -1372,9 +1459,9 @@
             }
         }
 
-        function checkTotalsAgainstLimits(selectedIds, listLabel) {
+        function checkTotalsAgainstLimits(selectedIds, listLabel, sourceCache = foodsCache) {
             const limits = getGoalLimits();
-            const totals = calculateTotals(selectedIds);
+            const totals = calculateTotals(selectedIds, sourceCache);
             const over = [];
 
             if (limits.calories !== null && totals.calories > limits.calories) {
@@ -1400,7 +1487,14 @@
             return { ok: true };
         }
 
-        function attemptToggleFood(selectEl, option, listLabel) {
+        function attemptToggleFood(
+            selectEl,
+            option,
+            listLabel,
+            sourceCache = foodsCache,
+            onUpdate = updateFoodTables,
+            warningElementId = 'foods-limit-warning'
+        ) {
             if (!selectEl || !option || option.disabled) {
                 return;
             }
@@ -1410,24 +1504,28 @@
 
             if (option.selected) {
                 option.selected = false;
-                updateFoodTables();
-                setLimitWarning('');
+                onUpdate();
+                setLimitWarning('', warningElementId);
                 return;
             }
 
             selectedIds.add(option.value);
-            const result = checkTotalsAgainstLimits(Array.from(selectedIds), listLabel);
+            const result = checkTotalsAgainstLimits(
+                Array.from(selectedIds),
+                listLabel,
+                sourceCache
+            );
             if (!result.ok) {
-                setLimitWarning(result.message);
+                setLimitWarning(result.message, warningElementId);
                 return;
             }
 
-            setLimitWarning('');
+            setLimitWarning('', warningElementId);
             option.selected = true;
-            updateFoodTables();
+            onUpdate();
         }
 
-        function renderSelectedFoods(selectId, tableBodyId, totalRowId) {
+        function renderSelectedFoods(selectId, tableBodyId, totalRowId, sourceCache = foodsCache) {
             const selectEl = document.getElementById(selectId);
             const tableBody = document.getElementById(tableBodyId);
             const totalRow = document.getElementById(totalRowId);
@@ -1460,7 +1558,7 @@
             let totalFat = 0;
 
             const rows = selected.map(foodId => {
-                const food = foodsCache.find(item => String(item.id) === String(foodId));
+                const food = sourceCache.find(item => String(item.id) === String(foodId));
                 if (!food) {
                     return null;
                 }
@@ -1507,12 +1605,29 @@
             renderSelectedFoods('rule-excluded-foods', 'excluded-foods-details', 'excluded-foods-total');
         }
 
+        function updateCookedFoodTables() {
+            renderSelectedFoods(
+                'rule-recommended-cooked-foods',
+                'recommended-cooked-foods-details',
+                'recommended-cooked-foods-total',
+                cookedFoodsCache
+            );
+            renderSelectedFoods(
+                'rule-excluded-cooked-foods',
+                'excluded-cooked-foods-details',
+                'excluded-cooked-foods-total',
+                cookedFoodsCache
+            );
+        }
+
         function applyDietTypeFoodFilter() {
             const dietType = document.getElementById('goal-diet-type')?.value;
             const veganOnly = dietType === 'vegan';
             const selects = [
                 document.getElementById('rule-recommended-foods'),
-                document.getElementById('rule-excluded-foods')
+                document.getElementById('rule-excluded-foods'),
+                document.getElementById('rule-recommended-cooked-foods'),
+                document.getElementById('rule-excluded-cooked-foods')
             ];
 
             selects.forEach(selectEl => {
@@ -1534,6 +1649,7 @@
 
             applyAllergyFoodFilter();
             updateFoodTables();
+            updateCookedFoodTables();
         }
 
         function getSelectedAllergies() {
@@ -1546,23 +1662,32 @@
             const dietType = document.getElementById('goal-diet-type')?.value;
             const veganOnly = dietType === 'vegan';
             const allergies = new Set(getSelectedAllergies());
-            const recommendedSelect = document.getElementById('rule-recommended-foods');
-            if (!recommendedSelect) {
+            const selects = [
+                document.getElementById('rule-recommended-foods'),
+                document.getElementById('rule-excluded-foods')
+            ];
+            if (!selects[0] && !selects[1]) {
                 return;
             }
-            Array.from(recommendedSelect.options).forEach(option => {
-                if (option.disabled && option.value === '') {
+            selects.forEach(selectEl => {
+                if (!selectEl) {
                     return;
                 }
-                const foodType = String(option.dataset.foodType || 'general').toLowerCase();
-                const isVegan = String(option.dataset.isVegan || '0') === '1';
-                const shouldDisable = (veganOnly && !isVegan) || allergies.has(foodType);
-                option.disabled = shouldDisable;
-                if (shouldDisable && option.selected) {
-                    option.selected = false;
-                }
+                Array.from(selectEl.options).forEach(option => {
+                    if (option.disabled && option.value === '') {
+                        return;
+                    }
+                    const foodType = String(option.dataset.foodType || 'general').toLowerCase();
+                    const isVegan = String(option.dataset.isVegan || '0') === '1';
+                    const shouldDisable = (veganOnly && !isVegan) || allergies.has(foodType);
+                    option.disabled = shouldDisable;
+                    if (shouldDisable && option.selected) {
+                        option.selected = false;
+                    }
+                });
             });
             updateFoodTables();
+            updateCookedFoodTables();
         }
 
         function populateFoodSelects(foods, statusMessage) {
@@ -1623,6 +1748,66 @@
 
             applyDietTypeFoodFilter();
             updateFoodTables();
+        }
+
+        function populateCookedFoodSelects(cookedFoods, statusMessage) {
+            const recommendedSelect = document.getElementById('rule-recommended-cooked-foods');
+            const excludedSelect = document.getElementById('rule-excluded-cooked-foods');
+            const emptyMessage = document.getElementById('cooked-foods-empty');
+
+            if (!recommendedSelect || !excludedSelect) {
+                return;
+            }
+
+            recommendedSelect.innerHTML = '';
+            excludedSelect.innerHTML = '';
+
+            const items = Array.isArray(cookedFoods) ? cookedFoods : [];
+            if (items.length === 0) {
+                if (emptyMessage) {
+                    if (statusMessage) {
+                        emptyMessage.textContent = statusMessage;
+                    }
+                    emptyMessage.classList.remove('d-none');
+                }
+                const placeholder = document.createElement('option');
+                placeholder.textContent = 'No cooked foods available';
+                placeholder.disabled = true;
+                placeholder.selected = true;
+                recommendedSelect.appendChild(placeholder);
+
+                const placeholder2 = placeholder.cloneNode(true);
+                excludedSelect.appendChild(placeholder2);
+                updateCookedFoodTables();
+                return;
+            }
+
+            if (emptyMessage) {
+                emptyMessage.classList.add('d-none');
+            }
+
+            items.forEach(food => {
+                const label = food.name || 'Unnamed Food';
+                const optionA = document.createElement('option');
+                optionA.value = food.id;
+                optionA.textContent = label;
+                optionA.dataset.calories = food.calories ?? '';
+                optionA.dataset.protein = food.protein ?? '';
+                optionA.dataset.carbs = food.carbs ?? '';
+                optionA.dataset.fat = food.fat ?? '';
+                optionA.dataset.isVegan = String(food.is_vegan ?? 0);
+                optionA.dataset.foodType = String(food.food_type || 'cooked').toLowerCase();
+                if (food.description) {
+                    optionA.title = food.description;
+                }
+
+                const optionB = optionA.cloneNode(true);
+                recommendedSelect.appendChild(optionA);
+                excludedSelect.appendChild(optionB);
+            });
+
+            applyDietTypeFoodFilter();
+            updateCookedFoodTables();
         }
 
         function renderFoodTable(foods) {
@@ -1883,12 +2068,17 @@
                 .then(response => response.json())
                 .then(data => {
                     cookedFoodsCache = Array.isArray(data.cooked_foods) ? data.cooked_foods : [];
+                    populateCookedFoodSelects(
+                        cookedFoodsCache,
+                        'No cooked foods found yet. Use "Add Cooked Food" to add items to the list.'
+                    );
                     currentCookedFoodPage = 1;
                     renderCookedFoodTable(cookedFoodsCache);
                 })
                 .catch(error => {
                     console.error('Error loading cooked foods:', error);
                     cookedFoodsCache = [];
+                    populateCookedFoodSelects([], 'Failed to load cooked foods. Please refresh or try again.');
                     currentCookedFoodPage = 1;
                     renderCookedFoodTable([]);
                 });
@@ -2386,14 +2576,24 @@
                     document.getElementById('rule-excluded-foods'),
                     Array.isArray(rule.excluded_food_ids) ? rule.excluded_food_ids : []
                 );
+                setSelectOptions(
+                    document.getElementById('rule-recommended-cooked-foods'),
+                    Array.isArray(rule.recommended_cooked_food_ids) ? rule.recommended_cooked_food_ids : []
+                );
+                setSelectOptions(
+                    document.getElementById('rule-excluded-cooked-foods'),
+                    Array.isArray(rule.excluded_cooked_food_ids) ? rule.excluded_cooked_food_ids : []
+                );
                 updateFoodTables();
+                updateCookedFoodTables();
             };
 
-            if (foodsCache.length === 0) {
-                loadFoods().then(() => applySelections());
-            } else {
+            Promise.all([
+                foodsCache.length === 0 ? loadFoods() : Promise.resolve(),
+                cookedFoodsCache.length === 0 ? loadCookedFoods() : Promise.resolve()
+            ]).then(() => {
                 applySelections();
-            }
+            });
 
             const builderTab = document.getElementById('builder-tab');
             bootstrap.Tab.getOrCreateInstance(builderTab).show();
@@ -2595,6 +2795,13 @@
                 });
             }
 
+            const refreshCookedFoodsButton = document.getElementById('refresh-cooked-foods');
+            if (refreshCookedFoodsButton) {
+                refreshCookedFoodsButton.addEventListener('click', function () {
+                    loadCookedFoods();
+                });
+            }
+
             const refreshFoodsListButton = document.getElementById('refresh-foods-list');
             if (refreshFoodsListButton) {
                 refreshFoodsListButton.addEventListener('click', function () {
@@ -2693,11 +2900,54 @@
                 });
             }
 
+            const recommendedCookedSelect = document.getElementById('rule-recommended-cooked-foods');
+            if (recommendedCookedSelect) {
+                recommendedCookedSelect.addEventListener('change', function () {
+                    updateCookedFoodTables();
+                });
+                recommendedCookedSelect.addEventListener('mousedown', function (event) {
+                    const option = event.target;
+                    if (option && option.tagName === 'OPTION' && !option.disabled) {
+                        event.preventDefault();
+                        attemptToggleFood(
+                            recommendedCookedSelect,
+                            option,
+                            'Recommended Cooked Foods',
+                            cookedFoodsCache,
+                            updateCookedFoodTables,
+                            'cooked-foods-limit-warning'
+                        );
+                    }
+                });
+            }
+
+            const excludedCookedSelect = document.getElementById('rule-excluded-cooked-foods');
+            if (excludedCookedSelect) {
+                excludedCookedSelect.addEventListener('change', function () {
+                    updateCookedFoodTables();
+                });
+                excludedCookedSelect.addEventListener('mousedown', function (event) {
+                    const option = event.target;
+                    if (option && option.tagName === 'OPTION' && !option.disabled) {
+                        event.preventDefault();
+                        attemptToggleFood(
+                            excludedCookedSelect,
+                            option,
+                            'Avoid Cooked Foods',
+                            cookedFoodsCache,
+                            updateCookedFoodTables,
+                            'cooked-foods-limit-warning'
+                        );
+                    }
+                });
+            }
+
             ['goal-calories', 'goal-protein', 'goal-carbs', 'goal-fat'].forEach(id => {
                 const input = document.getElementById(id);
                 if (input) {
                     input.addEventListener('input', function () {
                         updateFoodTables();
+                        updateCookedFoodTables();
                     });
                 }
             });
@@ -2931,6 +3181,8 @@
 
             const recommendedSelect = document.getElementById('rule-recommended-foods');
             const excludedSelect = document.getElementById('rule-excluded-foods');
+            const recommendedCookedSelect = document.getElementById('rule-recommended-cooked-foods');
+            const excludedCookedSelect = document.getElementById('rule-excluded-cooked-foods');
             if (recommendedSelect) {
                 Array.from(recommendedSelect.options).forEach(option => {
                     option.selected = false;
@@ -2941,9 +3193,22 @@
                     option.selected = false;
                 });
             }
+            if (recommendedCookedSelect) {
+                Array.from(recommendedCookedSelect.options).forEach(option => {
+                    option.selected = false;
+                });
+            }
+            if (excludedCookedSelect) {
+                Array.from(excludedCookedSelect.options).forEach(option => {
+                    option.selected = false;
+                });
+            }
 
             applyDietTypeFoodFilter();
             updateFoodTables();
+            updateCookedFoodTables();
+            setLimitWarning('', 'foods-limit-warning');
+            setLimitWarning('', 'cooked-foods-limit-warning');
         }
 
         function applyWeightGoalRule() {
@@ -3031,6 +3296,8 @@
 
             const recommendedSelect = document.getElementById('rule-recommended-foods');
             const excludedSelect = document.getElementById('rule-excluded-foods');
+            const recommendedCookedSelect = document.getElementById('rule-recommended-cooked-foods');
+            const excludedCookedSelect = document.getElementById('rule-excluded-cooked-foods');
             const recommendedFoods = recommendedSelect
                 ? Array.from(recommendedSelect.selectedOptions).map(option => option.textContent.trim()).filter(Boolean)
                 : [];
@@ -3042,6 +3309,12 @@
                 : [];
             const excludedFoodIds = excludedSelect
                 ? Array.from(excludedSelect.selectedOptions).map(option => option.value).filter(Boolean)
+                : [];
+            const recommendedCookedFoodIds = recommendedCookedSelect
+                ? Array.from(recommendedCookedSelect.selectedOptions).map(option => option.value).filter(Boolean)
+                : [];
+            const excludedCookedFoodIds = excludedCookedSelect
+                ? Array.from(excludedCookedSelect.selectedOptions).map(option => option.value).filter(Boolean)
                 : [];
 
             if (recommendedFoods.length > 0) {
@@ -3085,7 +3358,9 @@
                     conditions,
                     actions,
                     recommended_food_ids: recommendedFoodIds,
-                    excluded_food_ids: excludedFoodIds
+                    excluded_food_ids: excludedFoodIds,
+                    recommended_cooked_food_ids: recommendedCookedFoodIds,
+                    excluded_cooked_food_ids: excludedCookedFoodIds
                 })
             })
                 .then(response => response.json())
