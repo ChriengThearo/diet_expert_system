@@ -554,6 +554,25 @@
                             </div>
                         </div>
                     </div>
+                    <div class="mb-1">
+                        <label class="form-label required">Food Preference</label>
+                        <div class="row">
+                            <div class="col-md-3 col-6 mb-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="foodPreference" id="foodPreferenceCooked"
+                                        value="cooked" required>
+                                    <label class="form-check-label" for="foodPreferenceCooked">Cooked Food</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-6 mb-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="foodPreference" id="foodPreferenceRaw"
+                                        value="raw">
+                                    <label class="form-check-label" for="foodPreferenceRaw">Raw Food</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -609,6 +628,10 @@
                                 <tr>
                                     <td><strong>Meals/Day:</strong></td>
                                     <td id="reviewMeals"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Food Preference:</strong></td>
+                                    <td id="reviewFoodPreference"></td>
                                 </tr>
                             </table>
                         </div>
@@ -708,6 +731,18 @@
             if (preferences.mealsPerDay) {
                 const mealsRadio = document.querySelector('input[name="mealsPerDay"][value="' + preferences.mealsPerDay + '"]');
                 if (mealsRadio) mealsRadio.checked = true;
+            }
+
+            const storedFoodPreference = String(preferences.foodPreference || preferences.food_preference || '').trim().toLowerCase();
+            let normalizedFoodPreference = '';
+            if (storedFoodPreference.includes('cooked')) {
+                normalizedFoodPreference = 'cooked';
+            } else if (storedFoodPreference.includes('raw')) {
+                normalizedFoodPreference = 'raw';
+            }
+            if (normalizedFoodPreference) {
+                const preferenceRadio = document.querySelector('input[name="foodPreference"][value="' + normalizedFoodPreference + '"]');
+                if (preferenceRadio) preferenceRadio.checked = true;
             }
         }
 
@@ -971,6 +1006,8 @@
             document.getElementById('reviewBloodSugar').textContent = bloodSugar ? bloodSugar + ' mg/dL' : 'Not provided';
             const meals = document.querySelector('input[name="mealsPerDay"]:checked');
             document.getElementById('reviewMeals').textContent = meals ? meals.value + ' meals' : 'Not specified';
+            const foodPreference = document.querySelector('input[name="foodPreference"]:checked');
+            document.getElementById('reviewFoodPreference').textContent = foodPreference ? foodPreference.nextElementSibling.textContent : 'Not specified';
         }
 
         const dietForm = document.getElementById('dietForm');
@@ -1039,8 +1076,9 @@
 
             const dietTypeInput = document.querySelector('input[name="dietType"]:checked');
             const mealsInput = document.querySelector('input[name="mealsPerDay"]:checked');
+            const foodPreferenceInput = document.querySelector('input[name="foodPreference"]:checked');
 
-            if (!dietTypeInput || !mealsInput) {
+            if (!dietTypeInput || !mealsInput || !foodPreferenceInput) {
                 showFormError('Please complete the required selections before generating your plan.');
                 return;
             }
@@ -1064,7 +1102,8 @@
                     blood_sugar: document.getElementById('blood_sugar').value || null
                 },
                 preferences: {
-                    mealsPerDay: mealsInput.value
+                    mealsPerDay: mealsInput.value,
+                    foodPreference: foodPreferenceInput.value
                 }
             };
 
@@ -1303,6 +1342,16 @@
                 ? profile.allergies.map(titleCase).join(', ')
                 : 'None';
             const mealsPerDay = profile.meals_per_day ? `${profile.meals_per_day} meals` : `${mealsCount} meals`;
+            const selectedFoodPreference = String(
+                profile.food_preference
+                || document.querySelector('input[name="foodPreference"]:checked')?.value
+                || ''
+            ).toLowerCase();
+            const foodPreferenceDisplay = selectedFoodPreference === 'cooked'
+                ? 'Cooked Food'
+                : selectedFoodPreference === 'raw'
+                    ? 'Raw Food'
+                    : 'Not specified';
             const bloodSugarMetric = profile.blood_sugar !== undefined && profile.blood_sugar !== null
                 ? profile.blood_sugar
                 : document.getElementById('blood_sugar').value;
@@ -1368,6 +1417,7 @@
                                 <tr><td><strong>Allergies:</strong></td><td>${allergies}</td></tr>
                                 <tr><td><strong>Blood Sugar:</strong></td><td>${bloodSugarDisplay}</td></tr>
                                 <tr><td><strong>Meals/Day:</strong></td><td>${mealsPerDay}</td></tr>
+                                <tr><td><strong>Food Preference:</strong></td><td>${foodPreferenceDisplay}</td></tr>
                             </table>
                         </div>
                     </div>

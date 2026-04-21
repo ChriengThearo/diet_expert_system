@@ -448,8 +448,12 @@ class DashboardService:
             try:
                 rule = matched_rule["rule"]
                 actions = matched_rule.get("actions", []) or []
-                foods = DashboardService._get_rule_foods(rule.id)
-                avoid_foods = DashboardService._get_rule_avoid_foods(rule.id)
+                foods = DashboardService._get_rule_foods(
+                    rule.id, profile.get("food_preference")
+                )
+                avoid_foods = DashboardService._get_rule_avoid_foods(
+                    rule.id, profile.get("food_preference")
+                )
                 rule_summary = {
                     "id": rule.id,
                     "name": rule.rule_name,
@@ -514,6 +518,16 @@ class DashboardService:
         meals_per_day = to_int(
             preferences.get("mealsPerDay") or preferences.get("meals_per_day")
         )
+        raw_food_preference = str(
+            preferences.get("foodPreference")
+            or preferences.get("food_preference")
+            or ""
+        ).strip().lower()
+        food_preference = None
+        if "cooked" in raw_food_preference:
+            food_preference = "cooked"
+        elif "raw" in raw_food_preference:
+            food_preference = "raw"
         blood_sugar = to_float(health.get("blood_sugar"))
 
         return {
@@ -525,6 +539,7 @@ class DashboardService:
             "diet_type": diet_type,
             "allergies": allergies,
             "meals_per_day": meals_per_day,
+            "food_preference": food_preference,
             "blood_sugar": blood_sugar,
         }
 
@@ -875,7 +890,22 @@ class DashboardService:
             return str(value)
 
     @staticmethod
-    def _get_rule_foods(rule_id: int) -> List[Dict[str, Any]]:
+    def _resolve_mapping_food(
+        mapping,
+        food_preference: Optional[str] = None,
+    ):
+        """Resolve a food item from a mapping based on requested food preference."""
+        normalized_preference = str(food_preference or "").strip().lower()
+        if normalized_preference == "raw":
+            return mapping.food
+        if normalized_preference == "cooked":
+            return mapping.cooked_food
+        return mapping.food or mapping.cooked_food
+
+    @staticmethod
+    def _get_rule_foods(
+        rule_id: int, food_preference: Optional[str] = None
+    ) -> List[Dict[str, Any]]:
         """Get recommended foods for a rule (excluding avoided items)."""
         if not rule_id:
             return []
@@ -891,7 +921,7 @@ class DashboardService:
             note = (mapping.notes or "").strip().lower()
             if note == "avoid":
                 continue
-            food = mapping.food or mapping.cooked_food
+            food = DashboardService._resolve_mapping_food(mapping, food_preference)
             if not food:
                 continue
             foods.append(
@@ -907,7 +937,9 @@ class DashboardService:
         return foods
 
     @staticmethod
-    def _get_rule_avoid_foods(rule_id: int) -> List[Dict[str, Any]]:
+    def _get_rule_avoid_foods(
+        rule_id: int, food_preference: Optional[str] = None
+    ) -> List[Dict[str, Any]]:
         """Get avoided foods for a rule."""
         if not rule_id:
             return []
@@ -923,7 +955,7 @@ class DashboardService:
             note = (mapping.notes or "").strip().lower()
             if note != "avoid":
                 continue
-            food = mapping.food or mapping.cooked_food
+            food = DashboardService._resolve_mapping_food(mapping, food_preference)
             if not food:
                 continue
             foods.append(
