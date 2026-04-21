@@ -677,10 +677,10 @@
                         <!-- Results will be loaded here -->
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" onclick="window.print()">
-                            <i class="fas fa-print me-2"></i>Print Plan
+                        <button type="button" class="btn btn-outline-primary" id="refreshPlanBtn">
+                            <i class="fas fa-rotate-right me-2"></i>Refresh
                         </button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
@@ -693,6 +693,9 @@
     <script>
         let currentSection = 1;
         const totalSections = 4;
+        let latestPlanResult = null;
+        let resultFoodGroups = [];
+        let activeResultFoodGroupIndex = 0;
 
         const lastFormData = (function() {
             try {
@@ -750,6 +753,7 @@
             updateProgressBar();
             setupAnalystGate();
             prefillFromLastPlan();
+            attachRefreshPlanHandler();
         });
 
         function setupAnalystGate() {
@@ -1319,12 +1323,90 @@
         `;
         }
 
-        function showResults(data) {
+        function normalizeResultFoodGroups(data) {
+            const rawGroups = Array.isArray(data?.food_groups) ? data.food_groups : [];
+            const normalized = rawGroups
+                .map(group => {
+                    const foods = Array.isArray(group?.foods) ? group.foods : [];
+                    const avoidFoods = Array.isArray(group?.avoid_foods) ? group.avoid_foods : [];
+                    const groupKey = String(group?.group_key || '').trim() || 'group_1';
+                    return {
+                        group_key: groupKey,
+                        foods,
+                        avoid_foods: avoidFoods
+                    };
+                })
+                .filter(group => group.foods.length > 0 || group.avoid_foods.length > 0);
+
+            if (normalized.length > 0) {
+                return normalized;
+            }
+
+            return [
+                {
+                    group_key: 'group_1',
+                    foods: Array.isArray(data?.foods) ? data.foods : [],
+                    avoid_foods: Array.isArray(data?.avoid_foods) ? data.avoid_foods : []
+                }
+            ];
+        }
+
+        function getGroupLabel(group, index) {
+            const groupKey = String(group?.group_key || '').trim().toLowerCase();
+            const match = groupKey.match(/(\d+)/);
+            if (match) {
+                return `Group ${Number(match[1])}`;
+            }
+            return `Group ${index + 1}`;
+        }
+
+        function updateRefreshPlanButton() {
+            const refreshBtn = document.getElementById('refreshPlanBtn');
+            if (!refreshBtn) {
+                return;
+            }
+
+            const groupCount = Array.isArray(resultFoodGroups) ? resultFoodGroups.length : 0;
+            const canRefresh = groupCount > 1;
+            refreshBtn.disabled = !canRefresh;
+            refreshBtn.title = canRefresh
+                ? 'Load another food group for this rule'
+                : 'No additional food groups available';
+        }
+
+        function attachRefreshPlanHandler() {
+            const refreshBtn = document.getElementById('refreshPlanBtn');
+            if (!refreshBtn || refreshBtn.dataset.bound === '1') {
+                return;
+            }
+
+            refreshBtn.dataset.bound = '1';
+            refreshBtn.addEventListener('click', function () {
+                if (!latestPlanResult || !Array.isArray(resultFoodGroups) || resultFoodGroups.length <= 1) {
+                    return;
+                }
+
+                activeResultFoodGroupIndex = (activeResultFoodGroupIndex + 1) % resultFoodGroups.length;
+                renderResultsContent(latestPlanResult, false);
+            });
+            updateRefreshPlanButton();
+        }
+
+        function renderResultsContent(data, shouldShowModal) {
             const resultsContent = document.getElementById('resultsContent');
+            if (!resultsContent) {
+                return;
+            }
+
             const profile = data.profile || {};
             const metrics = data.metrics || {};
-            const foods = Array.isArray(data.foods) ? data.foods : [];
-            const avoidFoods = Array.isArray(data.avoid_foods) ? data.avoid_foods : [];
+            const activeGroup = resultFoodGroups[activeResultFoodGroupIndex] || {
+                group_key: 'group_1',
+                foods: [],
+                avoid_foods: []
+            };
+            const foods = Array.isArray(activeGroup.foods) ? activeGroup.foods : [];
+            const avoidFoods = Array.isArray(activeGroup.avoid_foods) ? activeGroup.avoid_foods : [];
 
             const foodNames = foods.map(item => item.name || item).filter(Boolean);
             const avoidFoodNames = avoidFoods.map(item => item.name || item).filter(Boolean);
@@ -1332,6 +1414,9 @@
                 || Number(document.querySelector('input[name="mealsPerDay"]:checked')?.value)
                 || 3;
             const meals = splitMeals(foodNames, mealsCount);
+            const groupLabel = getGroupLabel(activeGroup, activeResultFoodGroupIndex);
+            const totalGroups = resultFoodGroups.length;
+            const groupDisplay = totalGroups > 1 ? `${groupLabel} of ${totalGroups}` : groupLabel;
 
             const age = profile.age ?? document.getElementById('age').value;
             const gender = profile.gender ? titleCase(profile.gender) : 'Not specified';
@@ -1426,7 +1511,7 @@
 
             <div class="card mb-3">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0"><i class="fas fa-calendar-alt me-2"></i>Sample Daily Meal Plan</h5>
+                    <h5 class="mb-0"><i class="fas fa-calendar-alt me-2"></i>Sample Daily Meal Plan <small class="ms-2">${groupDisplay}</small></h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -1459,6 +1544,11 @@
         `;
 
             resultsContent.innerHTML = html;
+            updateRefreshPlanButton();
+
+            if (!shouldShowModal) {
+                return;
+            }
 
             const resultsModalEl = document.getElementById('resultsModal');
             if (!resultsModalEl) {
@@ -1482,6 +1572,22 @@
             }, { once: true });
 
             resultsModal.show();
+        }
+
+        function showResults(data) {
+            latestPlanResult = data || {};
+            resultFoodGroups = normalizeResultFoodGroups(latestPlanResult);
+            activeResultFoodGroupIndex = 0;
+
+            const activeGroupKey = String(latestPlanResult.active_food_group_key || '').trim();
+            if (activeGroupKey) {
+                const matchedIndex = resultFoodGroups.findIndex(group => String(group.group_key || '').trim() === activeGroupKey);
+                if (matchedIndex >= 0) {
+                    activeResultFoodGroupIndex = matchedIndex;
+                }
+            }
+
+            renderResultsContent(latestPlanResult, true);
         }
 
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));

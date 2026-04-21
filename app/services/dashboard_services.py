@@ -448,12 +448,18 @@ class DashboardService:
             try:
                 rule = matched_rule["rule"]
                 actions = matched_rule.get("actions", []) or []
-                foods = DashboardService._get_rule_foods(
+                food_groups = DashboardService._get_rule_food_groups(
                     rule.id, profile.get("food_preference")
                 )
-                avoid_foods = DashboardService._get_rule_avoid_foods(
-                    rule.id, profile.get("food_preference")
-                )
+                active_food_group_key = None
+                if food_groups:
+                    active_group = food_groups[0]
+                    active_food_group_key = active_group.get("group_key")
+                    foods = active_group.get("foods", []) or []
+                    avoid_foods = active_group.get("avoid_foods", []) or []
+                else:
+                    foods = []
+                    avoid_foods = []
                 rule_summary = {
                     "id": rule.id,
                     "name": rule.rule_name,
@@ -465,8 +471,13 @@ class DashboardService:
                 logger.exception("Failed to build rule outputs")
                 foods = []
                 avoid_foods = []
+                food_groups = []
+                active_food_group_key = None
                 actions = []
                 rule_summary = None
+        else:
+            food_groups = []
+            active_food_group_key = None
 
         action_metrics = DashboardService._extract_action_metrics(actions)
         metrics = DashboardService._calculate_user_metrics(personal, action_metrics)
@@ -477,6 +488,8 @@ class DashboardService:
             "rule": rule_summary,
             "foods": foods,
             "avoid_foods": avoid_foods,
+            "food_groups": food_groups,
+            "active_food_group_key": active_food_group_key,
         }
 
     @staticmethod
@@ -901,6 +914,97 @@ class DashboardService:
         if normalized_preference == "cooked":
             return mapping.cooked_food
         return mapping.food or mapping.cooked_food
+
+    @staticmethod
+    def _serialize_food_item(food: Any) -> Dict[str, Any]:
+        return {
+            "id": food.id,
+            "name": food.name,
+            "calories": food.calories,
+            "protein": food.protein,
+            "sugar": food.sugar,
+            "fat": food.fat,
+        }
+
+    @staticmethod
+    def _dedupe_food_items(items: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        deduped = []
+        seen = set()
+        for item in items or []:
+            if not isinstance(item, dict):
+                continue
+            item_id = item.get("id")
+            item_name = str(item.get("name") or "").strip().lower()
+            key = item_id if item_id is not None else item_name
+            if key in seen:
+                continue
+            seen.add(key)
+            deduped.append(item)
+        return deduped
+
+    @staticmethod
+    def _group_sort_key(group_key: str):
+        key_text = str(group_key or "").strip().lower()
+        match = re.search(r"(\d+)", key_text)
+        if match:
+            try:
+                return (0, int(match.group(1)), key_text)
+            except Exception:
+                pass
+        return (1, 0, key_text)
+
+    @staticmethod
+    def _get_rule_food_groups(
+        rule_id: int, food_preference: Optional[str] = None
+    ) -> List[Dict[str, Any]]:
+        """Get grouped recommended/avoided foods for a rule."""
+        if not rule_id:
+            return []
+        try:
+            group_rows = FoodGroupTable.query.filter_by(diet_rule_id=rule_id).all()
+        except Exception:
+            return []
+
+        grouped = {}
+        for group_row in group_rows:
+            mapping = group_row.rule_food_map
+            if not mapping:
+                continue
+            food = DashboardService._resolve_mapping_food(mapping, food_preference)
+            if not food:
+                continue
+
+            group_key = str(group_row.group_key or "").strip() or "group_1"
+            if group_key not in grouped:
+                grouped[group_key] = {
+                    "group_key": group_key,
+                    "foods": [],
+                    "avoid_foods": [],
+                }
+
+            note = (mapping.notes or "").strip().lower()
+            bucket = "avoid_foods" if note == "avoid" else "foods"
+            grouped[group_key][bucket].append(DashboardService._serialize_food_item(food))
+
+        sorted_groups = sorted(
+            grouped.values(),
+            key=lambda group: DashboardService._group_sort_key(group.get("group_key")),
+        )
+
+        normalized = []
+        for group in sorted_groups:
+            foods = DashboardService._dedupe_food_items(group.get("foods", []))
+            avoid_foods = DashboardService._dedupe_food_items(group.get("avoid_foods", []))
+            if not foods and not avoid_foods:
+                continue
+            normalized.append(
+                {
+                    "group_key": group.get("group_key"),
+                    "foods": foods,
+                    "avoid_foods": avoid_foods,
+                }
+            )
+        return normalized
 
     @staticmethod
     def _get_rule_foods(
