@@ -22,7 +22,9 @@ class DietRulesTable(db.Model):
         "GoalsTable", secondary=tbl_goal_diet_rules, back_populates="diet_rules"
     )
     goals_by_rule = db.relationship("GoalsTable", back_populates="diet_rule")
-    rule_food_maps = db.relationship("RuleFoodMapTable", back_populates="diet_rule")
+    food_groups = db.relationship(
+        "FoodGroupTable", back_populates="diet_rule", cascade="all, delete-orphan"
+    )
 
     # Add property for backward compatibility
     @property

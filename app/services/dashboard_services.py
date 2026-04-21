@@ -5,7 +5,7 @@ from app.models.user import UserTable
 from app.models.role import RoleTable
 from app.models.goal import GoalsTable
 from app.models.diet_rule import DietRulesTable
-from app.models.rule_food_map import RuleFoodMapTable
+from app.models.food_group import FoodGroupTable
 from app.models.user_result import UserResultsTable
 from app.models.food import FoodsTable
 from extensions import db
@@ -879,9 +879,15 @@ class DashboardService:
         """Get recommended foods for a rule (excluding avoided items)."""
         if not rule_id:
             return []
-        food_maps = RuleFoodMapTable.query.filter_by(diet_rule_id=rule_id).all()
+        try:
+            group_rows = FoodGroupTable.query.filter_by(diet_rule_id=rule_id).all()
+        except Exception:
+            return []
         foods = []
-        for mapping in food_maps:
+        for group_row in group_rows:
+            mapping = group_row.rule_food_map
+            if not mapping:
+                continue
             note = (mapping.notes or "").strip().lower()
             if note == "avoid":
                 continue
@@ -905,9 +911,15 @@ class DashboardService:
         """Get avoided foods for a rule."""
         if not rule_id:
             return []
-        food_maps = RuleFoodMapTable.query.filter_by(diet_rule_id=rule_id).all()
+        try:
+            group_rows = FoodGroupTable.query.filter_by(diet_rule_id=rule_id).all()
+        except Exception:
+            return []
         foods = []
-        for mapping in food_maps:
+        for group_row in group_rows:
+            mapping = group_row.rule_food_map
+            if not mapping:
+                continue
             note = (mapping.notes or "").strip().lower()
             if note != "avoid":
                 continue

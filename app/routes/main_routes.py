@@ -13,7 +13,7 @@ import os
 from app.models.goal import GoalsTable
 from app.models.diet_rule import DietRulesTable
 from app.models.food import FoodsTable
-from app.models.rule_food_map import RuleFoodMapTable
+from app.models.food_group import FoodGroupTable
 from app.forms.diet_rule_forms import DietRuleForm
 from app.services.diet_rule_service import DietRuleService
 from extensions import db
@@ -142,8 +142,15 @@ def images(filename):
 @main_bp.route("/foods/<int:rule_id>")
 def foods(rule_id):
     rule = DietRulesTable.query.get_or_404(rule_id)
-    # Get foods associated with this rule via rule_food_map
-    rule_food_maps = RuleFoodMapTable.query.filter_by(diet_rule_id=rule_id).all()
+    # Get foods associated with this rule via food groups -> rule_food_map
+    try:
+        rule_food_maps = [
+            group.rule_food_map
+            for group in FoodGroupTable.query.filter_by(diet_rule_id=rule_id).all()
+            if group.rule_food_map is not None
+        ]
+    except Exception:
+        rule_food_maps = []
     foods = [
         (rfm.food or rfm.cooked_food, rfm.notes)
         for rfm in rule_food_maps

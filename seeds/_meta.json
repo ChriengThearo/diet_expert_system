@@ -10,6 +10,7 @@
     "tbl_goals",
     "tbl_role_permissions",
     "tbl_rule_food_map",
+    "tbl_food_groups",
     "tbl_user_results",
     "tbl_user_roles",
     "tbl_goal_diet_rules",
@@ -27,6 +28,7 @@
     "tbl_user_results": 26,
     "tbl_user_roles": 11,
     "tbl_goal_diet_rules": 144,
-    "tbl_user_goals": 3
+    "tbl_user_goals": 3,
+    "tbl_food_groups": 2020
   }
 }
