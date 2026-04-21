@@ -14,7 +14,7 @@ class CookedFoodsTable(db.Model):
     description = db.Column(db.String(255))
     calories = db.Column(db.Float)
     protein = db.Column(db.Float)
-    carbs = db.Column(db.Float)
+    sugar = db.Column(db.Float)
     fat = db.Column(db.Float)
 
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)

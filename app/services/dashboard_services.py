@@ -502,14 +502,19 @@ class DashboardService:
         bmi = round(weight / (height_m**2), 2) if weight and height_m else None
 
         gender = str(personal.get("gender") or "").strip().lower()
-        diet_type = str(health.get("dietType") or "").strip().lower()
+        diet_type = str(
+            health.get("dietType") or health.get("diet_type") or ""
+        ).strip().lower()
         allergies = health.get("allergies") or []
         if not isinstance(allergies, list):
             allergies = [allergies]
         allergies = [
             str(item).strip().lower() for item in allergies if str(item).strip()
         ]
-        meals_per_day = to_int(preferences.get("mealsPerDay"))
+        meals_per_day = to_int(
+            preferences.get("mealsPerDay") or preferences.get("meals_per_day")
+        )
+        blood_sugar = to_float(health.get("blood_sugar"))
 
         return {
             "age": age,
@@ -520,6 +525,7 @@ class DashboardService:
             "diet_type": diet_type,
             "allergies": allergies,
             "meals_per_day": meals_per_day,
+            "blood_sugar": blood_sugar,
         }
 
     @staticmethod
@@ -623,13 +629,34 @@ class DashboardService:
         if len(parts) < 3:
             return False
 
-        param = parts[0].lower()
+        param = parts[0].lower().replace("-", "_")
+        if param == "bloodsugar":
+            param = "blood_sugar"
         operator = parts[1].lower()
+        if operator == ">":
+            operator = "greater_than"
+        elif operator == "<":
+            operator = "less_than"
+        elif operator == ">=":
+            operator = "greater_than_or_equals"
+        elif operator == "<=":
+            operator = "less_than_or_equals"
+        elif operator == "greater_or_equals":
+            operator = "greater_than_or_equals"
+        elif operator == "less_or_equals":
+            operator = "less_than_or_equals"
         raw_value = " ".join(parts[2:]).strip()
         value_lower = raw_value.lower()
 
         profile_value = None
-        if param in ["age", "weight", "height", "bmi", "meals_per_day"]:
+        if param in [
+            "age",
+            "weight",
+            "height",
+            "bmi",
+            "meals_per_day",
+            "blood_sugar",
+        ]:
             profile_value = profile.get(param)
         elif param in ["allergy", "allergies"]:
             profile_value = profile.get("allergies", [])
@@ -651,14 +678,23 @@ class DashboardService:
                 f"{param} equals {raw_value}", profile
             )
 
-        if operator in ["greater_than", "less_than"]:
+        if operator in [
+            "greater_than",
+            "less_than",
+            "greater_than_or_equals",
+            "less_than_or_equals",
+        ]:
             try:
                 numeric_value = float(raw_value)
                 if profile_value is None:
                     return False
                 if operator == "greater_than":
                     return float(profile_value) > numeric_value
-                return float(profile_value) < numeric_value
+                if operator == "less_than":
+                    return float(profile_value) < numeric_value
+                if operator == "greater_than_or_equals":
+                    return float(profile_value) >= numeric_value
+                return float(profile_value) <= numeric_value
             except Exception:
                 return False
 
@@ -858,7 +894,7 @@ class DashboardService:
                     "name": food.name,
                     "calories": food.calories,
                     "protein": food.protein,
-                    "carbs": food.carbs,
+                    "sugar": food.sugar,
                     "fat": food.fat,
                 }
             )
@@ -884,7 +920,7 @@ class DashboardService:
                     "name": food.name,
                     "calories": food.calories,
                     "protein": food.protein,
-                    "carbs": food.carbs,
+                    "sugar": food.sugar,
                     "fat": food.fat,
                 }
             )
@@ -893,7 +929,7 @@ class DashboardService:
     @staticmethod
     def _extract_action_metrics(actions: List[str]) -> Dict[str, Optional[float]]:
         """Extract calories and macro targets from rule actions."""
-        metrics = {"calories": None, "protein": None, "carbs": None, "fat": None}
+        metrics = {"calories": None, "protein": None, "sugar": None, "fat": None}
         if not actions:
             return metrics
 
@@ -908,7 +944,7 @@ class DashboardService:
                     metrics["calories"] = float(match.group(1))
 
             if "set_macros" in lower:
-                for key in ["protein", "carbs", "fat"]:
+                for key in ["protein", "sugar", "fat"]:
                     match = re.search(rf"{key}\s*=\s*(\d+(?:\.\d+)?)", lower)
                     if match:
                         metrics[key] = float(match.group(1))
@@ -925,7 +961,7 @@ class DashboardService:
             "bmi": None,
             "calories": action_metrics.get("calories"),
             "protein": action_metrics.get("protein"),
-            "carbs": action_metrics.get("carbs"),
+            "sugar": action_metrics.get("sugar"),
             "fat": action_metrics.get("fat"),
         }
 
@@ -942,11 +978,11 @@ class DashboardService:
             if (
                 metrics["calories"] is None
                 and metrics["protein"]
-                and metrics["carbs"]
+                and metrics["sugar"]
                 and metrics["fat"]
             ):
                 metrics["calories"] = (
-                    metrics["protein"] * 4 + metrics["carbs"] * 4 + metrics["fat"] * 9
+                    metrics["protein"] * 4 + metrics["sugar"] * 4 + metrics["fat"] * 9
                 )
 
             if metrics["calories"] is None and weight > 0 and height_cm > 0 and age > 0:
@@ -960,12 +996,12 @@ class DashboardService:
                 calories = float(metrics["calories"])
                 if not metrics["protein"]:
                     metrics["protein"] = calories * 0.3 / 4
-                if not metrics["carbs"]:
-                    metrics["carbs"] = calories * 0.45 / 4
+                if not metrics["sugar"]:
+                    metrics["sugar"] = calories * 0.45 / 4
                 if not metrics["fat"]:
                     metrics["fat"] = calories * 0.25 / 9
 
-            for key in ["calories", "protein", "carbs", "fat"]:
+            for key in ["calories", "protein", "sugar", "fat"]:
                 if metrics[key] is not None:
                     metrics[key] = round(float(metrics[key]), 0)
         except Exception as e:

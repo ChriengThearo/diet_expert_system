@@ -701,6 +701,10 @@
                 if (dietRadio) dietRadio.checked = true;
             }
 
+            if (health.blood_sugar !== undefined && health.blood_sugar !== null && health.blood_sugar !== '') {
+                document.getElementById('blood_sugar').value = health.blood_sugar;
+            }
+
             if (preferences.mealsPerDay) {
                 const mealsRadio = document.querySelector('input[name="mealsPerDay"][value="' + preferences.mealsPerDay + '"]');
                 if (mealsRadio) mealsRadio.checked = true;
@@ -777,6 +781,10 @@
                 if (data.diet_type) {
                     const r = document.querySelector('input[name="dietType"][value="' + data.diet_type + '"]');
                     if (r) r.checked = true;
+                }
+
+                if (data.blood_sugar !== undefined && data.blood_sugar !== null && data.blood_sugar !== '') {
+                    document.getElementById('blood_sugar').value = data.blood_sugar;
                 }
             };
 
@@ -1053,7 +1061,7 @@
                     dietType: dietTypeInput.value,
                     allergies: Array.from(document.querySelectorAll('input[type="checkbox"][id^="allergy_"]:checked'))
                         .map(cb => cb.value),
-                    bloodSugar: document.getElementById('blood_sugar').value || null
+                    blood_sugar: document.getElementById('blood_sugar').value || null
                 },
                 preferences: {
                     mealsPerDay: mealsInput.value
@@ -1295,11 +1303,17 @@
                 ? profile.allergies.map(titleCase).join(', ')
                 : 'None';
             const mealsPerDay = profile.meals_per_day ? `${profile.meals_per_day} meals` : `${mealsCount} meals`;
+            const bloodSugarMetric = profile.blood_sugar !== undefined && profile.blood_sugar !== null
+                ? profile.blood_sugar
+                : document.getElementById('blood_sugar').value;
+            const bloodSugarDisplay = bloodSugarMetric !== undefined && bloodSugarMetric !== null && bloodSugarMetric !== ''
+                ? `${bloodSugarMetric} mg/dL`
+                : 'Not provided';
 
             const bmiValue = formatNumber(metrics.bmi, 1);
             const caloriesValue = formatNumber(metrics.calories, 0);
             const proteinValue = formatNumber(metrics.protein, 0);
-            const carbsValue = formatNumber(metrics.carbs, 0);
+            const sugarValue = formatNumber(metrics.sugar, 0);
             const fatValue = formatNumber(metrics.fat, 0);
 
             let html = `
@@ -1334,7 +1348,7 @@
                                 <tr><td><strong>BMI:</strong></td><td>${bmiValue ? bmiValue : 'Not specified'}</td></tr>
                                 <tr><td><strong>Calories:</strong></td><td>${caloriesValue ? `${caloriesValue} kcal/day` : 'Not specified'}</td></tr>
                                 <tr><td><strong>Protein:</strong></td><td>${proteinValue ? `${proteinValue} g` : 'Not specified'}</td></tr>
-                                <tr><td><strong>Carbs:</strong></td><td>${carbsValue ? `${carbsValue} g` : 'Not specified'}</td></tr>
+                                <tr><td><strong>Sugar:</strong></td><td>${sugarValue ? `${sugarValue} g` : 'Not specified'}</td></tr>
                                 <tr><td><strong>Fat:</strong></td><td>${fatValue ? `${fatValue} g` : 'Not specified'}</td></tr>
                             </table>
                         </div>
@@ -1352,6 +1366,7 @@
                             <table class="table">
                                 <tr><td><strong>Diet Type:</strong></td><td>${dietType}</td></tr>
                                 <tr><td><strong>Allergies:</strong></td><td>${allergies}</td></tr>
+                                <tr><td><strong>Blood Sugar:</strong></td><td>${bloodSugarDisplay}</td></tr>
                                 <tr><td><strong>Meals/Day:</strong></td><td>${mealsPerDay}</td></tr>
                             </table>
                         </div>

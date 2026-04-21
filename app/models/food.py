@@ -13,7 +13,7 @@ class FoodsTable(db.Model):
     description = db.Column(db.String(255))
     calories = db.Column(db.Float)  # Simplified column name
     protein = db.Column(db.Float)  # Simplified column name
-    carbs = db.Column(db.Float)  # Simplified column name
+    sugar = db.Column(db.Float)  # Simplified column name
     fat = db.Column(db.Float)  # Simplified column name
 
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)

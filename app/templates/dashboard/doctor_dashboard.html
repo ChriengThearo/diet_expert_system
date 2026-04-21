@@ -638,7 +638,7 @@
                                         <th>Food Type</th>
                                         <th>Calories</th>
                                         <th>Protein</th>
-                                        <th>Carbs</th>
+                                        <th>Sugar</th>
                                         <th>Fat</th>
                                         <th class="text-end">Actions</th>
                                     </tr>
@@ -682,7 +682,7 @@
                                         <th>Is Vegan</th>
                                         <th>Calories</th>
                                         <th>Protein</th>
-                                        <th>Carbs</th>
+                                        <th>Sugar</th>
                                         <th>Fat</th>
                                         <th class="text-end">Actions</th>
                                     </tr>
@@ -709,7 +709,7 @@
                             <div class="alert alert-info mb-4 builder-intro">
                                 <strong>Rule Inputs from User Form:</strong>
                                 <span class="small">age, gender, weight, height, diet_type (normal/vegan), allergies,
-                                    meals_per_day</span>
+                                    meals_per_day, blood_sugar</span>
                             </div>
 
                             <div class="row mb-4">
@@ -769,6 +769,16 @@
                                             <option value="vegan">Vegan</option>
                                         </select>
                                     </div>
+                                    <div class="col-md-2">
+                                        <label class="form-label">Blood Sugar Min</label>
+                                        <input type="number" step="0.1" class="form-control" id="goal-blood-sugar-min"
+                                            placeholder="mg/dL">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="form-label">Blood Sugar Max</label>
+                                        <input type="number" step="0.1" class="form-control" id="goal-blood-sugar-max"
+                                            placeholder="mg/dL">
+                                    </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-md-12">
@@ -805,8 +815,8 @@
                                         <input type="number" class="form-control" id="goal-protein" placeholder="g/day">
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="form-label">Carbs</label>
-                                        <input type="number" class="form-control" id="goal-carbs" placeholder="g/day">
+                                        <label class="form-label">Sugar</label>
+                                        <input type="number" class="form-control" id="goal-sugar" placeholder="g/day">
                                     </div>
                                     <div class="col-md-3">
                                         <label class="form-label">Fat</label>
@@ -843,7 +853,7 @@
                                                         <th>Vegan</th>
                                                         <th>Calories</th>
                                                         <th>Protein</th>
-                                                        <th>Carbs</th>
+                                                        <th>Sugar</th>
                                                         <th>Fat</th>
                                                     </tr>
                                                 </thead>
@@ -878,7 +888,7 @@
                                                         <th>Vegan</th>
                                                         <th>Calories</th>
                                                         <th>Protein</th>
-                                                        <th>Carbs</th>
+                                                        <th>Sugar</th>
                                                         <th>Fat</th>
                                                     </tr>
                                                 </thead>
@@ -930,7 +940,7 @@
                                                         <th>Vegan</th>
                                                         <th>Calories</th>
                                                         <th>Protein</th>
-                                                        <th>Carbs</th>
+                                                        <th>Sugar</th>
                                                         <th>Fat</th>
                                                     </tr>
                                                 </thead>
@@ -965,7 +975,7 @@
                                                         <th>Vegan</th>
                                                         <th>Calories</th>
                                                         <th>Protein</th>
-                                                        <th>Carbs</th>
+                                                        <th>Sugar</th>
                                                         <th>Fat</th>
                                                     </tr>
                                                 </thead>
@@ -1041,6 +1051,7 @@
                                         <ul class="list-unstyled small mb-0">
                                             <li><strong>Diet Type:</strong> Vegan</li>
                                             <li><strong>Allergies:</strong> Soy</li>
+                                            <li><strong>Blood Sugar:</strong> 95 mg/dL</li>
                                             <li><strong>Meals/Day:</strong> 3 meals</li>
                                         </ul>
                                     </div>
@@ -1080,6 +1091,14 @@
                                             <label class="form-label">Height (cm)</label>
                                             <input type="number" class="form-control test-input" id="test-height"
                                                 min="100" max="250" required placeholder="e.g., 170">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Blood Sugar (mg/dL)</label>
+                                            <input type="number" class="form-control test-input" id="test-blood-sugar"
+                                                min="20" max="600" step="0.1" placeholder="Optional, e.g., 95">
                                         </div>
                                     </div>
 
@@ -1218,8 +1237,8 @@
                             <input type="number" step="0.01" class="form-control" id="food-protein" placeholder="g">
                         </div>
                         <div class="col-6 mb-3">
-                            <label class="form-label">Carbs</label>
-                            <input type="number" step="0.01" class="form-control" id="food-carbs" placeholder="g">
+                            <label class="form-label">Sugar</label>
+                            <input type="number" step="0.01" class="form-control" id="food-sugar" placeholder="g">
                         </div>
                         <div class="col-6 mb-3">
                             <label class="form-label">Fat</label>
@@ -1288,8 +1307,8 @@
                                 placeholder="g">
                         </div>
                         <div class="col-6 mb-3">
-                            <label class="form-label">Carbs</label>
-                            <input type="number" step="0.01" class="form-control" id="cooked-food-carbs" placeholder="g">
+                            <label class="form-label">Sugar</label>
+                            <input type="number" step="0.01" class="form-control" id="cooked-food-sugar" placeholder="g">
                         </div>
                         <div class="col-6 mb-3">
                             <label class="form-label">Fat</label>
@@ -1426,7 +1445,7 @@
             return {
                 calories: parsePositiveNumber(document.getElementById('goal-calories')?.value),
                 protein: parsePositiveNumber(document.getElementById('goal-protein')?.value),
-                carbs: parsePositiveNumber(document.getElementById('goal-carbs')?.value),
+                sugar: parsePositiveNumber(document.getElementById('goal-sugar')?.value),
                 fat: parsePositiveNumber(document.getElementById('goal-fat')?.value)
             };
         }
@@ -1439,10 +1458,10 @@
                 }
                 totals.calories += Number(food.calories) || 0;
                 totals.protein += Number(food.protein) || 0;
-                totals.carbs += Number(food.carbs) || 0;
+                totals.sugar += Number(food.sugar) || 0;
                 totals.fat += Number(food.fat) || 0;
                 return totals;
-            }, { calories: 0, protein: 0, carbs: 0, fat: 0 });
+            }, { calories: 0, protein: 0, sugar: 0, fat: 0 });
         }
 
         function setLimitWarning(message, warningElementId = 'foods-limit-warning') {
@@ -1470,8 +1489,8 @@
             if (limits.protein !== null && totals.protein > limits.protein) {
                 over.push(`Protein ${totals.protein} > ${limits.protein} g/day`);
             }
-            if (limits.carbs !== null && totals.carbs > limits.carbs) {
-                over.push(`Carbs ${totals.carbs} > ${limits.carbs} g/day`);
+            if (limits.sugar !== null && totals.sugar > limits.sugar) {
+                over.push(`Sugar ${totals.sugar} > ${limits.sugar} g/day`);
             }
             if (limits.fat !== null && totals.fat > limits.fat) {
                 over.push(`Fat ${totals.fat} > ${limits.fat} g/day`);
@@ -1554,7 +1573,7 @@
 
             let totalCalories = 0;
             let totalProtein = 0;
-            let totalCarbs = 0;
+            let totalSugar = 0;
             let totalFat = 0;
 
             const rows = selected.map(foodId => {
@@ -1564,12 +1583,12 @@
                 }
                 const calories = Number(food.calories) || 0;
                 const protein = Number(food.protein) || 0;
-                const carbs = Number(food.carbs) || 0;
+                const sugar = Number(food.sugar) || 0;
                 const fat = Number(food.fat) || 0;
 
                 totalCalories += calories;
                 totalProtein += protein;
-                totalCarbs += carbs;
+                totalSugar += sugar;
                 totalFat += fat;
 
                 return `
@@ -1578,7 +1597,7 @@
                         <td>${food.is_vegan ? 'Yes' : 'No'}</td>
                         <td>${formatNutrient(food.calories, 'kcal')}</td>
                         <td>${formatNutrient(food.protein, 'g')}</td>
-                        <td>${formatNutrient(food.carbs, 'g')}</td>
+                        <td>${formatNutrient(food.sugar, 'g')}</td>
                         <td>${formatNutrient(food.fat, 'g')}</td>
                     </tr>
                 `;
@@ -1594,7 +1613,7 @@
                     cells[1].textContent = '-';
                     cells[2].textContent = `${totalCalories} kcal`;
                     cells[3].textContent = `${totalProtein} g`;
-                    cells[4].textContent = `${totalCarbs} g`;
+                    cells[4].textContent = `${totalSugar} g`;
                     cells[5].textContent = `${totalFat} g`;
                 }
             }
@@ -1733,7 +1752,7 @@
                 optionA.textContent = label;
                 optionA.dataset.calories = food.calories ?? '';
                 optionA.dataset.protein = food.protein ?? '';
-                optionA.dataset.carbs = food.carbs ?? '';
+                optionA.dataset.sugar = food.sugar ?? '';
                 optionA.dataset.fat = food.fat ?? '';
                 optionA.dataset.isVegan = String(food.is_vegan ?? 0);
                 optionA.dataset.foodType = String(food.food_type || 'general').toLowerCase();
@@ -1793,7 +1812,7 @@
                 optionA.textContent = label;
                 optionA.dataset.calories = food.calories ?? '';
                 optionA.dataset.protein = food.protein ?? '';
-                optionA.dataset.carbs = food.carbs ?? '';
+                optionA.dataset.sugar = food.sugar ?? '';
                 optionA.dataset.fat = food.fat ?? '';
                 optionA.dataset.isVegan = String(food.is_vegan ?? 0);
                 optionA.dataset.foodType = String(food.food_type || 'cooked').toLowerCase();
@@ -1853,7 +1872,7 @@
                         <td>${titleCase(food.food_type || 'general')}</td>
                         <td>${formatNutrient(food.calories, 'kcal')}</td>
                         <td>${formatNutrient(food.protein, 'g')}</td>
-                        <td>${formatNutrient(food.carbs, 'g')}</td>
+                        <td>${formatNutrient(food.sugar, 'g')}</td>
                         <td>${formatNutrient(food.fat, 'g')}</td>
                         <td class="text-end">
                             <button class="btn btn-sm btn-outline-secondary view-food" data-id="${food.id}"
@@ -1989,7 +2008,7 @@
                         <td>${food.is_vegan ? 'Yes' : 'No'}</td>
                         <td>${formatNutrient(food.calories, 'kcal')}</td>
                         <td>${formatNutrient(food.protein, 'g')}</td>
-                        <td>${formatNutrient(food.carbs, 'g')}</td>
+                        <td>${formatNutrient(food.sugar, 'g')}</td>
                         <td>${formatNutrient(food.fat, 'g')}</td>
                         <td class="text-end">
                             <button class="btn btn-sm btn-outline-secondary view-cooked-food" data-id="${food.id}"
@@ -2113,7 +2132,7 @@
             document.getElementById('cooked-food-vegan').value = isEdit && food ? (food.is_vegan ? '1' : '0') : '0';
             document.getElementById('cooked-food-calories').value = isEdit && food && food.calories != null ? food.calories : '';
             document.getElementById('cooked-food-protein').value = isEdit && food && food.protein != null ? food.protein : '';
-            document.getElementById('cooked-food-carbs').value = isEdit && food && food.carbs != null ? food.carbs : '';
+            document.getElementById('cooked-food-sugar').value = isEdit && food && food.sugar != null ? food.sugar : '';
             document.getElementById('cooked-food-fat').value = isEdit && food && food.fat != null ? food.fat : '';
             document.getElementById('cooked-food-photo').value = '';
 
@@ -2180,7 +2199,7 @@
                     <tr><td><strong>Is Vegan</strong></td><td>${food.is_vegan ? 'Yes' : 'No'}</td></tr>
                     <tr><td><strong>Calories</strong></td><td>${formatNutrient(food.calories, 'kcal')}</td></tr>
                     <tr><td><strong>Protein</strong></td><td>${formatNutrient(food.protein, 'g')}</td></tr>
-                    <tr><td><strong>Carbs</strong></td><td>${formatNutrient(food.carbs, 'g')}</td></tr>
+                    <tr><td><strong>Sugar</strong></td><td>${formatNutrient(food.sugar, 'g')}</td></tr>
                     <tr><td><strong>Fat</strong></td><td>${formatNutrient(food.fat, 'g')}</td></tr>
                 </table>
             `;
@@ -2197,7 +2216,7 @@
             const isVegan = document.getElementById('cooked-food-vegan').value;
             const calories = document.getElementById('cooked-food-calories').value;
             const protein = document.getElementById('cooked-food-protein').value;
-            const carbs = document.getElementById('cooked-food-carbs').value;
+            const sugar = document.getElementById('cooked-food-sugar').value;
             const fat = document.getElementById('cooked-food-fat').value;
             const photoFile = document.getElementById('cooked-food-photo').files[0];
 
@@ -2220,7 +2239,7 @@
             formData.append('is_gevan', isVegan);
             formData.append('calories', calories);
             formData.append('protein', protein);
-            formData.append('carbs', carbs);
+            formData.append('sugar', sugar);
             formData.append('fat', fat);
             if (photoFile) {
                 formData.append('photo', photoFile);
@@ -2247,7 +2266,7 @@
                     document.getElementById('cooked-food-vegan').value = '0';
                     document.getElementById('cooked-food-calories').value = '';
                     document.getElementById('cooked-food-protein').value = '';
-                    document.getElementById('cooked-food-carbs').value = '';
+                    document.getElementById('cooked-food-sugar').value = '';
                     document.getElementById('cooked-food-fat').value = '';
                     document.getElementById('cooked-food-id').value = '';
 
@@ -2288,7 +2307,7 @@
             document.getElementById('food-vegan').value = isEdit && food ? (food.is_vegan ? '1' : '0') : '0';
             document.getElementById('food-calories').value = isEdit && food && food.calories != null ? food.calories : '';
             document.getElementById('food-protein').value = isEdit && food && food.protein != null ? food.protein : '';
-            document.getElementById('food-carbs').value = isEdit && food && food.carbs != null ? food.carbs : '';
+            document.getElementById('food-sugar').value = isEdit && food && food.sugar != null ? food.sugar : '';
             document.getElementById('food-fat').value = isEdit && food && food.fat != null ? food.fat : '';
             document.getElementById('food-photo').value = '';
 
@@ -2389,7 +2408,7 @@
                     <tr><td><strong>Is Vegan</strong></td><td>${food.is_vegan ? 'Yes' : 'No'}</td></tr>
                     <tr><td><strong>Calories</strong></td><td>${formatNutrient(food.calories, 'kcal')}</td></tr>
                     <tr><td><strong>Protein</strong></td><td>${formatNutrient(food.protein, 'g')}</td></tr>
-                    <tr><td><strong>Carbs</strong></td><td>${formatNutrient(food.carbs, 'g')}</td></tr>
+                    <tr><td><strong>Sugar</strong></td><td>${formatNutrient(food.sugar, 'g')}</td></tr>
                     <tr><td><strong>Fat</strong></td><td>${formatNutrient(food.fat, 'g')}</td></tr>
                 </table>
             `;
@@ -2525,6 +2544,14 @@
                     document.getElementById('goal-gender').value = text.split('gender equals').pop().trim();
                 } else if (text.startsWith('diet_type equals')) {
                     document.getElementById('goal-diet-type').value = text.split('diet_type equals').pop().trim();
+                } else if (text.startsWith('blood_sugar greater_than')) {
+                    document.getElementById('goal-blood-sugar-min').value = text.split('blood_sugar greater_than').pop().trim();
+                } else if (text.startsWith('blood_sugar greater_than_or_equals')) {
+                    document.getElementById('goal-blood-sugar-min').value = text.split('blood_sugar greater_than_or_equals').pop().trim();
+                } else if (text.startsWith('blood_sugar less_than')) {
+                    document.getElementById('goal-blood-sugar-max').value = text.split('blood_sugar less_than').pop().trim();
+                } else if (text.startsWith('blood_sugar less_than_or_equals')) {
+                    document.getElementById('goal-blood-sugar-max').value = text.split('blood_sugar less_than_or_equals').pop().trim();
                 }
             });
             if (!inferredGoalType) {
@@ -2552,13 +2579,13 @@
                 }
                 if (text.startsWith('set_macros')) {
                     const proteinMatch = text.match(/protein\s*=\s*([0-9.]+)/i);
-                    const carbsMatch = text.match(/carbs\s*=\s*([0-9.]+)/i);
+                    const sugarMatch = text.match(/sugar\s*=\s*([0-9.]+)/i);
                     const fatMatch = text.match(/fat\s*=\s*([0-9.]+)/i);
                     if (proteinMatch) {
                         document.getElementById('goal-protein').value = proteinMatch[1];
                     }
-                    if (carbsMatch) {
-                        document.getElementById('goal-carbs').value = carbsMatch[1];
+                    if (sugarMatch) {
+                        document.getElementById('goal-sugar').value = sugarMatch[1];
                     }
                     if (fatMatch) {
                         document.getElementById('goal-fat').value = fatMatch[1];
@@ -2942,7 +2969,7 @@
                 });
             }
 
-            ['goal-calories', 'goal-protein', 'goal-carbs', 'goal-fat'].forEach(id => {
+            ['goal-calories', 'goal-protein', 'goal-sugar', 'goal-fat'].forEach(id => {
                 const input = document.getElementById(id);
                 if (input) {
                     input.addEventListener('input', function () {
@@ -3171,9 +3198,11 @@
             document.getElementById('goal-bmi-max').value = '';
             document.getElementById('goal-gender').value = 'any';
             document.getElementById('goal-diet-type').value = 'any';
+            document.getElementById('goal-blood-sugar-min').value = '';
+            document.getElementById('goal-blood-sugar-max').value = '';
             document.getElementById('goal-calories').value = '';
             document.getElementById('goal-protein').value = '';
-            document.getElementById('goal-carbs').value = '';
+            document.getElementById('goal-sugar').value = '';
             document.getElementById('goal-fat').value = '';
             document.querySelectorAll('.goal-allergy').forEach(input => {
                 input.checked = false;
@@ -3218,10 +3247,12 @@
             const bmiMax = document.getElementById('goal-bmi-max').value;
             const gender = document.getElementById('goal-gender').value;
             const dietType = document.getElementById('goal-diet-type').value;
+            const bloodSugarMin = document.getElementById('goal-blood-sugar-min').value;
+            const bloodSugarMax = document.getElementById('goal-blood-sugar-max').value;
             const allergies = getSelectedAllergies();
             const calories = document.getElementById('goal-calories').value;
             const protein = document.getElementById('goal-protein').value;
-            const carbs = document.getElementById('goal-carbs').value;
+            const sugar = document.getElementById('goal-sugar').value;
             const fat = document.getElementById('goal-fat').value;
 
             if (!document.getElementById('rule-name').value) {
@@ -3242,11 +3273,14 @@
             if (dietType !== 'any') {
                 parts.push(`Diet ${dietType}`);
             }
+            if (bloodSugarMin || bloodSugarMax) {
+                parts.push(`Blood Sugar ${bloodSugarMin || '...'}-${bloodSugarMax || '...'} mg/dL`);
+            }
             if (calories) {
                 parts.push(`Calories ${calories}`);
             }
-            if (protein || carbs || fat) {
-                parts.push(`Macros P${protein || '-'} C${carbs || '-'} F${fat || '-'}`);
+            if (protein || sugar || fat) {
+                parts.push(`Macros P${protein || '-'} S${sugar || '-'} F${fat || '-'}`);
             }
             if (parts.length > 0 && !document.getElementById('rule-description').value) {
                 document.getElementById('rule-description').value = parts.join(' | ');
@@ -3271,6 +3305,8 @@
             const bmiMax = document.getElementById('goal-bmi-max').value;
             const gender = document.getElementById('goal-gender').value;
             const dietType = document.getElementById('goal-diet-type').value;
+            const bloodSugarMin = document.getElementById('goal-blood-sugar-min').value;
+            const bloodSugarMax = document.getElementById('goal-blood-sugar-max').value;
             const allergies = getSelectedAllergies();
 
             const conditions = [];
@@ -3285,6 +3321,12 @@
             }
             if (dietType !== 'any') {
                 conditions.push(`diet_type equals ${dietType}`);
+            }
+            if (bloodSugarMin) {
+                conditions.push(`blood_sugar greater_than ${bloodSugarMin}`);
+            }
+            if (bloodSugarMax) {
+                conditions.push(`blood_sugar less_than ${bloodSugarMax}`);
             }
             if (Array.isArray(allergies)) {
                 allergies.forEach(allergy => {
@@ -3327,17 +3369,17 @@
             // Build actions from calorie/macros inputs
             const calories = document.getElementById('goal-calories').value;
             const protein = document.getElementById('goal-protein').value;
-            const carbs = document.getElementById('goal-carbs').value;
+            const sugar = document.getElementById('goal-sugar').value;
             const fat = document.getElementById('goal-fat').value;
 
             const actions = [];
             if (calories) {
                 actions.push(`set_calories: calories=${calories} kcal/day`);
             }
-            if (protein || carbs || fat) {
+            if (protein || sugar || fat) {
                 const parts = [];
                 if (protein) parts.push(`protein=${protein}g`);
-                if (carbs) parts.push(`carbs=${carbs}g`);
+                if (sugar) parts.push(`sugar=${sugar}g`);
                 if (fat) parts.push(`fat=${fat}g`);
                 actions.push(`set_macros: ${parts.join(', ')}`);
             }
@@ -3392,7 +3434,7 @@
             const isVegan = document.getElementById('food-vegan').value;
             const calories = document.getElementById('food-calories').value;
             const protein = document.getElementById('food-protein').value;
-            const carbs = document.getElementById('food-carbs').value;
+            const sugar = document.getElementById('food-sugar').value;
             const fat = document.getElementById('food-fat').value;
             const photoFile = document.getElementById('food-photo').files[0];
 
@@ -3414,7 +3456,7 @@
             formData.append('is_gevan', isVegan);
             formData.append('calories', calories);
             formData.append('protein', protein);
-            formData.append('carbs', carbs);
+            formData.append('sugar', sugar);
             formData.append('fat', fat);
             if (photoFile) {
                 formData.append('photo', photoFile);
@@ -3441,7 +3483,7 @@
                     document.getElementById('food-vegan').value = '0';
                     document.getElementById('food-calories').value = '';
                     document.getElementById('food-protein').value = '';
-                    document.getElementById('food-carbs').value = '';
+                    document.getElementById('food-sugar').value = '';
                     document.getElementById('food-fat').value = '';
                     document.getElementById('food-id').value = '';
 
@@ -3468,15 +3510,30 @@
                 return false;
             }
 
-            const param = parts[0];
-            const operator = parts[1];
+            let param = parts[0].toLowerCase().replace(/-/g, '_');
+            if (param === 'bloodsugar') {
+                param = 'blood_sugar';
+            }
+            let operator = parts[1].toLowerCase();
+            if (operator === '>') operator = 'greater_than';
+            if (operator === '<') operator = 'less_than';
+            if (operator === '>=') operator = 'greater_than_or_equals';
+            if (operator === '<=') operator = 'less_than_or_equals';
+            if (operator === 'greater_or_equals') operator = 'greater_than_or_equals';
+            if (operator === 'less_or_equals') operator = 'less_than_or_equals';
             const rawValue = parts.slice(2).join(' ');
             const valueLower = rawValue.toLowerCase();
 
             let profileValue;
-            if (['age', 'weight', 'height', 'bmi', 'meals_per_day'].includes(param)) {
-                profileValue = Number(profile[param]);
-            } else if (param === 'allergy') {
+            if (['age', 'weight', 'height', 'bmi', 'meals_per_day', 'blood_sugar'].includes(param)) {
+                const rawProfileValue = profile[param];
+                if (rawProfileValue === null || rawProfileValue === undefined || rawProfileValue === '') {
+                    profileValue = null;
+                } else {
+                    const parsed = Number(rawProfileValue);
+                    profileValue = Number.isFinite(parsed) ? parsed : null;
+                }
+            } else if (param === 'allergy' || param === 'allergies') {
                 profileValue = (profile.allergies || []).map(item => String(item).toLowerCase());
             } else if (param === 'diet_type' || param === 'gender') {
                 profileValue = String(profile[param] || '').toLowerCase();
@@ -3499,12 +3556,15 @@
                 return !evaluateCondition(`${param} equals ${rawValue}`, profile);
             }
 
-            if (operator === 'greater_than' || operator === 'less_than') {
+            if (operator === 'greater_than' || operator === 'less_than' || operator === 'greater_than_or_equals' || operator === 'less_than_or_equals') {
                 const numValue = Number(rawValue);
                 if (!Number.isFinite(profileValue) || !Number.isFinite(numValue)) {
                     return false;
                 }
-                return operator === 'greater_than' ? profileValue > numValue : profileValue < numValue;
+                if (operator === 'greater_than') return profileValue > numValue;
+                if (operator === 'less_than') return profileValue < numValue;
+                if (operator === 'greater_than_or_equals') return profileValue >= numValue;
+                return profileValue <= numValue;
             }
 
             if (operator === 'contains' || operator === 'not_contains') {
@@ -3683,6 +3743,7 @@
             const gender = document.getElementById('test-gender').value;
             const weight = parseFloat(document.getElementById('test-weight').value);
             const height = parseFloat(document.getElementById('test-height').value);
+            const bloodSugarValue = parseFloat(document.getElementById('test-blood-sugar').value);
             const dietType = document.getElementById('test-diet-type').value;
             const mealsPerDay = parseInt(document.getElementById('test-meals-per-day').value, 10);
             const allergies = [];
@@ -3696,6 +3757,7 @@
                 gender,
                 weight,
                 height,
+                blood_sugar: Number.isFinite(bloodSugarValue) ? bloodSugarValue : null,
                 dietType,
                 mealsPerDay,
                 allergies
@@ -3760,11 +3822,17 @@
                 ? profile.allergies.map(titleCase).join(', ')
                 : 'None';
             const mealsPerDay = profile.meals_per_day ? `${profile.meals_per_day} meals` : `${mealsCount} meals`;
+            const bloodSugarMetric = profile.blood_sugar !== undefined && profile.blood_sugar !== null
+                ? profile.blood_sugar
+                : document.getElementById('test-blood-sugar').value;
+            const bloodSugarDisplay = bloodSugarMetric !== undefined && bloodSugarMetric !== null && bloodSugarMetric !== ''
+                ? `${bloodSugarMetric} mg/dL`
+                : 'Not provided';
 
             const bmiValue = formatNumber(metrics.bmi, 1);
             const caloriesValue = formatNumber(metrics.calories, 0);
             const proteinValue = formatNumber(metrics.protein, 0);
-            const carbsValue = formatNumber(metrics.carbs, 0);
+            const sugarValue = formatNumber(metrics.sugar, 0);
             const fatValue = formatNumber(metrics.fat, 0);
 
             let html = `
@@ -3799,7 +3867,7 @@
                                     <tr><td><strong>BMI:</strong></td><td>${bmiValue ? bmiValue : 'Not specified'}</td></tr>
                                     <tr><td><strong>Calories:</strong></td><td>${caloriesValue ? `${caloriesValue} kcal/day` : 'Not specified'}</td></tr>
                                     <tr><td><strong>Protein:</strong></td><td>${proteinValue ? `${proteinValue} g` : 'Not specified'}</td></tr>
-                                    <tr><td><strong>Carbs:</strong></td><td>${carbsValue ? `${carbsValue} g` : 'Not specified'}</td></tr>
+                                    <tr><td><strong>Sugar:</strong></td><td>${sugarValue ? `${sugarValue} g` : 'Not specified'}</td></tr>
                                     <tr><td><strong>Fat:</strong></td><td>${fatValue ? `${fatValue} g` : 'Not specified'}</td></tr>
                                 </table>
                             </div>
@@ -3817,6 +3885,7 @@
                                 <table class="table">
                                     <tr><td><strong>Diet Type:</strong></td><td>${dietType}</td></tr>
                                     <tr><td><strong>Allergies:</strong></td><td>${allergies}</td></tr>
+                                    <tr><td><strong>Blood Sugar:</strong></td><td>${bloodSugarDisplay}</td></tr>
                                     <tr><td><strong>Meals/Day:</strong></td><td>${mealsPerDay}</td></tr>
                                 </table>
                             </div>
@@ -3897,6 +3966,7 @@
                 height: inputValues.height,
                 diet_type: inputValues.dietType,
                 meals_per_day: inputValues.mealsPerDay,
+                blood_sugar: inputValues.blood_sugar,
                 allergies: inputValues.allergies.map(item => String(item).toLowerCase())
             };
 
@@ -3971,6 +4041,7 @@
                     health: {
                         dietType: inputValues.dietType,
                         allergies: inputValues.allergies,
+                        blood_sugar: inputValues.blood_sugar,
                         conditions: []
                     },
                     preferences: {
@@ -3997,6 +4068,7 @@
             document.getElementById('test-gender').value = 'male';
             document.getElementById('test-weight').value = 70;
             document.getElementById('test-height').value = 170;
+            document.getElementById('test-blood-sugar').value = 95;
             document.getElementById('test-diet-type').value = 'vegan';
             document.getElementById('test-meals-per-day').value = '3';
 

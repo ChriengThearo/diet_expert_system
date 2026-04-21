@@ -371,7 +371,7 @@ def doctor_foods():
                     "food_type": getattr(food, "food_type", "general") or "general",
                     "calories": food.calories,
                     "protein": food.protein,
-                    "carbs": food.carbs,
+                    "sugar": food.sugar,
                     "fat": food.fat,
                 }
                 for food in foods
@@ -442,7 +442,7 @@ def create_doctor_food():
         food_type=(get_value("food_type") or "general").strip().lower(),
         calories=to_float(get_value("calories")),
         protein=to_float(get_value("protein")),
-        carbs=to_float(get_value("carbs")),
+        sugar=to_float(get_value("sugar")),
         fat=to_float(get_value("fat")),
     )
     if food.food_type not in allowed_food_types:
@@ -465,7 +465,7 @@ def create_doctor_food():
                     "food_type": food.food_type or "general",
                     "calories": food.calories,
                     "protein": food.protein,
-                    "carbs": food.carbs,
+                    "sugar": food.sugar,
                     "fat": food.fat,
                 },
             }
@@ -572,7 +572,7 @@ def update_or_delete_doctor_food(food_id: int):
         food.is_gevan = vegan_value
     food.calories = to_float(get_value("calories"))
     food.protein = to_float(get_value("protein"))
-    food.carbs = to_float(get_value("carbs"))
+    food.sugar = to_float(get_value("sugar"))
     food.fat = to_float(get_value("fat"))
 
     try:
@@ -588,7 +588,7 @@ def update_or_delete_doctor_food(food_id: int):
                     "food_type": food.food_type or "general",
                     "calories": food.calories,
                     "protein": food.protein,
-                    "carbs": food.carbs,
+                    "sugar": food.sugar,
                     "fat": food.fat,
                 },
             }
@@ -626,7 +626,7 @@ def doctor_cooked_foods():
                     "cooking_method": cooked_food.cooking_method or "",
                     "calories": cooked_food.calories,
                     "protein": cooked_food.protein,
-                    "carbs": cooked_food.carbs,
+                    "sugar": cooked_food.sugar,
                     "fat": cooked_food.fat,
                 }
                 for cooked_food in cooked_foods
@@ -689,7 +689,7 @@ def create_doctor_cooked_food():
         cooking_method=(get_value("cooking_method") or "").strip() or None,
         calories=to_float(get_value("calories")),
         protein=to_float(get_value("protein")),
-        carbs=to_float(get_value("carbs")),
+        sugar=to_float(get_value("sugar")),
         fat=to_float(get_value("fat")),
     )
     vegan_value = to_bool(get_value("is_gevan"))
@@ -711,7 +711,7 @@ def create_doctor_cooked_food():
                     "cooking_method": cooked_food.cooking_method or "",
                     "calories": cooked_food.calories,
                     "protein": cooked_food.protein,
-                    "carbs": cooked_food.carbs,
+                    "sugar": cooked_food.sugar,
                     "fat": cooked_food.fat,
                 },
             }
@@ -821,7 +821,7 @@ def update_or_delete_doctor_cooked_food(cooked_food_id: int):
         cooked_food.is_gevan = vegan_value
     cooked_food.calories = to_float(get_value("calories"))
     cooked_food.protein = to_float(get_value("protein"))
-    cooked_food.carbs = to_float(get_value("carbs"))
+    cooked_food.sugar = to_float(get_value("sugar"))
     cooked_food.fat = to_float(get_value("fat"))
 
     try:
@@ -838,7 +838,7 @@ def update_or_delete_doctor_cooked_food(cooked_food_id: int):
                     "cooking_method": cooked_food.cooking_method or "",
                     "calories": cooked_food.calories,
                     "protein": cooked_food.protein,
-                    "carbs": cooked_food.carbs,
+                    "sugar": cooked_food.sugar,
                     "fat": cooked_food.fat,
                 },
             }
@@ -1470,8 +1470,11 @@ def user_dashboard():
                     "bmi": metrics.get("bmi") or result.bmi,
                     "calories": metrics.get("calories"),
                     "protein": metrics.get("protein"),
-                    "carbs": metrics.get("carbs"),
+                    "sugar": metrics.get("sugar"),
                     "fat": metrics.get("fat"),
+                    "blood_sugar": profile.get("blood_sugar")
+                    if profile.get("blood_sugar") is not None
+                    else health.get("blood_sugar"),
                     "diet_type": profile.get("diet_type") or health.get("dietType"),
                     "meals_per_day": profile.get("meals_per_day")
                     or preferences.get("mealsPerDay"),
@@ -1500,8 +1503,9 @@ def user_dashboard():
                     "bmi": entry.get("bmi"),
                     "calories": entry.get("calories"),
                     "protein": entry.get("protein"),
-                    "carbs": entry.get("carbs"),
+                    "sugar": entry.get("sugar"),
                     "fat": entry.get("fat"),
+                    "blood_sugar": entry.get("blood_sugar"),
                     "diet_type": entry.get("diet_type"),
                     "meals_per_day": entry.get("meals_per_day"),
                     "allergies": entry.get("allergies") or "None",
@@ -1767,6 +1771,7 @@ def _parse_health_document(text):
         "gender": None,
         "weight": None,
         "height": None,
+        "blood_sugar": None,
         "allergies": [],
         "diet_type": None,
     }
@@ -1821,6 +1826,18 @@ def _parse_health_document(text):
             val = float(m.group(1))
             if 50 <= val <= 300:
                 result["height"] = val
+                break
+
+    # --- Blood sugar (mg/dL) ---
+    for pattern in [
+        r"(?:fasting\s*)?(?:blood\s*(?:sugar|glucose)|fbs|rbs|glucose)\s*[:\-]?\s*(\d+\.?\d*)\s*(?:mg\s*\/\s*d[l1]|mg\/d[l1])?",
+        r"(?:blood\s*(?:sugar|glucose)\s*(?:level|reading)?\s*[:\-]?\s*)(\d+\.?\d*)",
+    ]:
+        m = re.search(pattern, lower)
+        if m:
+            val = float(m.group(1))
+            if 20 <= val <= 600:
+                result["blood_sugar"] = val
                 break
 
     # --- Allergies ---
@@ -1995,8 +2012,11 @@ def user_dashboard_submit():
                 "bmi": metrics.get("bmi"),
                 "calories": metrics.get("calories"),
                 "protein": metrics.get("protein"),
-                "carbs": metrics.get("carbs"),
+                "sugar": metrics.get("sugar"),
                 "fat": metrics.get("fat"),
+                "blood_sugar": profile.get("blood_sugar")
+                if profile.get("blood_sugar") is not None
+                else health.get("blood_sugar"),
                 "diet_type": profile.get("diet_type") or health.get("dietType"),
                 "meals_per_day": profile.get("meals_per_day")
                 or preferences.get("mealsPerDay"),

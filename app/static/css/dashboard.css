@@ -371,7 +371,7 @@
 }
 
 /* Progress bar dynamic width */
-.carbs-progress, .protein-progress, .fats-progress {
+.sugar-progress, .protein-progress, .fats-progress {
     width: 0% !important;
     transition: width 1s ease-in-out;
 }
