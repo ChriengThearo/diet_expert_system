@@ -832,6 +832,27 @@
                                 </div>
                             </div>
 
+                            <div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+                                <input class="form-check-input d-none" type="checkbox" id="rule-active" checked>
+                                <button type="button" class="btn btn-outline-secondary" id="add-food-group">
+                                    <i class="fas fa-layer-group me-1"></i>Add Group Food
+                                </button>
+                                <button type="button" class="btn btn-custom" id="save-rule"
+                                    data-permission="rule.create" data-action="save rules">
+                                    <i class="fas fa-save me-2"></i>Save Rule
+                                </button>
+                            </div>
+
+                            <div class="d-none mb-3" id="food-groups-list">
+                                <div class="d-flex flex-wrap align-items-center gap-3">
+                                    <h6 class="mb-0 text-primary" id="active-food-group-label">Group 1</h6>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <label for="food-group-selector" class="small text-muted mb-0">Switch Group</label>
+                                        <select id="food-group-selector" class="form-select form-select-sm" style="min-width: 170px;"></select>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="border rounded p-3 mb-4 builder-section d-none" id="rule-foods-section">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                     <h6 class="mb-0"><i class="fas fa-apple-alt me-2"></i>Foods for This Rule</h6>
@@ -1007,19 +1028,6 @@
                             </div>
 
                             <hr class="my-4">
-
-                            <div class="d-flex flex-wrap gap-2 align-items-center mb-2">
-                                <input class="form-check-input d-none" type="checkbox" id="rule-active" checked>
-                                <button type="button" class="btn btn-outline-secondary" id="add-food-group">
-                                    <i class="fas fa-layer-group me-1"></i>Add Group Food
-                                </button>
-                                <button type="button" class="btn btn-custom" id="save-rule"
-                                    data-permission="rule.create" data-action="save rules">
-                                    <i class="fas fa-save me-2"></i>Save Rule
-                                </button>
-                            </div>
-                            <div class="d-flex flex-wrap gap-2 align-items-center mb-3 d-none" id="food-groups-list">
-                            </div>
                         </div>
                     </div>
 
@@ -2640,38 +2648,32 @@
 
         function renderFoodGroupsList() {
             const container = document.getElementById('food-groups-list');
-            if (!container) {
+            const activeLabel = document.getElementById('active-food-group-label');
+            const selector = document.getElementById('food-group-selector');
+            if (!container || !activeLabel || !selector) {
                 return;
             }
-            container.innerHTML = '';
             updateFoodGroupBuilderVisibility();
             if (!Array.isArray(foodGroupsState) || foodGroupsState.length === 0) {
+                selector.innerHTML = '';
+                activeLabel.textContent = 'Group 1';
                 return;
             }
-            foodGroupsState.forEach((group, index) => {
-                const wrap = document.createElement('div');
-                wrap.className = 'btn-group btn-group-sm';
 
-                const activateBtn = document.createElement('button');
-                activateBtn.type = 'button';
-                activateBtn.className = group.group_key === activeFoodGroupKey ? 'btn btn-primary' : 'btn btn-outline-primary';
-                activateBtn.dataset.groupAction = 'activate';
-                activateBtn.dataset.groupKey = group.group_key;
-                activateBtn.textContent = `Group ${index + 1}`;
-                wrap.appendChild(activateBtn);
+            const selectedKey = getFoodGroupByKey(activeFoodGroupKey)
+                ? activeFoodGroupKey
+                : foodGroupsState[0].group_key;
+            activeFoodGroupKey = selectedKey;
 
-                if (foodGroupsState.length > 1) {
-                    const removeBtn = document.createElement('button');
-                    removeBtn.type = 'button';
-                    removeBtn.className = 'btn btn-outline-danger';
-                    removeBtn.dataset.groupAction = 'remove';
-                    removeBtn.dataset.groupKey = group.group_key;
-                    removeBtn.innerHTML = '<i class="fas fa-times"></i>';
-                    wrap.appendChild(removeBtn);
-                }
+            selector.innerHTML = foodGroupsState
+                .map((group, index) => {
+                    const selected = group.group_key === selectedKey ? ' selected' : '';
+                    return `<option value="${group.group_key}"${selected}>Group ${index + 1}</option>`;
+                })
+                .join('');
 
-                container.appendChild(wrap);
-            });
+            const selectedIndex = foodGroupsState.findIndex(group => group.group_key === selectedKey);
+            activeLabel.textContent = `Group ${selectedIndex >= 0 ? selectedIndex + 1 : 1}`;
         }
 
         function switchFoodGroup(groupKey) {
@@ -3221,21 +3223,12 @@
                 });
             }
 
-            const foodGroupsList = document.getElementById('food-groups-list');
-            if (foodGroupsList) {
-                foodGroupsList.addEventListener('click', function (event) {
-                    const actionTarget = event.target.closest('[data-group-action]');
-                    if (!actionTarget) {
-                        return;
-                    }
-                    const action = actionTarget.dataset.groupAction;
-                    const groupKey = actionTarget.dataset.groupKey;
-                    if (action === 'activate') {
+            const foodGroupSelector = document.getElementById('food-group-selector');
+            if (foodGroupSelector) {
+                foodGroupSelector.addEventListener('change', function () {
+                    const groupKey = String(foodGroupSelector.value || '');
+                    if (groupKey) {
                         switchFoodGroup(groupKey);
-                        return;
-                    }
-                    if (action === 'remove') {
-                        removeFoodGroup(groupKey);
                     }
                 });
             }
