@@ -1077,6 +1077,13 @@
     font-size: 0.86rem;
 }
 
+.doctor-dashboard-app .rule-loading-note {
+    display: block;
+    margin-top: 0.3rem;
+    font-size: 0.78rem;
+    color: var(--doc-muted);
+}
+
 .doctor-dashboard-app .rule-builder .form-control,
 .doctor-dashboard-app .rule-builder .form-select {
     border-radius: 10px;

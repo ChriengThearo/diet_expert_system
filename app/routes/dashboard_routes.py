@@ -26,6 +26,7 @@ from app.services.diet_rule_service import DietRuleService
 from app.routes.access_control import permission_required
 from extensions import db, csrf
 from datetime import datetime, timedelta
+from sqlalchemy.orm import selectinload
 import json
 import os
 import uuid
@@ -420,7 +421,28 @@ def doctor_dashboard_data():
 )
 def doctor_rules():
     """Return diet rules for doctor dashboard"""
-    rules = DietRuleService.get_diet_rule_all()
+    page = request.args.get("page", default=1, type=int)
+    per_page = request.args.get("per_page", default=20, type=int)
+    page = page if isinstance(page, int) and page > 0 else 1
+    per_page = per_page if isinstance(per_page, int) and per_page > 0 else 20
+    per_page = min(per_page, 100)
+
+    total_rules = DietRulesTable.query.count()
+    total_pages = (total_rules + per_page - 1) // per_page if total_rules else 0
+    offset = (page - 1) * per_page
+
+    rules = (
+        DietRulesTable.query.options(
+            selectinload(DietRulesTable.goals),
+            selectinload(DietRulesTable.food_groups).selectinload(
+                FoodGroupTable.rule_food_map
+            ),
+        )
+        .order_by(DietRulesTable.rule_name.asc(), DietRulesTable.id.asc())
+        .offset(offset)
+        .limit(per_page)
+        .all()
+    )
     result = []
 
     for rule in rules:
@@ -521,7 +543,19 @@ def doctor_rules():
             }
         )
 
-    return jsonify({"rules": result})
+    return jsonify(
+        {
+            "rules": result,
+            "pagination": {
+                "page": page,
+                "per_page": per_page,
+                "total": total_rules,
+                "total_pages": total_pages,
+                "has_next": page < total_pages,
+                "has_prev": page > 1,
+            },
+        }
+    )
 
 
 @dashboard_bp.route("/doctor/test-plan", methods=["POST"])

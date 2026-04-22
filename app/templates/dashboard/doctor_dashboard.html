@@ -587,7 +587,9 @@
                             <div>
                                 <h4 class="mb-1"><i class="fas fa-list-ul me-2"></i>Rule Management</h4>
                                 <p class="rule-selection-note mb-0">Select cards to activate, deactivate, or delete in
-                                    bulk.</p>
+                                    bulk.
+                                    <span class="rule-loading-note" id="rules-loading-status" aria-live="polite"></span>
+                                </p>
                             </div>
                             <div class="btn-group" role="group">
                                 <button type="button" class="btn btn-outline-primary btn-sm" id="activate-selected"
@@ -1398,6 +1400,8 @@
         let currentRulePage = 1;
         const rulesPerPage = 4;
         const maxRulePageButtons = 20;
+        const ruleFetchBatchSize = 20;
+        let rulesLoadToken = 0;
         let currentFoodPage = 1;
         const foodsPerPage = 12;
         let foodsCache = [];
@@ -1419,26 +1423,124 @@
         });
 
         // Load rules into the rules list
-        function loadRules() {
-            const rulesList = document.getElementById('rules-list');
-            if (rulesList) {
-                rulesList.innerHTML = '';
+        function setRulesLoadingStatus(message, isError = false) {
+            const statusEl = document.getElementById('rules-loading-status');
+            if (!statusEl) {
+                return;
             }
+            statusEl.textContent = message || '';
+            statusEl.classList.toggle('text-danger', Boolean(isError));
+        }
 
-            fetch('/dashboard/doctor/rules')
-                .then(response => response.json())
-                .then(data => {
-                    sampleRules = Array.isArray(data.rules) ? data.rules : [];
-                    updateStats();
-                    currentRulePage = 1;
-                    renderRulesPage(currentRulePage);
-                })
-                .catch(error => {
-                    console.error('Error loading rules:', error);
-                    if (rulesList) {
-                        rulesList.innerHTML = '<div class="alert alert-danger">Failed to load rules.</div>';
+        function mergeRules(newRules) {
+            if (!Array.isArray(newRules) || newRules.length === 0) {
+                return;
+            }
+            const currentIndexById = new Map(
+                sampleRules.map((item, index) => [String(item.id), index])
+            );
+            newRules.forEach(rule => {
+                const key = String(rule.id);
+                if (currentIndexById.has(key)) {
+                    sampleRules[currentIndexById.get(key)] = rule;
+                    return;
+                }
+                currentIndexById.set(key, sampleRules.length);
+                sampleRules.push(rule);
+            });
+        }
+
+        async function fetchRulesBatch(page, loadToken) {
+            const params = new URLSearchParams({
+                page: String(page),
+                per_page: String(ruleFetchBatchSize)
+            });
+            const response = await fetch(`/dashboard/doctor/rules?${params.toString()}`);
+            if (!response.ok) {
+                throw new Error(`Failed to load rules (HTTP ${response.status})`);
+            }
+            const data = await response.json();
+            if (loadToken !== rulesLoadToken) {
+                return null;
+            }
+            return {
+                rules: Array.isArray(data.rules) ? data.rules : [],
+                pagination: data.pagination && typeof data.pagination === 'object' ? data.pagination : {}
+            };
+        }
+
+        async function loadRules() {
+            const rulesList = document.getElementById('rules-list');
+            const loadToken = ++rulesLoadToken;
+            sampleRules = [];
+            currentRulePage = 1;
+            updateStats();
+
+            if (rulesList) {
+                rulesList.innerHTML = `
+                    <div class="alert alert-light border d-flex align-items-center gap-2 mb-0">
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        <span>Loading rules...</span>
+                    </div>
+                `;
+            }
+            setRulesLoadingStatus('Loading first batch...');
+
+            try {
+                const firstBatch = await fetchRulesBatch(1, loadToken);
+                if (!firstBatch || loadToken !== rulesLoadToken) {
+                    return;
+                }
+
+                mergeRules(firstBatch.rules);
+                updateStats();
+                renderRulesPage(currentRulePage);
+
+                const totalRules = Number(firstBatch.pagination.total) || sampleRules.length;
+                const totalPages = Number(firstBatch.pagination.total_pages) || 0;
+
+                if (totalRules === 0) {
+                    setRulesLoadingStatus('No rules found.');
+                    return;
+                }
+
+                if (totalPages <= 1 || !firstBatch.pagination.has_next) {
+                    setRulesLoadingStatus(`Loaded ${sampleRules.length} rule${sampleRules.length === 1 ? '' : 's'}.`);
+                    return;
+                }
+
+                setRulesLoadingStatus(`Loaded ${sampleRules.length} of ${totalRules} rules. Loading more...`);
+
+                for (let page = 2; page <= totalPages; page++) {
+                    const batch = await fetchRulesBatch(page, loadToken);
+                    if (!batch || loadToken !== rulesLoadToken) {
+                        return;
                     }
-                });
+                    mergeRules(batch.rules);
+                    updateStats();
+                    renderRulesPage(currentRulePage);
+
+                    const loaded = sampleRules.length;
+                    if (page < totalPages) {
+                        setRulesLoadingStatus(`Loaded ${loaded} of ${totalRules} rules. Loading more...`);
+                    } else {
+                        setRulesLoadingStatus(`Loaded all ${loaded} rules.`);
+                    }
+
+                    await new Promise(resolve => setTimeout(resolve, 0));
+                }
+            } catch (error) {
+                if (loadToken !== rulesLoadToken) {
+                    return;
+                }
+                console.error('Error loading rules:', error);
+                if (rulesList && sampleRules.length === 0) {
+                    rulesList.innerHTML = '<div class="alert alert-danger">Failed to load rules.</div>';
+                } else if (sampleRules.length > 0) {
+                    renderRulesPage(currentRulePage);
+                }
+                setRulesLoadingStatus('Failed to load rules. Please refresh and try again.', true);
+            }
         }
 
         function formatNutrient(value, unit) {
