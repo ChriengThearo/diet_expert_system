@@ -10,37 +10,37 @@ class UserProfileEditForm(FlaskForm):
     """User profile edit form (dashboard user profile)."""
 
     username = StringField(
-        "Username", validators=[DataRequired(), Length(min=3, max=80)]
+        "ឈ្មោះអ្នកប្រើប្រាស់", validators=[DataRequired(), Length(min=3, max=80)]
     )
     full_name = StringField(
-        "Full Name", validators=[DataRequired(), Length(min=3, max=120)]
+        "ឈ្មោះពេញ", validators=[DataRequired(), Length(min=3, max=120)]
     )
     photo = FileField(
-        "Profile Photo",
+        "រូបប្រវត្តិរូប",
         validators=[
             Optional(),
-            FileAllowed(["jpg", "jpeg", "png", "gif"], "Images only!"),
+            FileAllowed(["jpg", "jpeg", "png", "gif"], "អាចផ្ទុកបានតែរូបភាពប៉ុណ្ណោះ!"),
         ],
     )
     current_password = PasswordField(
-        "Current Password",
+        "ពាក្យសម្ងាត់បច្ចុប្បន្ន",
         validators=[Optional()],
         render_kw={"autocomplete": "current-password"},
     )
     new_password = PasswordField(
-        "New Password",
+        "ពាក្យសម្ងាត់ថ្មី",
         validators=[Optional(), Length(min=6, max=128)],
         render_kw={"autocomplete": "new-password"},
     )
     confirm_password = PasswordField(
-        "Confirm New Password",
+        "បញ្ជាក់ពាក្យសម្ងាត់ថ្មី",
         validators=[
             Optional(),
-            EqualTo("new_password", message="New password and confirmation must match."),
+            EqualTo("new_password", message="ពាក្យសម្ងាត់ថ្មី និងការបញ្ជាក់ត្រូវតែដូចគ្នា។"),
         ],
         render_kw={"autocomplete": "new-password"},
     )
-    submit = SubmitField("Save Changes")
+    submit = SubmitField("រក្សាទុកការកែប្រែ")
 
     def __init__(self, original_user: UserTable, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -52,7 +52,7 @@ class UserProfileEditForm(FlaskForm):
             UserTable.id != self.original_user.id,
         ).first()
         if exists:
-            raise ValidationError("This username is already taken.")
+            raise ValidationError("ឈ្មោះអ្នកប្រើប្រាស់នេះត្រូវបានប្រើរួចហើយ។")
 
     def validate(self, extra_validators=None):
         if not super().validate(extra_validators=extra_validators):
@@ -70,24 +70,24 @@ class UserProfileEditForm(FlaskForm):
 
         if not current_password:
             self.current_password.errors.append(
-                "Current password is required to change your password."
+                "ត្រូវបញ្ចូលពាក្យសម្ងាត់បច្ចុប្បន្ន ដើម្បីប្តូរពាក្យសម្ងាត់។"
             )
             is_valid = False
         elif not self.original_user.check_password(current_password):
-            self.current_password.errors.append("Current password is incorrect.")
+            self.current_password.errors.append("ពាក្យសម្ងាត់បច្ចុប្បន្នមិនត្រឹមត្រូវទេ។")
             is_valid = False
 
         if not new_password:
-            self.new_password.errors.append("Please enter a new password.")
+            self.new_password.errors.append("សូមបញ្ចូលពាក្យសម្ងាត់ថ្មី។")
             is_valid = False
         elif current_password and new_password == current_password:
             self.new_password.errors.append(
-                "New password must be different from current password."
+                "ពាក្យសម្ងាត់ថ្មីត្រូវតែខុសពីពាក្យសម្ងាត់បច្ចុប្បន្ន។"
             )
             is_valid = False
 
         if not confirm_password:
-            self.confirm_password.errors.append("Please confirm your new password.")
+            self.confirm_password.errors.append("សូមបញ្ជាក់ពាក្យសម្ងាត់ថ្មីរបស់អ្នក។")
             is_valid = False
 
         return is_valid

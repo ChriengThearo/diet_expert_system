@@ -233,7 +233,7 @@ class DashboardService:
         """Persist user dashboard form data and update related tables."""
         user = UserTable.query.get(user_id)
         if not user:
-            raise ValueError("User not found")
+            raise ValueError("រកមិនឃើញអ្នកប្រើប្រាស់ទេ។")
 
         personal = payload.get("personal", {}) or {}
         health = payload.get("health", {}) or {}

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+{% set ui_lang = session.get('ui_lang', 'km') %}
+<html lang="{{ 'km' if ui_lang == 'km' else 'en' }}">
 
 <head>
     <meta charset="UTF-8">
@@ -118,7 +119,7 @@
     <!-- Loading Spinner -->
     <div class="loading-spinner">
         <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
+            <span class="visually-hidden">កំពុងផ្ទុក...</span>
         </div>
     </div>
 
@@ -147,8 +148,8 @@
                     <li class="nav-item">
                         <a class="btn btn-light btn-sm {% if request.endpoint and 'dashboard' in request.endpoint and 'diet_expert' not in request.endpoint %}active{% endif %}"
                             href="{{ url_for('dashboard.dashboard_home') }}" data-permission="user.dashboard.read"
-                            data-action="access your dashboard">
-                            <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                            data-action="ចូលប្រើផ្ទាំងគ្រប់គ្រងរបស់អ្នក">
+                            <i class="fas fa-tachometer-alt me-1"></i>ផ្ទាំងគ្រប់គ្រង
                         </a>
                     </li>
                     {% endif %}
@@ -156,7 +157,7 @@
                     <li class="nav-item">
                         <a class="btn btn-light btn-sm {% if request.endpoint == 'main.home' %}active{% endif %}"
                             href="{{ url_for('main.home') }}">
-                            <i class="fas fa-home me-1"></i>Home
+                            <i class="fas fa-home me-1"></i>ទំព័រដើម
                         </a>
                     </li>
 
@@ -164,8 +165,8 @@
                     <li class="nav-item">
                         <a class="btn btn-light btn-sm {% if request.endpoint and 'diet_expert' in request.endpoint %}active{% endif %}"
                             href="{{ url_for('dashboard.user_diet_expert') }}"
-                            data-permission="user.dashboard.create" data-action="generate diet plans">
-                            <i class="fas fa-utensils me-1"></i>Generate Plan
+                            data-permission="user.dashboard.create" data-action="បង្កើតផែនការអាហារ">
+                            <i class="fas fa-utensils me-1"></i>បង្កើតផែនការ
                         </a>
                     </li>
                     {% endif %}
@@ -173,7 +174,7 @@
                     <li class="nav-item">
                         <a class="btn btn-light btn-sm {% if request.endpoint == 'main.bmi' %}active{% endif %}"
                             href="{{ url_for('main.bmi') }}">
-                            <i class="fas fa-calculator me-1"></i>Calculate BMI
+                            <i class="fas fa-calculator me-1"></i>គណនា BMI
                         </a>
                     </li>
 
@@ -222,7 +223,36 @@
                         {% include "dashboard/_dashboard_switcher.html" %}
                     </li>
                     {% endif %}
-                    {% set nav_display_name = 'Guest' if session.get('user_guest_mode') else current_user.username %}
+                    {% set language_display_label = 'ភាសា' if ui_lang == 'km' else 'Language' %}
+                    <li class="nav-item dropdown me-2">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#"
+                            id="languageModeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"
+                            title="{{ language_display_label }}">
+                            <i class="fas fa-language me-1"></i>
+                            <span class="fw-semibold">{{ 'KH' if ui_lang == 'km' else 'EN' }}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageModeDropdown">
+                            <li>
+                                <button class="dropdown-item d-flex justify-content-between align-items-center {% if ui_lang == 'km' %}active{% endif %}"
+                                    type="button" data-language-option="km">
+                                    <span>ខ្មែរ</span>
+                                    {% if ui_lang == 'km' %}
+                                    <i class="fas fa-check text-success"></i>
+                                    {% endif %}
+                                </button>
+                            </li>
+                            <li>
+                                <button class="dropdown-item d-flex justify-content-between align-items-center {% if ui_lang == 'en' %}active{% endif %}"
+                                    type="button" data-language-option="en">
+                                    <span>English</span>
+                                    {% if ui_lang == 'en' %}
+                                    <i class="fas fa-check text-success"></i>
+                                    {% endif %}
+                                </button>
+                            </li>
+                        </ul>
+                    </li>
+                    {% set nav_display_name = 'ភ្ញៀវ' if session.get('user_guest_mode') else current_user.username %}
                     {% set nav_default_avatar_url = url_for('main.images', filename='public/avatar.png') %}
                     {% set nav_photo_path = (current_user.photo or '')|trim %}
                     {% set nav_avatar_url = nav_default_avatar_url if session.get('user_guest_mode') else
@@ -243,8 +273,8 @@
                                 <hr class="dropdown-divider">
                             </li>
                             <li><a class="dropdown-item" href="{{ url_for('dashboard.user_profile') }}"
-                                    data-permission="user.dashboard.read" data-action="view your profile">
-                                    <i class="fas fa-user me-2"></i>Profile
+                                    data-permission="user.dashboard.read" data-action="មើលប្រវត្តិរូបរបស់អ្នក">
+                                    <i class="fas fa-user me-2"></i>ប្រវត្តិរូប
                                 </a></li>
                             {% if 'user.dashboard.create' in dashboard_permissions %}
                             {% set user_guest_mode = session.get('user_guest_mode', False) %}
@@ -254,7 +284,7 @@
                                     data-guest-mode="{{ 'true' if user_guest_mode else 'false' }}">
                                     <i class="fas {{ 'fa-user' if user_guest_mode else 'fa-user-secret' }}"
                                         data-guest-icon></i>
-                                    <span data-guest-label>{{ 'User mode' if user_guest_mode else 'Guest mode' }}</span>
+                                    <span data-guest-label>{{ 'របៀបអ្នកប្រើប្រាស់' if user_guest_mode else 'របៀបភ្ញៀវ' }}</span>
                                 </button>
                             </li>
                             {% endif %}
@@ -262,19 +292,19 @@
                                 <hr class="dropdown-divider">
                             </li>
                             <li><a class="dropdown-item text-danger" href="{{ url_for('auth.logout') }}">
-                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                    <i class="fas fa-sign-out-alt me-2"></i>ចាកចេញ
                                 </a></li>
                         </ul>
                     </li>
                     {% else %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('auth.login') }}">
-                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                            <i class="fas fa-sign-in-alt me-1"></i>ចូលប្រើ
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('auth.register') }}">
-                            <i class="fas fa-user-plus me-1"></i>Register
+                            <i class="fas fa-user-plus me-1"></i>ចុះឈ្មោះ
                         </a>
                     </li>
                     {% endif %}
@@ -317,7 +347,7 @@
                         {{ message }}
                     </div>
                     <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
-                        aria-label="Close"></button>
+                        aria-label="បិទ"></button>
                 </div>
             </div>
             {% endfor %}
@@ -335,8 +365,8 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-4">
-                    <h5><i class="fas fa-heartbeat me-2"></i>Nutrition Expert System</h5>
-                    <p class="text-muted">Your personalized nutrition and diet management platform.</p>
+                    <h5><i class="fas fa-heartbeat me-2"></i>ប្រព័ន្ធជំនួយអាហារូបត្ថម្ភ</h5>
+                    <p class="text-muted">វេទិកាគ្រប់គ្រងអាហារូបត្ថម្ភ និងរបបអាហារផ្ទាល់ខ្លួនរបស់អ្នក។</p>
                     <div class="d-flex gap-2">
                         <a href="#" class="text-light"><i class="fab fa-facebook"></i></a>
                         <a href="#" class="text-light"><i class="fab fa-twitter"></i></a>
@@ -345,16 +375,16 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <h5>Quick Links</h5>
+                    <h5>តំណភ្ជាប់រហ័ស</h5>
                     <ul class="list-unstyled">
-                        <li><a href="{{ url_for('main.home') }}" class="text-light text-decoration-none">Home</a></li>
-                        <li><a href="#" class="text-light text-decoration-none">About Us</a></li>
-                        <li><a href="#" class="text-light text-decoration-none">Contact</a></li>
-                        <li><a href="#" class="text-light text-decoration-none">Privacy Policy</a></li>
+                        <li><a href="{{ url_for('main.home') }}" class="text-light text-decoration-none">ទំព័រដើម</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">អំពីយើង</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">ទំនាក់ទំនង</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">គោលការណ៍ឯកជនភាព</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">
-                    <h5>Contact Info</h5>
+                    <h5>ព័ត៌មានទំនាក់ទំនង</h5>
                     <p class="text-muted">
                         <i class="fas fa-envelope me-2"></i>support@nutritionexpert.com<br>
                         <i class="fas fa-phone me-2"></i>+1 (555) 123-4567<br>
@@ -364,7 +394,7 @@
             </div>
             <hr class="border-secondary">
             <div class="text-center">
-                <small>&copy; 2024 Nutrition Expert System. All rights reserved.</small>
+                <small>&copy; 2024 ប្រព័ន្ធជំនួយអាហារូបត្ថម្ភ។ រក្សាសិទ្ធិគ្រប់យ៉ាង។</small>
             </div>
         </div>
     </footer>
@@ -377,16 +407,16 @@
                 <div class="modal-header bg-warning-subtle" id="guestModeNoticeHeader">
                     <h5 class="modal-title" id="guestModeNoticeTitle">
                         <i class="fas fa-triangle-exclamation text-warning me-2" id="guestModeNoticeIcon"></i>
-                        <span id="guestModeNoticeTitleText">Notice</span>
+                        <span id="guestModeNoticeTitleText">សេចក្តីជូនដំណឹង</span>
                     </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="បិទ"></button>
                 </div>
                 <div class="modal-body">
-                    <p class="mb-0" id="guestModeNoticeMessage">Data from generated plans will not be saved.</p>
+                    <p class="mb-0" id="guestModeNoticeMessage">ទិន្នន័យពីផែនការដែលបានបង្កើត នឹងមិនត្រូវបានរក្សាទុកទេ។</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-warning fw-semibold" data-bs-dismiss="modal"
-                        id="guestModeNoticeButton">I Understand</button>
+                        id="guestModeNoticeButton">ខ្ញុំយល់ហើយ</button>
                 </div>
             </div>
         </div>
@@ -475,6 +505,59 @@
         });
 
         document.addEventListener('DOMContentLoaded', function () {
+            const languageOptions = document.querySelectorAll('[data-language-option]');
+            if (!languageOptions.length) {
+                return;
+            }
+
+            const endpoint = "{{ url_for('dashboard.set_language_mode') }}";
+            const currentLanguage = "{{ ui_lang }}";
+            const fallbackErrorMessage = currentLanguage === 'km'
+                ? 'មិនអាចប្តូរភាសាបានទេ។'
+                : 'Unable to switch language mode.';
+
+            languageOptions.forEach(option => {
+                option.addEventListener('click', async function (event) {
+                    event.preventDefault();
+                    const selectedLanguage = option.getAttribute('data-language-option');
+
+                    if (!selectedLanguage || selectedLanguage === currentLanguage) {
+                        return;
+                    }
+
+                    option.disabled = true;
+                    try {
+                        const response = await fetch(endpoint, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            credentials: 'same-origin',
+                            body: JSON.stringify({ language: selectedLanguage })
+                        });
+
+                        const data = await response.json().catch(() => ({}));
+                        if (!response.ok || data.success === false) {
+                            throw new Error(data.message || fallbackErrorMessage);
+                        }
+
+                        window.location.reload();
+                    } catch (error) {
+                        console.error('Failed to update language mode:', error);
+                        const message = error.message || fallbackErrorMessage;
+                        if (window.showNotification) {
+                            window.showNotification(message, 'danger', 4000);
+                        } else {
+                            alert(message);
+                        }
+                    } finally {
+                        option.disabled = false;
+                    }
+                });
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
             const guestModeToggle = document.getElementById('guestModeToggle');
             if (!guestModeToggle) {
                 return;
@@ -502,7 +585,7 @@
 
                 guestNoticeMessage.textContent = message;
                 if (guestNoticeTitleText) {
-                    guestNoticeTitleText.textContent = isWarning ? 'Notice' : 'Info';
+                    guestNoticeTitleText.textContent = isWarning ? 'សេចក្តីជូនដំណឹង' : 'ព័ត៌មាន';
                 }
 
                 if (guestNoticeHeader) {
@@ -517,7 +600,7 @@
                 if (guestNoticeButton) {
                     guestNoticeButton.classList.remove('btn-warning', 'btn-info');
                     guestNoticeButton.classList.add(isWarning ? 'btn-warning' : 'btn-info');
-                    guestNoticeButton.textContent = isWarning ? 'I Understand' : 'OK';
+                    guestNoticeButton.textContent = isWarning ? 'ខ្ញុំយល់ហើយ' : 'យល់ព្រម';
                 }
 
                 guestNoticeModalEl.addEventListener('hidden.bs.modal', () => {
@@ -532,7 +615,7 @@
             function updateGuestUi(isGuestMode) {
                 guestModeToggle.dataset.guestMode = isGuestMode ? 'true' : 'false';
                 if (guestLabel) {
-                    guestLabel.textContent = isGuestMode ? 'User mode' : 'Guest mode';
+                    guestLabel.textContent = isGuestMode ? 'របៀបអ្នកប្រើប្រាស់' : 'របៀបភ្ញៀវ';
                 }
                 if (guestIcon) {
                     guestIcon.classList.remove('fa-user', 'fa-user-secret');
@@ -558,7 +641,7 @@
 
                     const data = await response.json().catch(() => ({}));
                     if (!response.ok || data.success === false) {
-                        throw new Error(data.message || 'Failed to switch guest mode.');
+                        throw new Error(data.message || 'មិនអាចប្តូររបៀបភ្ញៀវបានទេ។');
                     }
 
                     const active = Boolean(data.guest_mode);
@@ -566,14 +649,14 @@
 
                     if (active) {
                         showGuestModeModal(
-                            '\u26A0\uFE0FNotice: Data from generated plans will not be saved.',
+                            '\u26A0\uFE0F សេចក្តីជូនដំណឹង៖ ទិន្នន័យពីផែនការដែលបានបង្កើត នឹងមិនត្រូវបានរក្សាទុកទេ។',
                             true,
                             () => window.location.reload()
                         );
                         return;
                     } else {
                         showGuestModeModal(
-                            data.message || 'Guest mode disabled. Saving to database is restored.',
+                            data.message || 'បានបិទរបៀបភ្ញៀវ។ ការរក្សាទុកទៅមូលដ្ឋានទិន្នន័យត្រូវបានស្ដារឡើងវិញ។',
                             false,
                             () => window.location.reload()
                         );
@@ -582,9 +665,9 @@
                 } catch (error) {
                     console.error('Failed to toggle guest mode:', error);
                     if (window.showNotification) {
-                        window.showNotification(error.message || 'Failed to switch guest mode.', 'danger', 4000);
+                        window.showNotification(error.message || 'មិនអាចប្តូររបៀបភ្ញៀវបានទេ។', 'danger', 4000);
                     } else {
-                        alert(error.message || 'Failed to switch guest mode.');
+                        alert(error.message || 'មិនអាចប្តូររបៀបភ្ញៀវបានទេ។');
                     }
                 } finally {
                     guestModeToggle.disabled = false;

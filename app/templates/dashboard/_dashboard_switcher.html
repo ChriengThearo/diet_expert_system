@@ -12,18 +12,18 @@
 {% if show_dashboard_switcher %}
 <div class="dashboard-switcher dropdown">
     <button class="dashboard-switcher-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false"
-        aria-label="Dashboard switcher">
+        aria-label="ប្ដូរផ្ទាំងគ្រប់គ្រង">
         <span class="dashboard-switcher-icon" aria-hidden="true"></span>
     </button>
     <ul class="dropdown-menu dropdown-menu-end shadow-sm">
         {% if 'dashboard.admin' in dashboard_permissions %}
-        <li><a class="dropdown-item" href="{{ url_for('dashboard.admin_dashboard') }}">Admin Dashboard</a></li>
+        <li><a class="dropdown-item" href="{{ url_for('dashboard.admin_dashboard') }}">ផ្ទាំងគ្រប់គ្រងអ្នកគ្រប់គ្រង</a></li>
         {% endif %}
         {% if 'dashboard.doctor' in dashboard_permissions %}
-        <li><a class="dropdown-item" href="{{ url_for('dashboard.doctor_dashboard') }}">Doctor Dashboard</a></li>
+        <li><a class="dropdown-item" href="{{ url_for('dashboard.doctor_dashboard') }}">ផ្ទាំងគ្រប់គ្រងវេជ្ជបណ្ឌិត</a></li>
         {% endif %}
         {% if 'dashboard.user' in dashboard_permissions %}
-        <li><a class="dropdown-item" href="{{ url_for('dashboard.user_dashboard') }}">User Dashboard</a></li>
+        <li><a class="dropdown-item" href="{{ url_for('dashboard.user_dashboard') }}">ផ្ទាំងគ្រប់គ្រងអ្នកប្រើប្រាស់</a></li>
         {% endif %}
     </ul>
 </div>

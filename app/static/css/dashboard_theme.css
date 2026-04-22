@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Noto+Sans+Khmer:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@500;600;700&display=swap');
 
 :root {
     --dash-ink: #10283a;
@@ -17,7 +17,7 @@
 
 .dashboard-shell,
 .doctor-dashboard-app {
-    font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
+    font-family: 'Noto Sans Khmer', 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
     color: var(--dash-ink);
 }
 
@@ -98,7 +98,7 @@
 .doctor-dashboard-app h3,
 .doctor-dashboard-app h4,
 .doctor-dashboard-app h5 {
-    font-family: 'Sora', 'Segoe UI', sans-serif;
+    font-family: 'Noto Sans Khmer', 'Sora', 'Segoe UI', sans-serif;
 }
 
 .dashboard-switcher-btn {

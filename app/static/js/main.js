@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const hasPermission = (code) => permissions.has(code);
 
     const showPermissionDenied = (action) => {
-        const message = `You have no permission to ${action}.`;
+        const message = `អ្នកមិនមានសិទ្ធិ ${action} ទេ។`;
         if (typeof window.showNotification === "function") {
             window.showNotification(message, "danger");
             return;
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!permission || hasPermission(permission)) return;
         event.preventDefault();
         event.stopPropagation();
-        const action = target.dataset.action || "perform this action";
+        const action = target.dataset.action || "អនុវត្តសកម្មភាពនេះ";
         showPermissionDenied(action);
     });
 
@@ -34,8 +34,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const strong = v.length >= 6;
 
         msg.textContent = strong
-            ? "Password length looks good."
-            : "Use at least 6 characters.";
+            ? "ប្រវែងពាក្យសម្ងាត់សមរម្យ។"
+            : "សូមប្រើយ៉ាងហោចណាស់ 6 តួអក្សរ។";
         msg.className = strong ? "form-text text-success" : "form-text text-danger";
     });
 });

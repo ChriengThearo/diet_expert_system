@@ -1528,7 +1528,7 @@ def diagnosis_interface():
 @login_required
 @user_required
 @permission_required(
-    "user.dashboard.read", "You have no permission to access the user dashboard."
+    "user.dashboard.read", "អ្នកមិនមានសិទ្ធិចូលប្រើផ្ទាំងគ្រប់គ្រងអ្នកប្រើប្រាស់ទេ។"
 )
 def user_dashboard():
     """User dashboard home page"""
@@ -1546,7 +1546,7 @@ def user_dashboard():
 
     def format_allergies(values):
         if not values:
-            return "None"
+            return "មិនមាន"
         if not isinstance(values, list):
             values = [values]
         cleaned = []
@@ -1555,7 +1555,7 @@ def user_dashboard():
             if not text:
                 continue
             cleaned.append(text.replace("_", " ").title())
-        return ", ".join(cleaned) if cleaned else "None"
+        return ", ".join(cleaned) if cleaned else "មិនមាន"
 
     def to_rounded_float(value, precision=1):
         try:
@@ -1679,7 +1679,7 @@ def user_dashboard():
                     "blood_sugar": entry.get("blood_sugar"),
                     "diet_type": entry.get("diet_type"),
                     "meals_per_day": entry.get("meals_per_day"),
-                    "allergies": entry.get("allergies") or "None",
+                    "allergies": entry.get("allergies") or "មិនមាន",
                 }
             )
 
@@ -1721,7 +1721,7 @@ def user_dashboard():
 @login_required
 @user_required
 @permission_required(
-    "user.dashboard.read", "You have no permission to view your profile."
+    "user.dashboard.read", "អ្នកមិនមានសិទ្ធិមើលប្រវត្តិរូបរបស់អ្នកទេ។"
 )
 def user_profile():
     """User profile page."""
@@ -1785,12 +1785,12 @@ def user_profile():
 @login_required
 @user_required
 @permission_required(
-    "user.dashboard.update", "You have no permission to update your profile."
+    "user.dashboard.update", "អ្នកមិនមានសិទ្ធិកែប្រែប្រវត្តិរូបរបស់អ្នកទេ។"
 )
 def user_profile_edit():
     """Edit user profile info."""
     if session.get("user_guest_mode"):
-        flash("Switch to User mode to edit profile.", "info")
+        flash("សូមប្តូរទៅរបៀបអ្នកប្រើប្រាស់ ដើម្បីកែប្រវត្តិរូប។", "info")
         return redirect(url_for("dashboard.user_profile"))
 
     form = UserProfileEditForm(current_user, obj=current_user)
@@ -1813,12 +1813,12 @@ def user_profile_edit():
 
         try:
             db.session.commit()
-            flash("Profile updated successfully.", "success")
+            flash("បានធ្វើបច្ចុប្បន្នភាពប្រវត្តិរូបដោយជោគជ័យ។", "success")
             return redirect(url_for("dashboard.user_profile"))
         except Exception:
             db.session.rollback()
             current_app.logger.exception("Failed to update user profile")
-            flash("Failed to update profile. Please try again.", "danger")
+            flash("មិនអាចធ្វើបច្ចុប្បន្នភាពប្រវត្តិរូបបានទេ។ សូមព្យាយាមម្តងទៀត។", "danger")
 
     return render_template(
         "dashboard/user_profile_edit.html",
@@ -1831,7 +1831,7 @@ def user_profile_edit():
 @login_required
 @user_required
 @permission_required(
-    "user.dashboard.create", "You have no permission to generate diet plans."
+    "user.dashboard.create", "អ្នកមិនមានសិទ្ធិបង្កើតផែនការអាហារទេ។"
 )
 def user_diet_expert():
     """Diet expert system page for users."""
@@ -1858,7 +1858,7 @@ def user_diet_expert():
 @csrf.exempt
 @permission_required(
     "user.dashboard.create",
-    "You have no permission to upload documents.",
+    "អ្នកមិនមានសិទ្ធិនាំចូលឯកសារទេ។",
     json_response=True,
 )
 def user_ocr_upload():
@@ -1867,7 +1867,7 @@ def user_ocr_upload():
 
     uploaded = request.files.get("document")
     if not uploaded or not uploaded.filename:
-        return jsonify({"success": False, "message": "No file uploaded."}), 400
+        return jsonify({"success": False, "message": "មិនមានឯកសារត្រូវបានផ្ទុកឡើងទេ។"}), 400
 
     allowed_ext = {"png", "jpg", "jpeg", "bmp", "tiff", "tif", "pdf"}
     ext = (
@@ -1876,7 +1876,7 @@ def user_ocr_upload():
         else ""
     )
     if ext not in allowed_ext:
-        return jsonify({"success": False, "message": "Unsupported file type."}), 400
+        return jsonify({"success": False, "message": "ប្រភេទឯកសារនេះមិនត្រូវបានគាំទ្រទេ។"}), 400
 
     tmp_path = None
     pdf_img_path = None
@@ -1901,7 +1901,7 @@ def user_ocr_upload():
                     jsonify(
                         {
                             "success": False,
-                            "message": "PDF support requires pdf2image. Please upload an image file instead.",
+                            "message": "ការគាំទ្រ PDF ត្រូវការ pdf2image។ សូមផ្ទុកឯកសាររូបភាពជំនួស។",
                         }
                     ),
                     400,
@@ -1934,7 +1934,7 @@ def user_ocr_upload():
         current_app.logger.exception("OCR processing failed")
         return (
             jsonify(
-                {"success": False, "message": f"OCR processing failed: {str(e)}"}
+                {"success": False, "message": f"ការដំណើរការ OCR បរាជ័យ៖ {str(e)}"}
             ),
             500,
         )
@@ -2407,12 +2407,28 @@ def _parse_health_document(text):
     return result
 
 
+@dashboard_bp.route("/language-mode", methods=["POST"])
+@login_required
+@csrf.exempt
+def set_language_mode():
+    payload = request.get_json(silent=True) or {}
+    language = str(payload.get("language", "")).strip().lower()
+
+    if language not in {"km", "en"}:
+        return jsonify({"success": False, "message": "Unsupported language mode."}), 400
+
+    session["ui_lang"] = language
+    session.modified = True
+
+    return jsonify({"success": True, "language": language})
+
+
 @dashboard_bp.route("/user/data")
 @login_required
 @user_required
 @permission_required(
     "user.dashboard.read",
-    "You have no permission to access dashboard data.",
+    "អ្នកមិនមានសិទ្ធិចូលប្រើទិន្នន័យផ្ទាំងគ្រប់គ្រងទេ។",
     json_response=True,
 )
 def user_dashboard_data():
@@ -2452,7 +2468,7 @@ def user_dashboard_data():
         if not isinstance(diagnosis_data, dict):
             continue
         primary = diagnosis_data.get("primary_diagnosis", {}) or {}
-        condition = primary.get("name", "Diagnosis")
+        condition = primary.get("name", "ការវិនិច្ឆ័យ")
         confidence = primary.get("confidence")
         diagnoses.append(
             {
@@ -2479,7 +2495,7 @@ def user_dashboard_data():
 @csrf.exempt
 @permission_required(
     "user.dashboard.read",
-    "You have no permission to change guest mode.",
+    "អ្នកមិនមានសិទ្ធិប្តូររបៀបភ្ញៀវទេ។",
     json_response=True,
 )
 def user_guest_mode():
@@ -2491,12 +2507,12 @@ def user_guest_mode():
         if not isinstance(session.get("guest_plan_history"), list):
             session["guest_plan_history"] = []
         session.modified = True
-        message = "Guest mode enabled."
+        message = "បានបើករបៀបភ្ញៀវ។"
     else:
         session.pop("user_guest_mode", None)
         session.pop("guest_plan_history", None)
         session.modified = True
-        message = "Guest mode disabled. Saving to database is restored."
+        message = "បានបិទរបៀបភ្ញៀវ។ ការរក្សាទុកទៅមូលដ្ឋានទិន្នន័យត្រូវបានស្ដារឡើងវិញ។"
 
     return jsonify(
         {
@@ -2513,7 +2529,7 @@ def user_guest_mode():
 @csrf.exempt
 @permission_required(
     "user.dashboard.create",
-    "You have no permission to submit dashboard data.",
+    "អ្នកមិនមានសិទ្ធិបញ្ជូនទិន្នន័យផ្ទាំងគ្រប់គ្រងទេ។",
     json_response=True,
 )
 def user_dashboard_submit():
@@ -2522,7 +2538,7 @@ def user_dashboard_submit():
 
     def format_allergies(values):
         if not values:
-            return "None"
+            return "មិនមាន"
         if not isinstance(values, list):
             values = [values]
         cleaned = []
@@ -2531,7 +2547,7 @@ def user_dashboard_submit():
             if not text:
                 continue
             cleaned.append(text.replace("_", " ").title())
-        return ", ".join(cleaned) if cleaned else "None"
+        return ", ".join(cleaned) if cleaned else "មិនមាន"
 
     try:
         result = DashboardService.save_user_dashboard_submission(
@@ -2579,51 +2595,51 @@ def user_dashboard_submit():
         return jsonify({"success": False, "message": str(e)}), 404
     except Exception as e:
         current_app.logger.exception("Failed to save dashboard submission")
-        return jsonify({"success": False, "message": "Failed to save submission"}), 500
+        return jsonify({"success": False, "message": "មិនអាចរក្សាទុកការបញ្ជូនទិន្នន័យបានទេ។"}), 500
 
 
 @dashboard_bp.route("/user/symptoms")
 @login_required
 @user_required
-@permission_required("user.dashboard.read", "You have no permission to view symptoms.")
+@permission_required("user.dashboard.read", "អ្នកមិនមានសិទ្ធិមើលរោគសញ្ញាទេ។")
 def get_symptoms():
     """Get available symptoms for user selection"""
     symptoms = [
         {
             "id": 1,
-            "name": "Increased thirst",
-            "description": "Feeling thirsty more often than usual",
+            "name": "ស្រេកទឹកខ្លាំង",
+            "description": "មានអារម្មណ៍ស្រេកទឹកញឹកញាប់ជាងធម្មតា",
         },
         {
             "id": 2,
-            "name": "Frequent urination",
-            "description": "Needing to urinate more frequently",
+            "name": "នោមញឹកញាប់",
+            "description": "ត្រូវការនោមញឹកញាប់ជាងធម្មតា",
         },
-        {"id": 3, "name": "Fatigue", "description": "Feeling tired and lacking energy"},
+        {"id": 3, "name": "អស់កម្លាំង", "description": "មានអារម្មណ៍នឿយហត់ និងខ្វះថាមពល"},
         {
             "id": 4,
-            "name": "Blurred vision",
-            "description": "Vision appears blurry or unfocused",
+            "name": "មើលមិនច្បាស់",
+            "description": "ចក្ខុវិស័យព្រិល ឬមិនសូវច្បាស់",
         },
         {
             "id": 5,
-            "name": "Unexplained weight loss",
-            "description": "Losing weight without trying",
+            "name": "ស្រកទម្ងន់មិនដឹងមូលហេតុ",
+            "description": "ស្រកទម្ងន់ដោយមិនបានព្យាយាម",
         },
         {
             "id": 6,
-            "name": "Increased hunger",
-            "description": "Feeling hungry more often than usual",
+            "name": "ឃ្លានញឹកញាប់",
+            "description": "មានអារម្មណ៍ឃ្លានញឹកញាប់ជាងធម្មតា",
         },
         {
             "id": 7,
-            "name": "Slow-healing sores",
-            "description": "Cuts or sores that heal slowly",
+            "name": "របួសជាសះយឺត",
+            "description": "ស្នាមកាត់ ឬដំបៅដែលជាសះយឺត",
         },
         {
             "id": 8,
-            "name": "Frequent infections",
-            "description": "Getting sick more often than usual",
+            "name": "ឆ្លងជំងឺញឹកញាប់",
+            "description": "ឈឺញឹកញាប់ជាងធម្មតា",
         },
     ]
 
@@ -2635,7 +2651,7 @@ def get_symptoms():
 @user_required
 @permission_required(
     "user.dashboard.create",
-    "You have no permission to run a diagnosis.",
+    "អ្នកមិនមានសិទ្ធិដំណើរការវិនិច្ឆ័យទេ។",
     json_response=True,
 )
 def run_diagnosis():
@@ -2648,24 +2664,24 @@ def run_diagnosis():
 
     # Mock diagnosis results based on symptoms
     primary_diagnosis = {
-        "name": "Type 2 Diabetes Risk",
-        "description": "Based on your symptoms, you may be at risk for Type 2 Diabetes",
+        "name": "ហានិភ័យជំងឺទឹកនោមផ្អែមប្រភេទទី 2",
+        "description": "ផ្អែកលើរោគសញ្ញារបស់អ្នក អ្នកអាចមានហានិភ័យជំងឺទឹកនោមផ្អែមប្រភេទទី 2",
         "confidence": 75,
     }
 
     recommendations = [
-        "Consult with a healthcare professional for proper diagnosis",
-        "Monitor your blood sugar levels regularly",
-        "Maintain a healthy diet low in refined sugars",
-        "Engage in regular physical activity",
-        "Stay hydrated and get adequate sleep",
+        "សូមពិគ្រោះជាមួយអ្នកជំនាញសុខាភិបាល ដើម្បីវិនិច្ឆ័យឱ្យបានត្រឹមត្រូវ",
+        "សូមតាមដានកម្រិតជាតិស្ករក្នុងឈាមជាប្រចាំ",
+        "រក្សារបបអាហារដែលមានសុខភាពល្អ និងជាតិស្ករចម្រាញ់ទាប",
+        "ធ្វើសកម្មភាពរាងកាយឱ្យបានទៀងទាត់",
+        "ផឹកទឹកឱ្យគ្រប់គ្រាន់ និងគេងឱ្យបានគ្រប់",
     ]
 
     next_steps = [
-        "Schedule an appointment with your doctor",
-        "Keep a symptom diary",
-        "Research diabetes management strategies",
-        "Consider dietary changes",
+        "កំណត់ពេលជួបវេជ្ជបណ្ឌិតរបស់អ្នក",
+        "កត់ត្រារោគសញ្ញាប្រចាំថ្ងៃ",
+        "សិក្សាពីវិធីគ្រប់គ្រងជំងឺទឹកនោមផ្អែម",
+        "ពិចារណាកែប្រែរបបអាហារ",
     ]
 
     result_payload = {

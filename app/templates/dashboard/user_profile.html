@@ -1,6 +1,6 @@
 {% extends "layouts/base_enhanced.html" %}
 
-{% block title %}User Profile{% endblock %}
+{% block title %}ប្រវត្តិរូបអ្នកប្រើប្រាស់{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard_theme.css') }}">
@@ -152,8 +152,8 @@
 {% endblock %}
 
 {% block breadcrumb_items %}
-<li class="breadcrumb-item"><a href="{{ url_for('dashboard.user_dashboard') }}">Dashboard</a></li>
-<li class="breadcrumb-item active" aria-current="page">Profile</li>
+<li class="breadcrumb-item"><a href="{{ url_for('dashboard.user_dashboard') }}">ផ្ទាំងគ្រប់គ្រង</a></li>
+<li class="breadcrumb-item active" aria-current="page">ប្រវត្តិរូប</li>
 {% endblock %}
 
 {% block content %}
@@ -161,9 +161,9 @@
 <div class="dashboard-shell user-shell profile-shell">
     <div class="dashboard-container">
         <div class="profile-wrapper">
-            {% set login_role = 'Guest' if is_guest_mode else ('Admin' if current_user.has_role('admin') else 'Doctor' if
+            {% set login_role = 'ភ្ញៀវ' if is_guest_mode else ('អ្នកគ្រប់គ្រង' if current_user.has_role('admin') else 'វេជ្ជបណ្ឌិត' if
             current_user.has_role('doctor') else
-            'User') %}
+            'អ្នកប្រើប្រាស់') %}
             <div class="profile-card">
                 <div class="profile-header">
                     <div class="d-flex align-items-center gap-3">
@@ -171,15 +171,15 @@
                         {% set photo_path = (user.photo or '')|trim %}
                         {% set avatar_url = default_avatar_url if is_guest_mode else (url_for('main.images', filename=photo_path|replace('images/', '')) if photo_path else default_avatar_url) %}
                         <div class="profile-avatar">
-                            <img src="{{ avatar_url }}" alt="Profile photo"
+                            <img src="{{ avatar_url }}" alt="រូបប្រវត្តិរូប"
                                 onerror="this.onerror=null;this.src='{{ default_avatar_url }}';">
                         </div>
                         <div>
-                            <span class="hero-chip"><i class="fas fa-user-check me-1"></i>Profile Overview</span>
-                            <div class="profile-title">{{ 'Guest' if is_guest_mode else (user.full_name or user.username) }}</div>
-                            <p class="profile-subtitle">{{ 'Guest session' if is_guest_mode else ('Member since ' ~ user.created_at.strftime('%b %d, %Y')) }}</p>
+                            <span class="hero-chip"><i class="fas fa-user-check me-1"></i>ទិដ្ឋភាពប្រវត្តិរូប</span>
+                            <div class="profile-title">{{ 'ភ្ញៀវ' if is_guest_mode else (user.full_name or user.username) }}</div>
+                            <p class="profile-subtitle">{{ 'សម័យភ្ញៀវ' if is_guest_mode else ('ជាសមាជិកតាំងពី ' ~ user.created_at.strftime('%d/%m/%Y')) }}</p>
                             <div class="profile-meta">
-                                <i class="fas fa-user-check me-1"></i>Logged in as {{ login_role }}
+                                <i class="fas fa-user-check me-1"></i>បានចូលប្រើជា {{ login_role }}
                             </div>
                         </div>
                     </div>
@@ -187,30 +187,30 @@
 
                 <div class="profile-info">
                     <div class="profile-info-item">
-                        <span>Full Name</span>
-                        <strong>{{ 'Hidden in guest mode' if is_guest_mode else (user.full_name or 'Not provided') }}</strong>
+                        <span>ឈ្មោះពេញ</span>
+                        <strong>{{ 'បានលាក់នៅក្នុងរបៀបភ្ញៀវ' if is_guest_mode else (user.full_name or 'មិនទាន់ផ្តល់') }}</strong>
                     </div>
                     <div class="profile-info-item">
-                        <span>Email</span>
-                        <strong>{{ 'Hidden in guest mode' if is_guest_mode else (user.email or 'Not provided') }}</strong>
+                        <span>អ៊ីមែល</span>
+                        <strong>{{ 'បានលាក់នៅក្នុងរបៀបភ្ញៀវ' if is_guest_mode else (user.email or 'មិនទាន់ផ្តល់') }}</strong>
                     </div>
                     <div class="profile-info-item">
-                        <span>Username</span>
-                        <strong>{{ 'Guest' if is_guest_mode else user.username }}</strong>
+                        <span>ឈ្មោះអ្នកប្រើប្រាស់</span>
+                        <strong>{{ 'ភ្ញៀវ' if is_guest_mode else user.username }}</strong>
                     </div>
                     <div class="profile-info-item">
-                        <span>Status</span>
-                        <strong>{{ 'Guest Session' if is_guest_mode else ('Active' if user.is_active else 'Inactive') }}</strong>
+                        <span>ស្ថានភាព</span>
+                        <strong>{{ 'សម័យភ្ញៀវ' if is_guest_mode else ('សកម្ម' if user.is_active else 'អសកម្ម') }}</strong>
                     </div>
                 </div>
 
                 <div class="profile-content">
                     <div class="row g-4">
                         <div class="col-lg-6">
-                            <h6 class="text-uppercase text-muted">Goals</h6>
+                            <h6 class="text-uppercase text-muted">គោលដៅ</h6>
                             <ul class="profile-list">
                                 {% if is_guest_mode %}
-                                <li>No goals available in guest mode.</li>
+                                <li>មិនមានគោលដៅនៅក្នុងរបៀបភ្ញៀវទេ។</li>
                                 {% elif user.goals %}
                                 {% for goal in user.goals %}
                                 <li>{{ goal.name }}</li>
@@ -222,7 +222,7 @@
                                 {% elif derived_goal %}
                                 <li>{{ derived_goal }}</li>
                                 {% else %}
-                                <li>No goals selected.</li>
+                                <li>មិនទាន់ជ្រើសរើសគោលដៅ។</li>
                                 {% endif %}
                             </ul>
                         </div>
@@ -231,19 +231,19 @@
                     <div class="action-row profile-actions">
                         {% if not is_guest_mode %}
                         <a class="btn btn-success" href="{{ url_for('dashboard.user_profile_edit') }}"
-                            data-permission="user.dashboard.update" data-action="update your profile">
-                            <i class="fas fa-pen me-2"></i>Edit Info
+                            data-permission="user.dashboard.update" data-action="ធ្វើបច្ចុប្បន្នភាពប្រវត្តិរូបរបស់អ្នក">
+                            <i class="fas fa-pen me-2"></i>កែព័ត៌មាន
                         </a>
                         {% else %}
                         <button class="btn btn-secondary" type="button" disabled>
-                            <i class="fas fa-eye-slash me-2"></i>Hidden in Guest Mode
+                            <i class="fas fa-eye-slash me-2"></i>បានលាក់នៅក្នុងរបៀបភ្ញៀវ
                         </button>
                         {% endif %}
                         <a class="btn btn-outline-success" href="{{ url_for('dashboard.user_dashboard') }}">
-                            <i class="fas fa-arrow-left me-2"></i>Back
+                            <i class="fas fa-arrow-left me-2"></i>ត្រឡប់ក្រោយ
                         </a>
                         <a class="btn btn-danger" href="{{ url_for('auth.logout') }}">
-                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                            <i class="fas fa-sign-out-alt me-2"></i>ចាកចេញ
                         </a>
                     </div>
                 </div>

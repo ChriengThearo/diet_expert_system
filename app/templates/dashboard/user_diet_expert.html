@@ -1,12 +1,12 @@
 {% extends "layouts/base_enhanced.html" %}
 
-{% block title %}Diet Expert System{% endblock %}
+{% block title %}áž”áŸ’ážšáž–áŸáž“áŸ’áž’áž‡áŸ†áž“áž½áž™ážšáŸ€áž”áž…áŸ†áž¢áž¶áž áž¶ážš{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard_theme.css') }}">
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Sora:wght@600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Noto+Sans+Khmer:wght@400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet" />
 <style>
     :root {
         --hp-brand: #2f9e7a;
@@ -24,7 +24,7 @@
     }
 
     body, .dashboard-shell {
-        font-family: "Manrope", sans-serif !important;
+        font-family: "Noto Sans Khmer", "Manrope", sans-serif !important;
         background:
             radial-gradient(circle at 5% 14%, #ffd8c8 0%, transparent 34%),
             radial-gradient(circle at 95% 8%, #d9f4ea 0%, transparent 30%),
@@ -51,7 +51,7 @@
         font-weight: 800;
         margin-bottom: 0.6rem;
         color: var(--hp-ink);
-        font-family: "Sora", sans-serif;
+        font-family: "Noto Sans Khmer", "Sora", sans-serif;
     }
 
     .diet-expert-title i {
@@ -344,28 +344,28 @@
 {% endblock %}
 
 {% block breadcrumb_items %}
-<li class="breadcrumb-item"><a href="{{ url_for('dashboard.user_dashboard') }}">Dashboard</a></li>
-<li class="breadcrumb-item active" aria-current="page">Diet Expert System</li>
+<li class="breadcrumb-item"><a href="{{ url_for('dashboard.user_dashboard') }}">áž•áŸ’áž‘áž¶áŸ†áž„áž‚áŸ’ážšáž”áŸ‹áž‚áŸ’ážšáž„</a></li>
+<li class="breadcrumb-item active" aria-current="page">áž”áŸ’ážšáž–áŸáž“áŸ’áž’áž‡áŸ†áž“áž½áž™ážšáŸ€áž”áž…áŸ†áž¢áž¶áž áž¶ážš</li>
 {% endblock %}
 
 {% block content %}
 <div id="analystGate" class="analyst-overlay">
     <div class="analyst-modal">
-        <h2>Choose Analyst</h2>
-        <p>Select the analysis mode before continuing to the Diet Expert System.</p>
+        <h2>áž‡áŸ’ážšáž¾ážŸážšáž”áŸ€áž”ážœáž·áž—áž¶áž‚</h2>
+        <p>ážŸáž¼áž˜áž‡áŸ’ážšáž¾ážŸážšáž”áŸ€áž”ážœáž·áž—áž¶áž‚ áž˜áž»áž“áž”áž“áŸ’ážáž‘áŸ…áž”áŸ’ážšáž–áŸáž“áŸ’áž’áž‡áŸ†áž“áž½áž™ážšáŸ€áž”áž…áŸ†áž¢áž¶áž áž¶ážšáŸ”</p>
         <div class="analyst-actions">
             <button type="button" class="btn btn-outline-primary" id="analystExternal">
-                <i class="fas fa-file-import me-2"></i>Import Documents
+                <i class="fas fa-file-import me-2"></i>áž“áž¶áŸ†áž…áž¼áž›áž¯áž€ážŸáž¶ážš
             </button>
             <input type="file" id="ocrFileInput" class="d-none"
                    accept=".png,.jpg,.jpeg,.bmp,.tiff,.tif,.pdf">
             <button type="button" class="btn btn-primary" id="analystNormal">
-                <i class="fas fa-edit me-2"></i>Manual Generate
+                <i class="fas fa-edit me-2"></i>áž”áž‰áŸ’áž…áž¼áž›ážŠáŸ„áž™ážŠáŸƒ
             </button>
         </div>
         <div class="analyst-loading d-none" id="analystLoading">
             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-            <span id="analystLoadingText">Processing document...</span>
+            <span id="analystLoadingText">áž€áŸ†áž–áž»áž„ážŠáŸ†ážŽáž¾ážšáž€áž¶ážšáž¯áž€ážŸáž¶ážš...</span>
         </div>
         <div class="alert alert-danger d-none mt-3 mb-0" id="analystError" role="alert"></div>
     </div>
@@ -375,12 +375,12 @@
     <div class="dashboard-container">
         <!-- Header -->
         <div class="diet-expert-header">
-            <h1 class="diet-expert-title"><i class="fas fa-utensils me-2"></i>Diet Expert System</h1>
-            <p class="text-muted mb-0">Personalized meal recommendations based on your profile</p>
+            <h1 class="diet-expert-title"><i class="fas fa-utensils me-2"></i>ប្រព័ន្ធជំនួយរៀបចំអាហារ</h1>
+            <p class="text-muted mb-0">ផ្តល់អនុសាសន៍អាហារតាមទម្រង់សុខភាពផ្ទាល់ខ្លួនរបស់អ្នក</p>
         </div>
 
         <div class="alert alert-success d-none" id="bloodTestedAlert" role="alert">
-            <i class="fas fa-check-circle me-2"></i>Document imported successfully — fields auto-filled from your report.
+            <i class="fas fa-check-circle me-2"></i>បាននាំចូលឯកសារដោយជោគជ័យ - ទិន្នន័យត្រូវបានបំពេញស្វ័យប្រវត្តិពីរបាយការណ៍របស់អ្នក។
         </div>
 
         <!-- Progress Bar -->
@@ -390,10 +390,10 @@
                     <div class="progress-bar" role="progressbar" style="width: 25%;" id="progressBar"></div>
                 </div>
                 <div class="d-flex justify-content-between mt-2">
-                    <small class="text-muted">Basic Info</small>
-                    <small class="text-muted">Health Details</small>
-                    <small class="text-muted">Preferences</small>
-                    <small class="text-muted">Review</small>
+                    <small class="text-muted">ព័ត៌មានមូលដ្ឋាន</small>
+                    <small class="text-muted">ព័ត៌មានសុខភាព</small>
+                    <small class="text-muted">ចំណូលចិត្ត</small>
+                    <small class="text-muted">ពិនិត្យមុនបញ្ជូន</small>
                 </div>
             </div>
         </div>
@@ -402,22 +402,22 @@
         <div class="step-indicator">
             <div class="step active" id="step1">
                 <div class="step-circle">1</div>
-                <span>Profile</span>
+                <span>ប្រវត្តិរូប</span>
                 <div class="step-line"></div>
             </div>
             <div class="step" id="step2">
                 <div class="step-circle">2</div>
-                <span>Health</span>
+                <span>សុខភាព</span>
                 <div class="step-line"></div>
             </div>
             <div class="step" id="step3">
                 <div class="step-circle">3</div>
-                <span>Preferences</span>
+                <span>ចំណូលចិត្ត</span>
                 <div class="step-line"></div>
             </div>
             <div class="step" id="step4">
                 <div class="step-circle">4</div>
-                <span>Review</span>
+                <span>ពិនិត្យមុនបញ្ជូន</span>
                 <div class="step-line"></div>
             </div>
         </div>
@@ -428,33 +428,33 @@
             <!-- SECTION 1: BASIC PROFILE -->
             <div class="section-card" id="section1">
                 <div class="section-header">
-                    <h4 class="mb-0"><i class="fas fa-user me-2"></i>Basic Information</h4>
+                    <h4 class="mb-0"><i class="fas fa-user me-2"></i>ព័ត៌មានមូលដ្ឋាន</h4>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label required">Age</label>
+                            <label class="form-label required">អាយុ</label>
                             <input type="number" class="form-control" id="age" min="1" max="120" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label required">Gender</label>
+                            <label class="form-label required">ភេទ</label>
                             <select class="form-select" id="gender" required>
-                                <option value="" selected disabled>Select gender</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                                <option value="other">Other / Prefer not to say</option>
+                                <option value="" selected disabled>ជ្រើសរើសភេទ</option>
+                                <option value="male">ប្រុស</option>
+                                <option value="female">ស្រី</option>
+                                <option value="other">ផ្សេងទៀត / មិនចង់បញ្ជាក់</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label required">Weight (kg)</label>
+                            <label class="form-label required">ទម្ងន់ (គក)</label>
                             <input type="number" class="form-control" id="weight" min="30" max="300" step="0.1"
                                 required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label required">Height (cm)</label>
+                            <label class="form-label required">កម្ពស់ (សម)</label>
                             <input type="number" class="form-control" id="height" min="100" max="250" required>
                         </div>
                     </div>
@@ -464,41 +464,41 @@
             <!-- SECTION 2: HEALTH INFORMATION -->
             <div class="section-card d-none" id="section2">
                 <div class="section-header">
-                    <h4 class="mb-0"><i class="fas fa-heartbeat me-2"></i>Health Information</h4>
+                    <h4 class="mb-0"><i class="fas fa-heartbeat me-2"></i>ព័ត៌មានសុខភាព</h4>
                 </div>
                 <div class="card-body">
                     <div class="mb-4">
-                        <label class="form-label">Food Allergies (select all that apply)</label>
+                        <label class="form-label">អាឡែស៊ីអាហារ (អាចជ្រើសបានច្រើន)</label>
                         <div class="row">
                             <div class="col-md-3 col-6 mb-2">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="allergy_seafood"
                                         value="seafood">
-                                    <label class="form-check-label" for="allergy_seafood">Seafood</label>
+                                    <label class="form-check-label" for="allergy_seafood">អាហារសមុទ្រ</label>
                                 </div>
                             </div>
                             <div class="col-md-3 col-6 mb-2">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="allergy_eggs" value="eggs">
-                                    <label class="form-check-label" for="allergy_eggs">Eggs</label>
+                                    <label class="form-check-label" for="allergy_eggs">ស៊ុត</label>
                                 </div>
                             </div>
                             <div class="col-md-3 col-6 mb-2">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="allergy_soy" value="soy">
-                                    <label class="form-check-label" for="allergy_soy">Soy</label>
+                                    <label class="form-check-label" for="allergy_soy">សណ្ដែកសៀង</label>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="mb-4">
-                        <label class="form-label" for="blood_sugar">Blood Sugar (Optional)</label>
+                        <label class="form-label" for="blood_sugar">ជាតិស្ករក្នុងឈាម (ជម្រើស)</label>
                         <div class="input-group" style="max-width: 300px;">
                             <input type="number" class="form-control" id="blood_sugar" name="blood_sugar"
-                                placeholder="e.g. 100" step="0.1" min="0" max="500">
+                                placeholder="ឧ. 100" step="0.1" min="0" max="500">
                             <span class="input-group-text">mg/dL</span>
                         </div>
-                        <small class="form-text text-muted">Enter your fasting blood sugar level if available.</small>
+                        <small class="form-text text-muted">បញ្ចូលកម្រិតជាតិស្ករក្នុងឈាមពេលអត់អាហារ ប្រសិនបើមាន។</small>
                     </div>
                 </div>
             </div>
@@ -506,69 +506,69 @@
             <!-- SECTION 3: FOOD PREFERENCES -->
             <div class="section-card d-none" id="section3">
                 <div class="section-header">
-                    <h4 class="mb-0"><i class="fas fa-utensils me-2"></i>Food Preferences</h4>
+                    <h4 class="mb-0"><i class="fas fa-utensils me-2"></i>ចំណូលចិត្តអាហារ</h4>
                 </div>
                 <div class="card-body">
                     <div class="mb-4">
-                        <label class="form-label required">Diet Type</label>
+                        <label class="form-label required">ប្រភេទរបបអាហារ</label>
                         <div class="row">
                             <div class="col-md-3 col-6 mb-2">
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="dietType" id="normal"
                                         value="normal" required>
-                                    <label class="form-check-label" for="normal">Normal</label>
+                                    <label class="form-check-label" for="normal">ធម្មតា</label>
                                 </div>
                             </div>
                             <div class="col-md-3 col-6 mb-2">
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="dietType" id="vegan"
                                         value="vegan">
-                                    <label class="form-check-label" for="vegan">Vegan</label>
+                                    <label class="form-check-label" for="vegan">វីហ្គាន់</label>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="mb-4">
-                        <label class="form-label required">Preferred Meals Per Day</label>
+                        <label class="form-label required">ចំនួនពេលអាហារដែលចង់ញ៉ាំក្នុងមួយថ្ងៃ</label>
                         <div class="row">
                             <div class="col-md-2 col-4 mb-2">
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="mealsPerDay" id="meals2"
                                         value="2" required>
-                                    <label class="form-check-label" for="meals2">2 Meals</label>
+                                    <label class="form-check-label" for="meals2">2 ពេល</label>
                                 </div>
                             </div>
                             <div class="col-md-2 col-4 mb-2">
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="mealsPerDay" id="meals3"
                                         value="3" required>
-                                    <label class="form-check-label" for="meals3">3 Meals</label>
+                                    <label class="form-check-label" for="meals3">3 ពេល</label>
                                 </div>
                             </div>
                             <div class="col-md-2 col-4 mb-2">
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="mealsPerDay" id="meals4"
                                         value="4">
-                                    <label class="form-check-label" for="meals4">4 Meals</label>
+                                    <label class="form-check-label" for="meals4">4 ពេល</label>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="mb-1">
-                        <label class="form-label required">Food Preference</label>
+                        <label class="form-label required">ប្រភេទអាហារដែលចូលចិត្ត</label>
                         <div class="row">
                             <div class="col-md-3 col-6 mb-2">
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="foodPreference" id="foodPreferenceCooked"
                                         value="cooked" required>
-                                    <label class="form-check-label" for="foodPreferenceCooked">Cooked Food</label>
+                                    <label class="form-check-label" for="foodPreferenceCooked">អាហារឆ្អិន</label>
                                 </div>
                             </div>
                             <div class="col-md-3 col-6 mb-2">
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="foodPreference" id="foodPreferenceRaw"
                                         value="raw">
-                                    <label class="form-check-label" for="foodPreferenceRaw">Raw Food</label>
+                                    <label class="form-check-label" for="foodPreferenceRaw">អាហារស្រស់</label>
                                 </div>
                             </div>
                         </div>
@@ -579,58 +579,58 @@
             <!-- SECTION 4: REVIEW -->
             <div class="section-card d-none" id="section4">
                 <div class="section-header">
-                    <h4 class="mb-0"><i class="fas fa-clipboard-check me-2"></i>Review & Submit</h4>
+                    <h4 class="mb-0"><i class="fas fa-clipboard-check me-2"></i>ពិនិត្យ និង បញ្ជូន</h4>
                 </div>
                 <div class="card-body">
                     <div class="alert alert-info">
                         <i class="fas fa-info-circle me-2"></i>
-                        Please review your information before submitting. Your personalized diet plan will be generated
-                        based on these details.
+                        សូមពិនិត្យព័ត៌មានរបស់អ្នកមុនពេលបញ្ជូន។ ផែនការអាហារផ្ទាល់ខ្លួនរបស់អ្នកនឹងត្រូវបានបង្កើត
+                        ផ្អែកលើព័ត៌មានទាំងនេះ។
                     </div>
 
                     <div class="row">
                         <div class="col-md-6">
-                            <h5>Personal Details</h5>
+                            <h5>ព័ត៌មានផ្ទាល់ខ្លួន</h5>
                             <table class="table table-sm">
                                 <tr>
-                                    <td><strong>Age:</strong></td>
+                                    <td><strong>អាយុ:</strong></td>
                                     <td id="reviewAge"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Gender:</strong></td>
+                                    <td><strong>ភេទ:</strong></td>
                                     <td id="reviewGender"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Weight:</strong></td>
+                                    <td><strong>ទម្ងន់:</strong></td>
                                     <td id="reviewWeight"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Height:</strong></td>
+                                    <td><strong>កម្ពស់:</strong></td>
                                     <td id="reviewHeight"></td>
                                 </tr>
                             </table>
                         </div>
                         <div class="col-md-6">
-                            <h5>Health & Preferences</h5>
+                            <h5>សុខភាព និង ចំណូលចិត្ត</h5>
                             <table class="table table-sm">
                                 <tr>
-                                    <td><strong>Diet Type:</strong></td>
+                                    <td><strong>ប្រភេទរបបអាហារ:</strong></td>
                                     <td id="reviewDietType"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Allergies:</strong></td>
+                                    <td><strong>អាឡែស៊ី:</strong></td>
                                     <td id="reviewAllergies"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Blood Sugar:</strong></td>
+                                    <td><strong>ជាតិស្ករក្នុងឈាម:</strong></td>
                                     <td id="reviewBloodSugar"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Meals/Day:</strong></td>
+                                    <td><strong>ពេលអាហារ/ថ្ងៃ:</strong></td>
                                     <td id="reviewMeals"></td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Food Preference:</strong></td>
+                                    <td><strong>ប្រភេទអាហារដែលចូលចិត្ត:</strong></td>
                                     <td id="reviewFoodPreference"></td>
                                 </tr>
                             </table>
@@ -640,7 +640,7 @@
                     <div class="form-check mt-4">
                         <input class="form-check-input" type="checkbox" id="consent" required>
                         <label class="form-check-label" for="consent">
-                            Confirm to generate a diet plan
+                            ខ្ញុំយល់ព្រមបង្កើតផែនការអាហារ
                         </label>
                     </div>
                 </div>
@@ -651,15 +651,15 @@
             <!-- Navigation Buttons -->
             <div class="d-flex justify-content-between mt-4">
                 <button type="button" class="btn btn-outline-secondary" id="prevBtn" style="display: none;">
-                    <i class="fas fa-arrow-left me-2"></i>Previous
+                    <i class="fas fa-arrow-left me-2"></i>ថយក្រោយ
                 </button>
                 <div class="ms-auto">
                     <button type="button" class="btn btn-custom" id="nextBtn">
-                        Next<i class="fas fa-arrow-right ms-2"></i>
+                        បន្ទាប់<i class="fas fa-arrow-right ms-2"></i>
                     </button>
                     <button type="submit" class="btn btn-success d-none" id="submitBtn"
-                        data-permission="user.dashboard.create" data-action="generate diet plans">
-                        <i class="fas fa-paper-plane me-2"></i>Generate Diet Plan
+                        data-permission="user.dashboard.create" data-action="បង្កើតផែនការអាហារ">
+                        <i class="fas fa-paper-plane me-2"></i>បង្កើតផែនការអាហារ
                     </button>
                 </div>
             </div>
@@ -670,7 +670,7 @@
             <div class="modal-dialog modal-lg modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header bg-primary text-white">
-                        <h5 class="modal-title"><i class="fas fa-chart-pie me-2"></i>Your Diet Plan</h5>
+                        <h5 class="modal-title"><i class="fas fa-chart-pie me-2"></i>ផែនការអាហាររបស់អ្នក</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body" id="resultsContent">
@@ -678,9 +678,9 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-primary" id="refreshPlanBtn">
-                            <i class="fas fa-rotate-right me-2"></i>Refresh
+                            <i class="fas fa-rotate-right me-2"></i>ប្ដូរក្រុមអាហារ
                         </button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">បិទ</button>
                     </div>
                 </div>
             </div>
@@ -827,12 +827,12 @@
                 }
             };
 
-            /* Manual Generate — same existing flow */
+            /* Manual Generate â€” same existing flow */
             normalBtn.addEventListener('click', () => {
                 revealContent(false);
             });
 
-            /* Import Documents — open file picker */
+            /* Import Documents â€” open file picker */
             externalBtn.addEventListener('click', () => {
                 clearError();
                 fileInput.click();
@@ -863,7 +863,7 @@
                 .then(async res => {
                     const data = await res.json();
                     if (!res.ok || !data.success) {
-                        throw new Error(data.message || 'OCR processing failed.');
+                        throw new Error(data.message || 'ការដំណើរការ OCR បរាជ័យ។');
                     }
                     return data;
                 })
@@ -875,7 +875,7 @@
                     console.error('OCR error:', err);
                     loading.classList.add('d-none');
                     unlockButtons();
-                    showError(err.message || 'Failed to process document. Please try again.');
+                    showError(err.message || 'មិនអាចដំណើរការឯកសារបានទេ។ សូមព្យាយាមម្តងទៀត។');
                 })
                 .finally(() => {
                     fileInput.value = '';
@@ -984,7 +984,7 @@
                     if (!input.nextElementSibling || !input.nextElementSibling.classList.contains('invalid-feedback')) {
                         const errorDiv = document.createElement('div');
                         errorDiv.className = 'invalid-feedback';
-                        errorDiv.textContent = 'This field is required';
+                        errorDiv.textContent = 'វាលនេះត្រូវតែបំពេញ';
                         input.parentNode.appendChild(errorDiv);
                     }
                 } else {
@@ -997,26 +997,27 @@
 
         function updateReviewSection() {
             document.getElementById('reviewAge').textContent = document.getElementById('age').value;
-            document.getElementById('reviewGender').textContent = document.getElementById('gender').value || 'Not specified';
-            document.getElementById('reviewWeight').textContent = document.getElementById('weight').value + ' kg';
-            document.getElementById('reviewHeight').textContent = document.getElementById('height').value + ' cm';
+            const genderOption = document.getElementById('gender').selectedOptions[0];
+            document.getElementById('reviewGender').textContent = genderOption ? genderOption.textContent : 'មិនបានបញ្ជាក់';
+            document.getElementById('reviewWeight').textContent = document.getElementById('weight').value + ' គក';
+            document.getElementById('reviewHeight').textContent = document.getElementById('height').value + ' សម';
             const dietType = document.querySelector('input[name="dietType"]:checked');
-            document.getElementById('reviewDietType').textContent = dietType ? dietType.nextElementSibling.textContent : 'Not specified';
+            document.getElementById('reviewDietType').textContent = dietType ? dietType.nextElementSibling.textContent : 'មិនបានបញ្ជាក់';
 
             const allergyCheckboxes = document.querySelectorAll('input[type="checkbox"][id^="allergy_"]:checked');
             const allergies = Array.from(allergyCheckboxes).map(cb => cb.nextElementSibling.textContent);
-            document.getElementById('reviewAllergies').textContent = allergies.length > 0 ? allergies.join(', ') : 'None';
+            document.getElementById('reviewAllergies').textContent = allergies.length > 0 ? allergies.join(', ') : 'មិនមាន';
             const bloodSugar = document.getElementById('blood_sugar').value;
-            document.getElementById('reviewBloodSugar').textContent = bloodSugar ? bloodSugar + ' mg/dL' : 'Not provided';
+            document.getElementById('reviewBloodSugar').textContent = bloodSugar ? bloodSugar + ' mg/dL' : 'មិនបានផ្តល់';
             const meals = document.querySelector('input[name="mealsPerDay"]:checked');
-            document.getElementById('reviewMeals').textContent = meals ? meals.value + ' meals' : 'Not specified';
+            document.getElementById('reviewMeals').textContent = meals ? meals.value + ' ពេល' : 'មិនបានបញ្ជាក់';
             const foodPreference = document.querySelector('input[name="foodPreference"]:checked');
-            document.getElementById('reviewFoodPreference').textContent = foodPreference ? foodPreference.nextElementSibling.textContent : 'Not specified';
+            document.getElementById('reviewFoodPreference').textContent = foodPreference ? foodPreference.nextElementSibling.textContent : 'មិនបានបញ្ជាក់';
         }
 
         const dietForm = document.getElementById('dietForm');
         if (!dietForm) {
-            console.error('Diet form not found on page.');
+            console.error('រកមិនឃើញទម្រង់ផែនការអាហារនៅលើទំព័រនេះទេ។');
         }
 
         const dietFormSubmitUrl = dietForm?.getAttribute('action') || '/dashboard/user/submit';
@@ -1031,7 +1032,7 @@
             }
             submitBtn.disabled = isSubmitting;
             if (isSubmitting) {
-                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Generating...';
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>កំពុងបង្កើត...';
             } else {
                 submitBtn.innerHTML = submitBtnLabel;
             }
@@ -1088,7 +1089,7 @@
             const foodPreferenceInput = document.querySelector('input[name="foodPreference"]:checked');
 
             if (!dietTypeInput || !mealsInput || !foodPreferenceInput) {
-                showFormError('Please complete the required selections before generating your plan.');
+                showFormError('សូមបំពេញជម្រើសដែលត្រូវការ មុនពេលបង្កើតផែនការរបស់អ្នក។');
                 return;
             }
 
@@ -1146,7 +1147,7 @@
                     }
 
                     if (!response.ok || data.success === false) {
-                        throw new Error(data.message || 'Failed to save data');
+                        throw new Error(data.message || 'មិនអាចរក្សាទុកទិន្នន័យបានទេ។');
                     }
 
                     return data;
@@ -1157,9 +1158,9 @@
                 .catch(error => {
                     console.error('Error saving data:', error);
                     if (error.name === 'AbortError') {
-                        showFormError('Request timed out. Please try again.');
+                        showFormError('សំណើផុតពេលកំណត់។ សូមព្យាយាមម្តងទៀត។');
                     } else {
-                        showFormError(error.message || 'Failed to save your data. Please try again.');
+                        showFormError(error.message || 'មិនអាចរក្សាទុកទិន្នន័យរបស់អ្នកបានទេ។ សូមព្យាយាមម្តងទៀត។');
                     }
                 })
                 .finally(() => {
@@ -1191,6 +1192,29 @@
                 .filter(Boolean)
                 .map(word => word.charAt(0).toUpperCase() + word.slice(1))
                 .join(' ');
+        }
+
+        function localizeGender(value) {
+            const token = String(value || '').trim().toLowerCase();
+            if (token === 'male') return 'ប្រុស';
+            if (token === 'female') return 'ស្រី';
+            if (token === 'other') return 'ផ្សេងទៀត';
+            return titleCase(value);
+        }
+
+        function localizeDietType(value) {
+            const token = String(value || '').trim().toLowerCase();
+            if (token === 'normal') return 'ធម្មតា';
+            if (token === 'vegan') return 'វីហ្គាន់';
+            return titleCase(value);
+        }
+
+        function localizeAllergy(value) {
+            const token = String(value || '').trim().toLowerCase().replace(/\s+/g, '_');
+            if (token === 'seafood') return 'អាហារសមុទ្រ';
+            if (token === 'eggs' || token === 'egg') return 'ស៊ុត';
+            if (token === 'soy' || token === 'soybean' || token === 'soya') return 'សណ្ដែកសៀង';
+            return titleCase(value);
         }
 
         function splitIntoParts(items, parts) {
@@ -1255,7 +1279,7 @@
 
         function renderMealItems(items) {
             if (!items || items.length === 0) {
-                return '<li class="text-muted">No items assigned</li>';
+                return '<li class="text-muted">មិនមានធាតុដែលបានកំណត់</li>';
             }
             return items.map(item => `<li>${item}</li>`).join('');
         }
@@ -1265,13 +1289,13 @@
             if (mealsCount === 2) {
                 return `
                 <div class="col-md-6">
-                    <h6><i class="fas fa-sun text-warning me-2"></i>Breakfast</h6>
+                    <h6><i class="fas fa-sun text-warning me-2"></i>ពេលព្រឹក</h6>
                     <ul>
                         ${renderMealItems(meals.breakfast)}
                     </ul>
                 </div>
                 <div class="col-md-6">
-                    <h6><i class="fas fa-cloud-sun text-warning me-2"></i>Lunch</h6>
+                    <h6><i class="fas fa-cloud-sun text-warning me-2"></i>ពេលថ្ងៃត្រង់</h6>
                     <ul>
                         ${renderMealItems(meals.lunch)}
                     </ul>
@@ -1282,25 +1306,25 @@
             if (mealsCount === 4) {
                 return `
                 <div class="col-md-3">
-                    <h6><i class="fas fa-sun text-warning me-2"></i>Breakfast</h6>
+                    <h6><i class="fas fa-sun text-warning me-2"></i>ពេលព្រឹក</h6>
                     <ul>
                         ${renderMealItems(meals.breakfast)}
                     </ul>
                 </div>
                 <div class="col-md-3">
-                    <h6><i class="fas fa-cloud-sun text-warning me-2"></i>Lunch</h6>
+                    <h6><i class="fas fa-cloud-sun text-warning me-2"></i>ពេលថ្ងៃត្រង់</h6>
                     <ul>
                         ${renderMealItems(meals.lunch)}
                     </ul>
                 </div>
                 <div class="col-md-3">
-                    <h6><i class="fas fa-moon text-warning me-2"></i>Dinner</h6>
+                    <h6><i class="fas fa-moon text-warning me-2"></i>ពេលល្ងាច</h6>
                     <ul>
                         ${renderMealItems(meals.dinner)}
                     </ul>
                 </div>
                 <div class="col-md-3">
-                    <h6><i class="fas fa-moon text-warning me-2"></i>Late Dinner</h6>
+                    <h6><i class="fas fa-moon text-warning me-2"></i>ពេលយប់</h6>
                     <ul>
                         ${renderMealItems(meals.late_dinner)}
                     </ul>
@@ -1310,19 +1334,19 @@
 
             return `
             <div class="col-md-4">
-                <h6><i class="fas fa-sun text-warning me-2"></i>Breakfast</h6>
+                <h6><i class="fas fa-sun text-warning me-2"></i>ពេលព្រឹក</h6>
                 <ul>
                     ${renderMealItems(meals.breakfast)}
                 </ul>
             </div>
             <div class="col-md-4">
-                <h6><i class="fas fa-cloud-sun text-warning me-2"></i>Lunch</h6>
+                <h6><i class="fas fa-cloud-sun text-warning me-2"></i>ពេលថ្ងៃត្រង់</h6>
                 <ul>
                     ${renderMealItems(meals.lunch)}
                 </ul>
             </div>
             <div class="col-md-4">
-                <h6><i class="fas fa-moon text-warning me-2"></i>Dinner</h6>
+                <h6><i class="fas fa-moon text-warning me-2"></i>ពេលល្ងាច</h6>
                 <ul>
                     ${renderMealItems(meals.dinner)}
                 </ul>
@@ -1362,9 +1386,9 @@
             const groupKey = String(group?.group_key || '').trim().toLowerCase();
             const match = groupKey.match(/(\d+)/);
             if (match) {
-                return `Group ${Number(match[1])}`;
+                return `ក្រុម ${Number(match[1])}`;
             }
-            return `Group ${index + 1}`;
+            return `ក្រុម ${index + 1}`;
         }
 
         function updateRefreshPlanButton() {
@@ -1377,8 +1401,8 @@
             const canRefresh = groupCount > 1;
             refreshBtn.disabled = !canRefresh;
             refreshBtn.title = canRefresh
-                ? 'Load another food group for this rule'
-                : 'No additional food groups available';
+                ? 'ប្ដូរទៅក្រុមអាហារផ្សេងសម្រាប់ច្បាប់នេះ'
+                : 'មិនមានក្រុមអាហារបន្ថែមទៀតទេ';
         }
 
         function attachRefreshPlanHandler() {
@@ -1423,33 +1447,33 @@
             const meals = splitMeals(foodNames, mealsCount);
             const groupLabel = getGroupLabel(activeGroup, activeResultFoodGroupIndex);
             const totalGroups = resultFoodGroups.length;
-            const groupDisplay = totalGroups > 1 ? `${groupLabel} of ${totalGroups}` : groupLabel;
+            const groupDisplay = totalGroups > 1 ? `${groupLabel} / ${totalGroups}` : groupLabel;
 
             const age = profile.age ?? document.getElementById('age').value;
-            const gender = profile.gender ? titleCase(profile.gender) : 'Not specified';
-            const weight = profile.weight ? `${profile.weight} kg` : 'Not specified';
-            const height = profile.height ? `${profile.height} cm` : 'Not specified';
-            const dietType = profile.diet_type ? titleCase(profile.diet_type) : 'Not specified';
+            const gender = profile.gender ? localizeGender(profile.gender) : 'មិនបានបញ្ជាក់';
+            const weight = profile.weight ? `${profile.weight} គក` : 'មិនបានបញ្ជាក់';
+            const height = profile.height ? `${profile.height} សម` : 'មិនបានបញ្ជាក់';
+            const dietType = profile.diet_type ? localizeDietType(profile.diet_type) : 'មិនបានបញ្ជាក់';
             const allergies = profile.allergies && profile.allergies.length
-                ? profile.allergies.map(titleCase).join(', ')
-                : 'None';
-            const mealsPerDay = profile.meals_per_day ? `${profile.meals_per_day} meals` : `${mealsCount} meals`;
+                ? profile.allergies.map(localizeAllergy).join(', ')
+                : 'មិនមាន';
+            const mealsPerDay = profile.meals_per_day ? `${profile.meals_per_day} ពេល` : `${mealsCount} ពេល`;
             const selectedFoodPreference = String(
                 profile.food_preference
                 || document.querySelector('input[name="foodPreference"]:checked')?.value
                 || ''
             ).toLowerCase();
             const foodPreferenceDisplay = selectedFoodPreference === 'cooked'
-                ? 'Cooked Food'
+                ? 'អាហារឆ្អិន'
                 : selectedFoodPreference === 'raw'
-                    ? 'Raw Food'
-                    : 'Not specified';
+                    ? 'អាហារស្រស់'
+                    : 'មិនបានបញ្ជាក់';
             const bloodSugarMetric = profile.blood_sugar !== undefined && profile.blood_sugar !== null
                 ? profile.blood_sugar
                 : document.getElementById('blood_sugar').value;
             const bloodSugarDisplay = bloodSugarMetric !== undefined && bloodSugarMetric !== null && bloodSugarMetric !== ''
                 ? `${bloodSugarMetric} mg/dL`
-                : 'Not provided';
+                : 'មិនបានផ្តល់';
 
             const bmiValue = formatNumber(metrics.bmi, 1);
             const caloriesValue = formatNumber(metrics.calories, 0);
@@ -1459,22 +1483,22 @@
 
             let html = `
             <div class="alert alert-success">
-                <h4><i class="fas fa-check-circle me-2"></i>Your Personalized Diet Plan</h4>
-                <p>Based on your profile and matching rules, here are your recommendations:</p>
+                <h4><i class="fas fa-check-circle me-2"></i>ផែនការអាហារផ្ទាល់ខ្លួនរបស់អ្នក</h4>
+                <p>ផ្អែកលើប្រវត្តិរូប និងច្បាប់ដែលផ្គូផ្គង ខាងក្រោមជាអនុសាសន៍សម្រាប់អ្នក៖</p>
             </div>
 
             <div class="row">
                 <div class="col-md-6">
                     <div class="card mb-3">
                         <div class="card-header bg-info text-white">
-                            <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>Your Metrics</h5>
+                            <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>សូចនាកររបស់អ្នក</h5>
                         </div>
                         <div class="card-body">
                             <table class="table">
-                                <tr><td><strong>Age:</strong></td><td>${age || 'Not specified'}</td></tr>
-                                <tr><td><strong>Gender:</strong></td><td>${gender}</td></tr>
-                                <tr><td><strong>Weight:</strong></td><td>${weight}</td></tr>
-                                <tr><td><strong>Height:</strong></td><td>${height}</td></tr>
+                                <tr><td><strong>អាយុ:</strong></td><td>${age || 'មិនបានបញ្ជាក់'}</td></tr>
+                                <tr><td><strong>ភេទ:</strong></td><td>${gender}</td></tr>
+                                <tr><td><strong>ទម្ងន់:</strong></td><td>${weight}</td></tr>
+                                <tr><td><strong>កម្ពស់:</strong></td><td>${height}</td></tr>
                             </table>
                         </div>
                     </div>
@@ -1482,15 +1506,15 @@
                 <div class="col-md-6">
                     <div class="card mb-3">
                         <div class="card-header bg-warning text-white">
-                            <h5 class="mb-0"><i class="fas fa-apple-alt me-2"></i>Macronutrients</h5>
+                            <h5 class="mb-0"><i class="fas fa-apple-alt me-2"></i>សារធាតុចិញ្ចឹមចម្បង</h5>
                         </div>
                         <div class="card-body">
                             <table class="table">
-                                <tr><td><strong>BMI:</strong></td><td>${bmiValue ? bmiValue : 'Not specified'}</td></tr>
-                                <tr><td><strong>Calories:</strong></td><td>${caloriesValue ? `${caloriesValue} kcal/day` : 'Not specified'}</td></tr>
-                                <tr><td><strong>Protein:</strong></td><td>${proteinValue ? `${proteinValue} g` : 'Not specified'}</td></tr>
-                                <tr><td><strong>Sugar:</strong></td><td>${sugarValue ? `${sugarValue} g` : 'Not specified'}</td></tr>
-                                <tr><td><strong>Fat:</strong></td><td>${fatValue ? `${fatValue} g` : 'Not specified'}</td></tr>
+                                <tr><td><strong>BMI:</strong></td><td>${bmiValue ? bmiValue : 'មិនបានបញ្ជាក់'}</td></tr>
+                                <tr><td><strong>កាឡូរី:</strong></td><td>${caloriesValue ? `${caloriesValue} kcal/ថ្ងៃ` : 'មិនបានបញ្ជាក់'}</td></tr>
+                                <tr><td><strong>ប្រូតេអ៊ីន:</strong></td><td>${proteinValue ? `${proteinValue} g` : 'មិនបានបញ្ជាក់'}</td></tr>
+                                <tr><td><strong>ស្ករ:</strong></td><td>${sugarValue ? `${sugarValue} g` : 'មិនបានបញ្ជាក់'}</td></tr>
+                                <tr><td><strong>ខ្លាញ់:</strong></td><td>${fatValue ? `${fatValue} g` : 'មិនបានបញ្ជាក់'}</td></tr>
                             </table>
                         </div>
                     </div>
@@ -1501,15 +1525,15 @@
                 <div class="col-12">
                     <div class="card mb-3">
                         <div class="card-header bg-secondary text-white">
-                            <h5 class="mb-0"><i class="fas fa-heart me-2"></i>Health & Preferences</h5>
+                            <h5 class="mb-0"><i class="fas fa-heart me-2"></i>សុខភាព និង ចំណូលចិត្ត</h5>
                         </div>
                         <div class="card-body">
                             <table class="table">
-                                <tr><td><strong>Diet Type:</strong></td><td>${dietType}</td></tr>
-                                <tr><td><strong>Allergies:</strong></td><td>${allergies}</td></tr>
-                                <tr><td><strong>Blood Sugar:</strong></td><td>${bloodSugarDisplay}</td></tr>
-                                <tr><td><strong>Meals/Day:</strong></td><td>${mealsPerDay}</td></tr>
-                                <tr><td><strong>Food Preference:</strong></td><td>${foodPreferenceDisplay}</td></tr>
+                                <tr><td><strong>ប្រភេទរបបអាហារ:</strong></td><td>${dietType}</td></tr>
+                                <tr><td><strong>អាឡែស៊ី:</strong></td><td>${allergies}</td></tr>
+                                <tr><td><strong>ជាតិស្ករក្នុងឈាម:</strong></td><td>${bloodSugarDisplay}</td></tr>
+                                <tr><td><strong>ពេលអាហារ/ថ្ងៃ:</strong></td><td>${mealsPerDay}</td></tr>
+                                <tr><td><strong>ប្រភេទអាហារដែលចូលចិត្ត:</strong></td><td>${foodPreferenceDisplay}</td></tr>
                             </table>
                         </div>
                     </div>
@@ -1518,7 +1542,7 @@
 
             <div class="card mb-3">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0"><i class="fas fa-calendar-alt me-2"></i>Sample Daily Meal Plan <small class="ms-2">${groupDisplay}</small></h5>
+                    <h5 class="mb-0"><i class="fas fa-calendar-alt me-2"></i>គំរូផែនការអាហារប្រចាំថ្ងៃ <small class="ms-2">${groupDisplay}</small></h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -1528,24 +1552,24 @@
             </div>
             <div class="card mb-3">
                 <div class="card-header bg-light">
-                    <h5 class="mb-0"><i class="fas fa-ban me-2 text-danger"></i>Avoid Foods</h5>
+                    <h5 class="mb-0"><i class="fas fa-ban me-2 text-danger"></i>អាហារគួរជៀសវាង</h5>
                 </div>
                 <div class="card-body">
                     <ul class="mb-0">
                         ${avoidFoodNames.length
                     ? avoidFoodNames.map(item => `<li>${item}</li>`).join('')
-                    : '<li class="text-muted">None</li>'}
+                    : '<li class="text-muted">មិនមាន</li>'}
                     </ul>
                 </div>
             </div>
 
             <div class="alert alert-warning">
-                <h5><i class="fas fa-exclamation-triangle me-2"></i>Important Notes</h5>
+                <h5><i class="fas fa-exclamation-triangle me-2"></i>ចំណាំសំខាន់</h5>
                 <ul class="mb-0">
-                    <li>This plan is a general recommendation</li>
-                    <li>Adjust portions based on your hunger levels</li>
-                    <li>Consult with a healthcare provider before making significant changes</li>
-                    <li>Monitor your progress and adjust as needed</li>
+                    <li>ផែនការនេះគឺជាអនុសាសន៍ទូទៅ</li>
+                    <li>សូមកែសម្រួលបរិមាណអាហារតាមកម្រិតឃ្លានរបស់អ្នក</li>
+                    <li>សូមពិគ្រោះជាមួយអ្នកជំនាញសុខាភិបាល មុនធ្វើការផ្លាស់ប្តូរដ៏សំខាន់</li>
+                    <li>សូមតាមដានវឌ្ឍនភាពរបស់អ្នក និងកែសម្រួលតាមតម្រូវការ</li>
                 </ul>
             </div>
         `;
@@ -1603,3 +1627,4 @@
         });
     </script>
     {% endblock %}
+
