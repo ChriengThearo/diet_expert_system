@@ -451,11 +451,11 @@
             <!-- Sidebar -->
             <div class="col-lg-3 mb-4">
                 <div class="sidebar control-sidebar">
-                    <h5 class="control-panel-title mb-2">Rule Control Panel</h5>
-                    <p class="control-panel-copy">Search, filter, and jump into rule operations quickly.</p>
+                    <h5 class="control-panel-title mb-2" id="control-panel-title">Rule Control Panel</h5>
+                    <p class="control-panel-copy" id="control-panel-copy">Search, filter, and jump into rule operations quickly.</p>
 
                     <div class="search-rules-wrap mb-3">
-                        <label for="search-rules" class="form-label mb-1">Find rule</label>
+                        <label for="search-rules" class="form-label mb-1" id="control-search-label">Find rule</label>
                         <div class="input-group input-group-sm">
                             <span class="input-group-text"><i class="fas fa-search"></i></span>
                             <input type="search" class="form-control" id="search-rules"
@@ -464,17 +464,17 @@
                     </div>
 
                     <div class="mb-4">
-                        <label class="form-label mb-2">Status Filters</label>
+                        <label class="form-label mb-2" id="control-filter-label">Status Filters</label>
                         <div class="form-check rule-filter-pill">
                             <input class="form-check-input" type="checkbox" id="filter-active" checked>
                             <label class="form-check-label" for="filter-active">
-                                Active Rules
+                                <span id="filter-active-label">Active Rules</span>
                             </label>
                         </div>
                         <div class="form-check rule-filter-pill">
                             <input class="form-check-input" type="checkbox" id="filter-inactive">
                             <label class="form-check-label" for="filter-inactive">
-                                Inactive Rules
+                                <span id="filter-inactive-label">Inactive Rules</span>
                             </label>
                         </div>
                     </div>
@@ -484,29 +484,29 @@
                     <div class="d-grid gap-2 quick-action-grid">
                         <button class="btn btn-custom" id="new-rule-btn" data-permission="rule.create"
                             data-action="create rules">
-                            <span class="action-icon"><i class="fas fa-plus-circle"></i></span>
-                            <span>Create Rule</span>
+                            <span class="action-icon"><i class="fas fa-plus-circle" id="primary-sidebar-action-icon"></i></span>
+                            <span id="primary-sidebar-action-text">Create Rule</span>
                         </button>
                         <button class="btn btn-outline-custom" id="add-food-btn" data-permission="food.create"
                             data-action="add foods">
-                            <span class="action-icon"><i class="fas fa-apple-alt"></i></span>
-                            <span>Add Food Item</span>
+                            <span class="action-icon"><i class="fas fa-apple-alt" id="secondary-sidebar-action-icon"></i></span>
+                            <span id="secondary-sidebar-action-text">Add Food Item</span>
                         </button>
                     </div>
                 </div>
 
                 <!-- Stats -->
                 <div class="sidebar mt-4 stats-sidebar">
-                    <h5 class="mb-3"><i class="fas fa-chart-bar me-2"></i>Rule Snapshot</h5>
+                    <h5 class="mb-3" id="snapshot-title"><i class="fas fa-chart-bar me-2"></i>Rule Snapshot</h5>
 
                     <div class="stat-card">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <h6 class="mb-1">Total Rules</h6>
+                                <h6 class="mb-1" id="snapshot-stat-1-label">Total Rules</h6>
                                 <h3 class="mb-0 stat-value" id="total-rules">{{ rules_authored or 0 }}</h3>
                             </div>
                             <div class="align-self-center">
-                                <i class="fas fa-list-alt fa-lg"></i>
+                                <i class="fas fa-list-alt fa-lg" id="snapshot-stat-1-icon"></i>
                             </div>
                         </div>
                     </div>
@@ -514,11 +514,11 @@
                     <div class="stat-card">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <h6 class="mb-1">Active Rules</h6>
+                                <h6 class="mb-1" id="snapshot-stat-2-label">Active Rules</h6>
                                 <h3 class="mb-0 stat-value" id="active-rules">0</h3>
                             </div>
                             <div class="align-self-center">
-                                <i class="fas fa-check-circle fa-lg"></i>
+                                <i class="fas fa-check-circle fa-lg" id="snapshot-stat-2-icon"></i>
                             </div>
                         </div>
                     </div>
@@ -526,11 +526,11 @@
                     <div class="stat-card">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <h6 class="mb-1">Inactive Rules</h6>
+                                <h6 class="mb-1" id="snapshot-stat-3-label">Inactive Rules</h6>
                                 <h3 class="mb-0 stat-value" id="inactive-rules">0</h3>
                             </div>
                             <div class="align-self-center">
-                                <i class="fas fa-tags fa-lg"></i>
+                                <i class="fas fa-tags fa-lg" id="snapshot-stat-3-icon"></i>
                             </div>
                         </div>
                     </div>
@@ -1410,10 +1410,33 @@
         let cookedFoodsCache = [];
         let foodGroupsState = [];
         let activeFoodGroupKey = null;
+        const SIDEBAR_MODE_RULES = 'rules';
+        const SIDEBAR_MODE_FOODS = 'foods';
+        const SIDEBAR_MODE_COOKED = 'cooked-foods';
+        let currentSidebarMode = SIDEBAR_MODE_RULES;
+        const sidebarStateByMode = {
+            [SIDEBAR_MODE_RULES]: {
+                search: '',
+                primaryChecked: true,
+                secondaryChecked: false
+            },
+            [SIDEBAR_MODE_FOODS]: {
+                search: '',
+                primaryChecked: true,
+                secondaryChecked: true
+            },
+            [SIDEBAR_MODE_COOKED]: {
+                search: '',
+                primaryChecked: true,
+                secondaryChecked: true
+            }
+        };
 
         // Initialize the page
         document.addEventListener('DOMContentLoaded', function () {
             setupEventListeners();
+            const activeTabTarget = document.querySelector('#expertTabs .nav-link.active')?.getAttribute('data-bs-target') || '#rules';
+            syncSidebarToTarget(activeTabTarget);
             updateFoodGroupBuilderVisibility();
             updateBloodSugarFieldsVisibility(false);
             loadRules();
@@ -1430,6 +1453,246 @@
             }
             statusEl.textContent = message || '';
             statusEl.classList.toggle('text-danger', Boolean(isError));
+        }
+
+        function getSidebarModeFromTarget(targetSelector) {
+            if (targetSelector === '#foods') {
+                return SIDEBAR_MODE_FOODS;
+            }
+            if (targetSelector === '#cooked-foods') {
+                return SIDEBAR_MODE_COOKED;
+            }
+            return SIDEBAR_MODE_RULES;
+        }
+
+        function saveSidebarState(mode = currentSidebarMode) {
+            const state = sidebarStateByMode[mode];
+            if (!state) {
+                return;
+            }
+            state.search = String(document.getElementById('search-rules')?.value || '');
+            state.primaryChecked = Boolean(document.getElementById('filter-active')?.checked);
+            state.secondaryChecked = Boolean(document.getElementById('filter-inactive')?.checked);
+        }
+
+        function applySidebarState(mode = currentSidebarMode) {
+            const state = sidebarStateByMode[mode];
+            if (!state) {
+                return;
+            }
+            const searchInput = document.getElementById('search-rules');
+            const primaryFilter = document.getElementById('filter-active');
+            const secondaryFilter = document.getElementById('filter-inactive');
+            if (searchInput) {
+                searchInput.value = state.search;
+            }
+            if (primaryFilter) {
+                primaryFilter.checked = state.primaryChecked;
+            }
+            if (secondaryFilter) {
+                secondaryFilter.checked = state.secondaryChecked;
+            }
+        }
+
+        function updateSidebarButtons(mode = currentSidebarMode) {
+            const primaryIcon = document.getElementById('primary-sidebar-action-icon');
+            const secondaryIcon = document.getElementById('secondary-sidebar-action-icon');
+            const primaryText = document.getElementById('primary-sidebar-action-text');
+            const secondaryText = document.getElementById('secondary-sidebar-action-text');
+            const primaryButton = document.getElementById('new-rule-btn');
+            const secondaryButton = document.getElementById('add-food-btn');
+            if (!primaryIcon || !secondaryIcon || !primaryText || !secondaryText || !primaryButton || !secondaryButton) {
+                return;
+            }
+
+            if (mode === SIDEBAR_MODE_FOODS) {
+                primaryIcon.className = 'fas fa-plus-circle';
+                primaryText.textContent = 'Add Food Item';
+                primaryButton.dataset.permission = 'food.create';
+                primaryButton.dataset.action = 'add foods';
+
+                secondaryIcon.className = 'fas fa-sync-alt';
+                secondaryText.textContent = 'Refresh Foods';
+                secondaryButton.dataset.permission = 'food.read';
+                secondaryButton.dataset.action = 'refresh foods';
+                return;
+            }
+
+            if (mode === SIDEBAR_MODE_COOKED) {
+                primaryIcon.className = 'fas fa-plus-circle';
+                primaryText.textContent = 'Add Cooked Food';
+                primaryButton.dataset.permission = 'food.create';
+                primaryButton.dataset.action = 'add cooked foods';
+
+                secondaryIcon.className = 'fas fa-sync-alt';
+                secondaryText.textContent = 'Refresh Cooked Foods';
+                secondaryButton.dataset.permission = 'food.read';
+                secondaryButton.dataset.action = 'refresh cooked foods';
+                return;
+            }
+
+            primaryIcon.className = 'fas fa-plus-circle';
+            primaryText.textContent = 'Create Rule';
+            primaryButton.dataset.permission = 'rule.create';
+            primaryButton.dataset.action = 'create rules';
+
+            secondaryIcon.className = 'fas fa-apple-alt';
+            secondaryText.textContent = 'Add Food Item';
+            secondaryButton.dataset.permission = 'food.create';
+            secondaryButton.dataset.action = 'add foods';
+        }
+
+        function getSidebarSearchTerm() {
+            return String(document.getElementById('search-rules')?.value || '').trim().toLowerCase();
+        }
+
+        function getFilteredFoods(items = foodsCache) {
+            const searchTerm = getSidebarSearchTerm();
+            const veganChecked = document.getElementById('filter-active')?.checked ?? true;
+            const nonVeganChecked = document.getElementById('filter-inactive')?.checked ?? true;
+
+            return (Array.isArray(items) ? items : []).filter(food => {
+                const isVegan = Boolean(food?.is_vegan);
+                if (isVegan && !veganChecked) {
+                    return false;
+                }
+                if (!isVegan && !nonVeganChecked) {
+                    return false;
+                }
+
+                if (!searchTerm) {
+                    return true;
+                }
+                const name = String(food?.name || '').toLowerCase();
+                const desc = String(food?.description || '').toLowerCase();
+                const type = String(food?.food_type || '').toLowerCase();
+                return name.includes(searchTerm) || desc.includes(searchTerm) || type.includes(searchTerm);
+            });
+        }
+
+        function getFilteredCookedFoods(items = cookedFoodsCache) {
+            const searchTerm = getSidebarSearchTerm();
+            const veganChecked = document.getElementById('filter-active')?.checked ?? true;
+            const nonVeganChecked = document.getElementById('filter-inactive')?.checked ?? true;
+
+            return (Array.isArray(items) ? items : []).filter(food => {
+                const isVegan = Boolean(food?.is_vegan);
+                if (isVegan && !veganChecked) {
+                    return false;
+                }
+                if (!isVegan && !nonVeganChecked) {
+                    return false;
+                }
+
+                if (!searchTerm) {
+                    return true;
+                }
+                const name = String(food?.name || '').toLowerCase();
+                const desc = String(food?.description || '').toLowerCase();
+                const method = String(food?.cooking_method || '').toLowerCase();
+                return name.includes(searchTerm) || desc.includes(searchTerm) || method.includes(searchTerm);
+            });
+        }
+
+        function renderSidebarForMode(mode = SIDEBAR_MODE_RULES) {
+            const panelTitle = document.getElementById('control-panel-title');
+            const panelCopy = document.getElementById('control-panel-copy');
+            const searchLabel = document.getElementById('control-search-label');
+            const searchInput = document.getElementById('search-rules');
+            const filterLabel = document.getElementById('control-filter-label');
+            const primaryFilterLabel = document.getElementById('filter-active-label');
+            const secondaryFilterLabel = document.getElementById('filter-inactive-label');
+            const loadingStatus = document.getElementById('rules-loading-status');
+            const snapshotTitle = document.getElementById('snapshot-title');
+            const stat1Label = document.getElementById('snapshot-stat-1-label');
+            const stat2Label = document.getElementById('snapshot-stat-2-label');
+            const stat3Label = document.getElementById('snapshot-stat-3-label');
+            const stat1Icon = document.getElementById('snapshot-stat-1-icon');
+            const stat2Icon = document.getElementById('snapshot-stat-2-icon');
+            const stat3Icon = document.getElementById('snapshot-stat-3-icon');
+
+            if (mode === SIDEBAR_MODE_FOODS) {
+                if (panelTitle) panelTitle.textContent = 'Food Control Panel';
+                if (panelCopy) panelCopy.textContent = 'Search, filter, and manage food catalog items quickly.';
+                if (searchLabel) searchLabel.textContent = 'Find food';
+                if (searchInput) searchInput.placeholder = 'Search by name, type, or description';
+                if (filterLabel) filterLabel.textContent = 'Food Filters';
+                if (primaryFilterLabel) primaryFilterLabel.textContent = 'Vegan Foods';
+                if (secondaryFilterLabel) secondaryFilterLabel.textContent = 'Non-Vegan Foods';
+                if (loadingStatus) loadingStatus.style.display = 'none';
+                if (snapshotTitle) snapshotTitle.innerHTML = '<i class="fas fa-chart-bar me-2"></i>Food Snapshot';
+                if (stat1Label) stat1Label.textContent = 'Total Foods';
+                if (stat2Label) stat2Label.textContent = 'Vegan Foods';
+                if (stat3Label) stat3Label.textContent = 'Non-Vegan Foods';
+                if (stat1Icon) stat1Icon.className = 'fas fa-apple-alt fa-lg';
+                if (stat2Icon) stat2Icon.className = 'fas fa-seedling fa-lg';
+                if (stat3Icon) stat3Icon.className = 'fas fa-drumstick-bite fa-lg';
+                return;
+            }
+
+            if (mode === SIDEBAR_MODE_COOKED) {
+                if (panelTitle) panelTitle.textContent = 'Cooked Food Control Panel';
+                if (panelCopy) panelCopy.textContent = 'Search, filter, and manage cooked food entries quickly.';
+                if (searchLabel) searchLabel.textContent = 'Find cooked food';
+                if (searchInput) searchInput.placeholder = 'Search by name, method, or description';
+                if (filterLabel) filterLabel.textContent = 'Cooked Food Filters';
+                if (primaryFilterLabel) primaryFilterLabel.textContent = 'Vegan Cooked Foods';
+                if (secondaryFilterLabel) secondaryFilterLabel.textContent = 'Non-Vegan Cooked Foods';
+                if (loadingStatus) loadingStatus.style.display = 'none';
+                if (snapshotTitle) snapshotTitle.innerHTML = '<i class="fas fa-chart-bar me-2"></i>Cooked Food Snapshot';
+                if (stat1Label) stat1Label.textContent = 'Total Cooked Foods';
+                if (stat2Label) stat2Label.textContent = 'Vegan Cooked Foods';
+                if (stat3Label) stat3Label.textContent = 'Non-Vegan Cooked Foods';
+                if (stat1Icon) stat1Icon.className = 'fas fa-utensils fa-lg';
+                if (stat2Icon) stat2Icon.className = 'fas fa-leaf fa-lg';
+                if (stat3Icon) stat3Icon.className = 'fas fa-fire fa-lg';
+                return;
+            }
+
+            if (panelTitle) panelTitle.textContent = 'Rule Control Panel';
+            if (panelCopy) panelCopy.textContent = 'Search, filter, and jump into rule operations quickly.';
+            if (searchLabel) searchLabel.textContent = 'Find rule';
+            if (searchInput) searchInput.placeholder = 'Search by name or description';
+            if (filterLabel) filterLabel.textContent = 'Status Filters';
+            if (primaryFilterLabel) primaryFilterLabel.textContent = 'Active Rules';
+            if (secondaryFilterLabel) secondaryFilterLabel.textContent = 'Inactive Rules';
+            if (loadingStatus) loadingStatus.style.display = '';
+            if (snapshotTitle) snapshotTitle.innerHTML = '<i class="fas fa-chart-bar me-2"></i>Rule Snapshot';
+            if (stat1Label) stat1Label.textContent = 'Total Rules';
+            if (stat2Label) stat2Label.textContent = 'Active Rules';
+            if (stat3Label) stat3Label.textContent = 'Inactive Rules';
+            if (stat1Icon) stat1Icon.className = 'fas fa-list-alt fa-lg';
+            if (stat2Icon) stat2Icon.className = 'fas fa-check-circle fa-lg';
+            if (stat3Icon) stat3Icon.className = 'fas fa-tags fa-lg';
+        }
+
+        function applySidebarFilters() {
+            if (currentSidebarMode === SIDEBAR_MODE_FOODS) {
+                currentFoodPage = 1;
+                renderFoodTable(foodsCache);
+                updateStats();
+                return;
+            }
+            if (currentSidebarMode === SIDEBAR_MODE_COOKED) {
+                currentCookedFoodPage = 1;
+                renderCookedFoodTable(cookedFoodsCache);
+                updateStats();
+                return;
+            }
+            filterRules();
+            updateStats();
+        }
+
+        function syncSidebarToTarget(targetSelector) {
+            const nextMode = getSidebarModeFromTarget(targetSelector);
+            if (nextMode !== currentSidebarMode) {
+                saveSidebarState(currentSidebarMode);
+            }
+            currentSidebarMode = nextMode;
+            renderSidebarForMode(currentSidebarMode);
+            updateSidebarButtons(currentSidebarMode);
+            applySidebarState(currentSidebarMode);
+            applySidebarFilters();
         }
 
         function mergeRules(newRules) {
@@ -1962,7 +2225,10 @@
                 return;
             }
 
-            const items = Array.isArray(foods) ? foods : [];
+            const sourceItems = Array.isArray(foods) ? foods : [];
+            const items = currentSidebarMode === SIDEBAR_MODE_FOODS
+                ? getFilteredFoods(sourceItems)
+                : sourceItems;
             const totalPages = Math.max(1, Math.ceil(items.length / foodsPerPage));
             currentFoodPage = Math.min(Math.max(1, currentFoodPage), totalPages);
             const start = (currentFoodPage - 1) * foodsPerPage;
@@ -2081,12 +2347,15 @@
                     populateFoodSelects(foodsCache, 'No foods found yet. Use "Add Food" to add items to the list.');
                     currentFoodPage = 1;
                     renderFoodTable(foodsCache);
+                    updateStats();
                 })
                 .catch(error => {
                     console.error('Error loading foods:', error);
                     populateFoodSelects([], 'Failed to load foods. Please refresh or try again.');
+                    foodsCache = [];
                     currentFoodPage = 1;
                     renderFoodTable([]);
+                    updateStats();
                 });
         }
 
@@ -2097,7 +2366,10 @@
                 return;
             }
 
-            const items = Array.isArray(cookedFoods) ? cookedFoods : [];
+            const sourceItems = Array.isArray(cookedFoods) ? cookedFoods : [];
+            const items = currentSidebarMode === SIDEBAR_MODE_COOKED
+                ? getFilteredCookedFoods(sourceItems)
+                : sourceItems;
             const totalPages = Math.max(1, Math.ceil(items.length / cookedFoodsPerPage));
             currentCookedFoodPage = Math.min(Math.max(1, currentCookedFoodPage), totalPages);
             const start = (currentCookedFoodPage - 1) * cookedFoodsPerPage;
@@ -2219,6 +2491,7 @@
                     );
                     currentCookedFoodPage = 1;
                     renderCookedFoodTable(cookedFoodsCache);
+                    updateStats();
                 })
                 .catch(error => {
                     console.error('Error loading cooked foods:', error);
@@ -2226,6 +2499,7 @@
                     populateCookedFoodSelects([], 'Failed to load cooked foods. Please refresh or try again.');
                     currentCookedFoodPage = 1;
                     renderCookedFoodTable([]);
+                    updateStats();
                 });
         }
 
@@ -3065,10 +3339,36 @@
             const totalRules = sampleRules.length;
             const activeRules = sampleRules.filter(r => r.active).length;
             const inactiveRules = sampleRules.filter(r => !r.active).length;
+            const totalFoods = foodsCache.length;
+            const veganFoods = foodsCache.filter(item => Boolean(item && item.is_vegan)).length;
+            const nonVeganFoods = totalFoods - veganFoods;
+            const totalCookedFoods = cookedFoodsCache.length;
+            const veganCookedFoods = cookedFoodsCache.filter(item => Boolean(item && item.is_vegan)).length;
+            const nonVeganCookedFoods = totalCookedFoods - veganCookedFoods;
 
-            document.getElementById('total-rules').textContent = totalRules;
-            document.getElementById('active-rules').textContent = activeRules;
-            document.getElementById('inactive-rules').textContent = inactiveRules;
+            const stat1 = document.getElementById('total-rules');
+            const stat2 = document.getElementById('active-rules');
+            const stat3 = document.getElementById('inactive-rules');
+            if (!stat1 || !stat2 || !stat3) {
+                return;
+            }
+
+            if (currentSidebarMode === SIDEBAR_MODE_FOODS) {
+                stat1.textContent = totalFoods;
+                stat2.textContent = veganFoods;
+                stat3.textContent = nonVeganFoods;
+                return;
+            }
+            if (currentSidebarMode === SIDEBAR_MODE_COOKED) {
+                stat1.textContent = totalCookedFoods;
+                stat2.textContent = veganCookedFoods;
+                stat3.textContent = nonVeganCookedFoods;
+                return;
+            }
+
+            stat1.textContent = totalRules;
+            stat2.textContent = activeRules;
+            stat3.textContent = inactiveRules;
         }
 
         function getFilteredRules() {
@@ -3164,6 +3464,14 @@
         function setupEventListeners() {
             // New rule button
             document.getElementById('new-rule-btn').addEventListener('click', function () {
+                if (currentSidebarMode === SIDEBAR_MODE_FOODS) {
+                    openFoodModal('create');
+                    return;
+                }
+                if (currentSidebarMode === SIDEBAR_MODE_COOKED) {
+                    openCookedFoodModal('create');
+                    return;
+                }
                 const builderTab = document.getElementById('builder-tab');
                 bootstrap.Tab.getOrCreateInstance(builderTab).show();
                 resetBuilder();
@@ -3205,6 +3513,14 @@
 
             // Add food button
             document.getElementById('add-food-btn').addEventListener('click', function () {
+                if (currentSidebarMode === SIDEBAR_MODE_FOODS) {
+                    loadFoods();
+                    return;
+                }
+                if (currentSidebarMode === SIDEBAR_MODE_COOKED) {
+                    loadCookedFoods();
+                    return;
+                }
                 openFoodModal('create');
             });
 
@@ -3536,18 +3852,31 @@
                 });
             }
 
-            // Filter rules
-            document.querySelectorAll('.sidebar input[type="checkbox"], .sidebar select').forEach(element => {
-                element.addEventListener('change', function () {
-                    filterRules();
+            // Sidebar tab synchronization
+            document.querySelectorAll('#expertTabs .nav-link').forEach(tabButton => {
+                tabButton.addEventListener('shown.bs.tab', function (event) {
+                    const targetSelector = event?.target?.getAttribute('data-bs-target') || '#rules';
+                    syncSidebarToTarget(targetSelector);
                 });
+            });
+
+            // Sidebar filters
+            ['filter-active', 'filter-inactive'].forEach(id => {
+                const checkbox = document.getElementById(id);
+                if (checkbox) {
+                    checkbox.addEventListener('change', function () {
+                        saveSidebarState(currentSidebarMode);
+                        applySidebarFilters();
+                    });
+                }
             });
 
             // Search rules
             const searchRules = document.getElementById('search-rules');
             if (searchRules) {
                 searchRules.addEventListener('input', function () {
-                    filterRules();
+                    saveSidebarState(currentSidebarMode);
+                    applySidebarFilters();
                 });
             }
 
