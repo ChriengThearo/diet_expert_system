@@ -21,6 +21,11 @@
     color: var(--dash-ink);
 }
 
+html[lang="km"] .dashboard-shell,
+html[lang="km"] .doctor-dashboard-app {
+    font-family: 'Khmer OS System', 'Noto Sans Khmer', 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
+}
+
 .navbar-user-dashboard {
     background: #ffffff !important;
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
@@ -99,6 +104,19 @@
 .doctor-dashboard-app h4,
 .doctor-dashboard-app h5 {
     font-family: 'Noto Sans Khmer', 'Sora', 'Segoe UI', sans-serif;
+}
+
+html[lang="km"] .dashboard-shell h1,
+html[lang="km"] .dashboard-shell h2,
+html[lang="km"] .dashboard-shell h3,
+html[lang="km"] .dashboard-shell h4,
+html[lang="km"] .dashboard-shell h5,
+html[lang="km"] .doctor-dashboard-app h1,
+html[lang="km"] .doctor-dashboard-app h2,
+html[lang="km"] .doctor-dashboard-app h3,
+html[lang="km"] .doctor-dashboard-app h4,
+html[lang="km"] .doctor-dashboard-app h5 {
+    font-family: 'Khmer OS System', 'Noto Sans Khmer', 'Sora', 'Segoe UI', sans-serif;
 }
 
 .dashboard-switcher-btn {

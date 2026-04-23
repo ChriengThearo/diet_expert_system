@@ -5,6 +5,10 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+html[lang="km"] body {
+    font-family: 'Khmer OS System', 'Noto Sans Khmer', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 main.container {
     max-width: 1200px;
 }
