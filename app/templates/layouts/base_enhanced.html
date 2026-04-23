@@ -130,6 +130,114 @@
             line-height: 1.1;
         }
 
+        @media (max-width: 991.98px) {
+            .navbar-user-dashboard {
+                padding: 0.6rem 0;
+            }
+
+            .navbar-user-dashboard .container-fluid {
+                gap: 0.6rem;
+            }
+
+            .navbar-user-dashboard .navbar-brand img {
+                width: 74px !important;
+            }
+
+            .navbar-user-dashboard .navbar-brand span {
+                font-size: 1.2rem;
+                letter-spacing: 0.03em !important;
+            }
+
+            .navbar-user-dashboard .navbar-toggler {
+                border: 1px solid rgba(16, 24, 40, 0.2);
+                border-radius: 12px;
+                padding: 0.42rem 0.56rem;
+            }
+
+            .navbar-user-dashboard #navbarMain {
+                width: 100%;
+                margin-top: 0.55rem;
+                padding: 0.8rem;
+                border: 1px solid rgba(15, 23, 42, 0.1);
+                border-radius: 16px;
+                background: rgba(255, 255, 255, 0.97);
+                box-shadow: 0 10px 24px rgba(15, 23, 42, 0.1);
+            }
+
+            .navbar-user-dashboard #navbarMain .navbar-nav {
+                gap: 0.45rem;
+            }
+
+            .navbar-user-dashboard #navbarMain .nav-item {
+                width: 100%;
+            }
+
+            .navbar-user-dashboard #navbarMain .btn.btn-light {
+                width: 100%;
+                margin-right: 0;
+                padding: 0.62rem 0.8rem;
+                border-radius: 12px;
+                justify-content: flex-start;
+                font-weight: 700;
+            }
+
+            .navbar-user-dashboard #navbarMain .navbar-nav.align-items-center {
+                align-items: stretch !important;
+                padding-top: 0.65rem;
+                margin-top: 0.35rem;
+                border-top: 1px solid rgba(15, 23, 42, 0.12);
+            }
+
+            .navbar-user-dashboard #navbarMain .nav-link.dropdown-toggle {
+                width: 100%;
+                justify-content: space-between;
+                padding: 0.62rem 0.78rem;
+                border-radius: 12px;
+                margin: 0;
+            }
+
+            .navbar-user-dashboard #navbarMain .dropdown-toggle::after {
+                margin-left: auto;
+            }
+
+            .navbar-user-dashboard #navbarMain .language-mode-trigger {
+                width: 100%;
+            }
+
+            .navbar-user-dashboard #navbarMain #userDropdown span {
+                max-width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .navbar-user-dashboard #navbarMain .dropdown-menu {
+                position: static !important;
+                width: 100%;
+                margin-top: 0.35rem;
+                border-radius: 12px;
+                box-shadow: none;
+                border: 1px solid rgba(15, 23, 42, 0.12);
+            }
+
+            .navbar-user-dashboard #navbarMain .dropdown-item {
+                border-radius: 10px;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            nav[aria-label="breadcrumb"] {
+                display: none;
+            }
+
+            main.container-fluid.py-4 {
+                padding-left: 0.72rem !important;
+                padding-right: 0.72rem !important;
+                padding-top: 0.95rem !important;
+                padding-bottom: 1.2rem !important;
+            }
+        }
+
         .loading-spinner {
             display: none;
             position: fixed;
@@ -536,6 +644,28 @@
             const forms = document.querySelectorAll('form');
             forms.forEach(form => {
                 form.addEventListener('submit', showLoading);
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const navCollapseEl = document.getElementById('navbarMain');
+            if (!navCollapseEl) {
+                return;
+            }
+
+            const closeMobileNav = () => {
+                if (window.innerWidth >= 992 || !navCollapseEl.classList.contains('show')) {
+                    return;
+                }
+                bootstrap.Collapse.getOrCreateInstance(navCollapseEl).hide();
+            };
+
+            navCollapseEl.querySelectorAll('a[href]').forEach(link => {
+                const href = (link.getAttribute('href') || '').trim();
+                if (!href || href === '#') {
+                    return;
+                }
+                link.addEventListener('click', closeMobileNav);
             });
         });
 
