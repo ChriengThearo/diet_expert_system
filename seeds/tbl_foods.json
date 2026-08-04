@@ -30,7 +30,7 @@
   {
     "id": 3,
     "name": "Chicken",
-    "photo": "images/foods/chicken.svg",
+    "photo": "images/foods/chicken_photo.png",
     "is_gevan": 0,
     "food_type": "general",
     "description": "Chicken breast, approx per 100g",
@@ -58,7 +58,7 @@
   {
     "id": 5,
     "name": "Beef",
-    "photo": "images/foods/beef.svg",
+    "photo": "images/foods/steak.png",
     "is_gevan": 0,
     "food_type": "general",
     "description": "Ground beef (85% lean), approx per 100g",
@@ -72,7 +72,7 @@
   {
     "id": 7,
     "name": "Fish",
-    "photo": "images/foods/fish.svg",
+    "photo": "images/foods/fish_photo.png",
     "is_gevan": 0,
     "food_type": "seafood",
     "description": "White fish, approx per 100g",
@@ -744,7 +744,7 @@
   {
     "id": 56,
     "name": "Bell Pepper",
-    "photo": null,
+    "photo": "images/foods/bell-pepper.png",
     "is_gevan": 1,
     "food_type": "general",
     "description": "Bell pepper, raw, approx per 100g",
@@ -800,7 +800,7 @@
   {
     "id": 60,
     "name": "Apples",
-    "photo": null,
+    "photo": "images/foods/apple.png",
     "is_gevan": 1,
     "food_type": "general",
     "description": "Apples, raw, with skin, approx per 100g",
@@ -842,7 +842,7 @@
   {
     "id": 63,
     "name": "Strawberries",
-    "photo": null,
+    "photo": "images/foods/strawberry.png",
     "is_gevan": 1,
     "food_type": "general",
     "description": "Strawberries, raw, approx per 100g",
