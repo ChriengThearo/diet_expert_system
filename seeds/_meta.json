@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-04-21T15:05:33.463179+00:00",
-  "database": "expert_system_v3",
+  "generated_at": "2026-08-04T06:59:15.991007+00:00",
+  "database": "expert_system_v5",
   "tables": [
     "tbl_cooked_foods",
     "tbl_diet_rules",
@@ -25,12 +25,12 @@
     "tbl_roles": 3,
     "tbl_users": 11,
     "tbl_goals": 3,
-    "tbl_role_permissions": 44,
+    "tbl_role_permissions": 47,
     "tbl_rule_food_map": 29668,
-    "tbl_user_results": 37,
+    "tbl_user_results": 39,
     "tbl_user_roles": 11,
     "tbl_food_groups": 29668,
-    "tbl_goal_diet_rules": 144,
+    "tbl_goal_diet_rules": 146,
     "tbl_user_goals": 3
   }
 }

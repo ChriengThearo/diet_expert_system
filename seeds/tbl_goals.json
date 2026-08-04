@@ -12,8 +12,8 @@
     "name": "Maintain Weight",
     "description": "Keep current weight stable and healthy.",
     "target_value": null,
-    "diet_rule_id": null,
-    "updated_at": "2026-04-21T14:53:41"
+    "diet_rule_id": 1394,
+    "updated_at": "2026-08-04T01:49:01"
   },
   {
     "id": 4,
