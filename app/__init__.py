@@ -56,7 +56,6 @@ def create_app(config_class: type[Config] = Config):
     with app.app_context():
         try:
             if not app.config.get("SKIP_DB_CREATE_ALL", False):
-                from app.models.user import UserTable
                 from app.models.role import RoleTable
                 from app.models.permission import PermissionTable
 
