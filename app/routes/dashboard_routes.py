@@ -1865,6 +1865,34 @@ def user_dashboard():
             deduped_plan_history.append(plan)
         plan_history = deduped_plan_history[:8]
 
+    # Extract foods and avoid_foods from the latest generated plan
+    latest_plan_foods = []
+    latest_plan_avoid_foods = []
+    latest_plan_rule_name = None
+    if not guest_mode_enabled:
+        latest_result = (
+            UserResultsTable.query.filter_by(user_id=current_user.id)
+            .filter(UserResultsTable.result_data.isnot(None))
+            .order_by(UserResultsTable.generated_at.desc())
+            .first()
+        )
+        if latest_result and latest_result.result_data:
+            try:
+                lp = json.loads(latest_result.result_data)
+                plan_node = lp.get("plan") or lp
+                latest_plan_foods = plan_node.get("foods") or []
+                latest_plan_avoid_foods = plan_node.get("avoid_foods") or []
+                rule_node = plan_node.get("rule")
+                if isinstance(rule_node, dict):
+                    latest_plan_rule_name = rule_node.get("name")
+            except Exception:
+                pass
+    elif guest_history_entries:
+        first_entry = guest_history_entries[0] if guest_history_entries else {}
+        if isinstance(first_entry, dict):
+            latest_plan_foods = first_entry.get("foods") or []
+            latest_plan_avoid_foods = first_entry.get("avoid_foods") or []
+
     return render_template(
         "dashboard/user_dashboard.html",
         user=current_user,
@@ -1873,6 +1901,9 @@ def user_dashboard():
         plan_total=plan_total,
         localized_user_goals=[_localize_goal_name(goal.name) for goal in current_user.goals],
         guest_mode=guest_mode_enabled,
+        latest_plan_foods=latest_plan_foods,
+        latest_plan_avoid_foods=latest_plan_avoid_foods,
+        latest_plan_rule_name=latest_plan_rule_name,
     )
 
 
