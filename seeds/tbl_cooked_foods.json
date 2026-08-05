@@ -3,8 +3,8 @@
     "id": 2,
     "name": "Mixed Vegetable Soup with Pork (Samlor Korko)",
     "photo": "images/cooked_foods/mixed_vegetable_soup_with_pork_samlor_korko.jpg",
-    "is_gevan": 0,
-    "food_type": "cooked",
+    "is_gevan": false,
+    "food_type": "Soup",
     "cooking_method": "Boil with vegetables and pork",
     "description": "Traditional Cambodian mixed vegetable soup with pork and herbs.",
     "calories": 220.0,
@@ -12,14 +12,14 @@
     "sugar": 15.0,
     "fat": 10.0,
     "created_at": "2026-04-20T12:36:36",
-    "updated_at": "2026-08-04T04:23:52"
+    "updated_at": "2026-04-21T07:25:16"
   },
   {
     "id": 3,
     "name": "Steamed Fish Curry (Amok Trey)",
     "photo": "images/cooked_foods/steamed_fish_curry_amok_trey.jpg",
-    "is_gevan": 0,
-    "food_type": "cooked",
+    "is_gevan": false,
+    "food_type": "Curry",
     "cooking_method": "Steam fish curry in banana leaf",
     "description": "Cambodian steamed fish curry with coconut milk.",
     "calories": 300.0,
@@ -27,13 +27,13 @@
     "sugar": 10.0,
     "fat": 20.0,
     "created_at": "2026-04-20T12:36:36",
-    "updated_at": "2026-08-04T04:27:55"
+    "updated_at": "2026-04-21T07:25:16"
   },
   {
     "id": 4,
     "name": "Rice Noodle Soup (Kuy Teav)",
     "photo": "images/cooked_foods/rice_noodle_soup_kuy_teav.jpg",
-    "is_gevan": 0,
+    "is_gevan": false,
     "food_type": "Noodles",
     "cooking_method": "Boil noodles and serve with broth",
     "description": "Cambodian rice noodle soup with meat and herbs.",
@@ -48,7 +48,7 @@
     "id": 5,
     "name": "Grilled Pork with Rice (Bai Sach Chrouk)",
     "photo": "images/cooked_foods/grilled_pork_with_rice_bai_sach_chrouk.jpg",
-    "is_gevan": 0,
+    "is_gevan": false,
     "food_type": "Rice",
     "cooking_method": "Grill marinated pork and serve with rice",
     "description": "Grilled pork served with rice, popular breakfast.",
@@ -63,7 +63,7 @@
     "id": 6,
     "name": "Stir-Fried Beef (Lok Lak)",
     "photo": "images/cooked_foods/stir_fried_beef_lok_lak.jpg",
-    "is_gevan": 0,
+    "is_gevan": false,
     "food_type": "Stir-fry",
     "cooking_method": "Stir-fry beef quickly with sauce",
     "description": "Cambodian stir-fried beef served with vegetables.",
@@ -78,7 +78,7 @@
     "id": 7,
     "name": "Beef Lime Salad (Pleah Sach Ko)",
     "photo": "images/cooked_foods/beef_lime_salad_pleah_sach_ko.jpg",
-    "is_gevan": 0,
+    "is_gevan": false,
     "food_type": "Salad",
     "cooking_method": "Mix beef with lime dressing",
     "description": "Beef salad mixed with lime juice and herbs.",
@@ -93,8 +93,8 @@
     "id": 8,
     "name": "Sour Herbal Fish Soup (Samlor Machu Kroeung)",
     "photo": "images/cooked_foods/sour_herbal_fish_soup_samlor_machu_kroeung.jpg",
-    "is_gevan": 0,
-    "food_type": "cooked",
+    "is_gevan": false,
+    "food_type": "Soup",
     "cooking_method": "Boil fish with herbs and sour broth",
     "description": "Cambodian sour soup with herbs and fish.",
     "calories": 200.0,
@@ -102,14 +102,14 @@
     "sugar": 12.0,
     "fat": 8.0,
     "created_at": "2026-04-20T12:36:36",
-    "updated_at": "2026-08-04T04:19:01"
+    "updated_at": "2026-04-21T07:25:16"
   },
   {
     "id": 9,
     "name": "Stir-Fried Chicken with Herbs (Sach Moan Chha Kroeung)",
     "photo": "images/cooked_foods/cooked_food_31e961c9d6df48c3822b0562791ac604.jpg",
-    "is_gevan": 0,
-    "food_type": "cooked",
+    "is_gevan": false,
+    "food_type": "Stir-fry",
     "cooking_method": "Stir-fry chicken with lemongrass paste",
     "description": "Chicken stir-fried with Khmer herbs.",
     "calories": 320.0,
@@ -117,14 +117,14 @@
     "sugar": 10.0,
     "fat": 18.0,
     "created_at": "2026-04-20T12:36:36",
-    "updated_at": "2026-08-04T04:29:29"
+    "updated_at": "2026-08-05T07:43:32.773635"
   },
   {
     "id": 10,
     "name": "Stir-Fried Eggplant (Cha Trob)",
     "photo": "images/cooked_foods/cooked_food_fc9668b04eb841f2bf388ff25f56e433.jpg",
-    "is_gevan": 1,
-    "food_type": "cooked",
+    "is_gevan": true,
+    "food_type": "Stir-fry",
     "cooking_method": "Stir-fry eggplant with garlic",
     "description": "Eggplant stir-fried in garlic sauce.",
     "calories": 220.0,
@@ -132,14 +132,14 @@
     "sugar": 18.0,
     "fat": 14.0,
     "created_at": "2026-04-20T12:36:36",
-    "updated_at": "2026-08-04T04:31:14"
+    "updated_at": "2026-08-05T07:43:32.773635"
   },
   {
     "id": 11,
     "name": "Stir-Fried Crab with Pepper (Cha Kdam)",
     "photo": "images/cooked_foods/stir_fried_crab_with_pepper_cha_kdam.jpg",
-    "is_gevan": 0,
-    "food_type": "cooked",
+    "is_gevan": false,
+    "food_type": "Seafood",
     "cooking_method": "Stir-fry crab with pepper sauce",
     "description": "Crab stir-fried with Kampot pepper.",
     "calories": 280.0,
@@ -147,13 +147,13 @@
     "sugar": 6.0,
     "fat": 18.0,
     "created_at": "2026-04-20T12:36:36",
-    "updated_at": "2026-08-04T04:32:08"
+    "updated_at": "2026-04-21T07:25:16"
   },
   {
     "id": 12,
     "name": "Chicken Curry (Samlor Kari Sach Moan)",
     "photo": "images/cooked_foods/chicken_curry_samlor_kari_sach_moan.jpg",
-    "is_gevan": 0,
+    "is_gevan": false,
     "food_type": "Curry",
     "cooking_method": "Cook chicken in curry broth",
     "description": "Cambodian chicken curry with coconut milk.",
@@ -168,7 +168,7 @@
     "id": 13,
     "name": "Prahok Coconut Dip (Prahok Ktis)",
     "photo": "images/cooked_foods/prahok_coconut_dip_prahok_ktis.jpg",
-    "is_gevan": 0,
+    "is_gevan": false,
     "food_type": "Dip",
     "cooking_method": "Cook pork with prahok and coconut",
     "description": "Creamy dip made with fermented fish and pork.",
@@ -183,8 +183,8 @@
     "id": 14,
     "name": "Stir-Fried Beef with Lemongrass (Cha Kroeung Sach Ko)",
     "photo": "images/cooked_foods/cooked_food_5e09210b41c145ad8b74807379e2de75.jpg",
-    "is_gevan": 0,
-    "food_type": "cooked",
+    "is_gevan": false,
+    "food_type": "Stir-fry",
     "cooking_method": "Stir-fry beef with herbs",
     "description": "Beef stir-fried with lemongrass paste.",
     "calories": 330.0,
@@ -192,14 +192,14 @@
     "sugar": 9.0,
     "fat": 19.0,
     "created_at": "2026-04-20T12:36:36",
-    "updated_at": "2026-08-04T05:10:05"
+    "updated_at": "2026-08-05T07:43:32.773635"
   },
   {
     "id": 15,
     "name": "Chicken Rice Porridge (Babor Sach Moan)",
     "photo": "images/cooked_foods/chicken_rice_porridge.jpg",
-    "is_gevan": 0,
-    "food_type": "cooked",
+    "is_gevan": false,
+    "food_type": "Porridge",
     "cooking_method": "Boil rice into porridge with chicken",
     "description": "Soft rice porridge cooked with chicken.",
     "calories": 240.0,
@@ -207,13 +207,13 @@
     "sugar": 28.0,
     "fat": 7.0,
     "created_at": "2026-04-20T12:36:36",
-    "updated_at": "2026-08-04T05:13:18"
+    "updated_at": "2026-04-21T07:25:16"
   },
   {
     "id": 16,
     "name": "Fish Rice Porridge (Babor Trey)",
     "photo": "images/cooked_foods/fish_rice_porridge.jpg",
-    "is_gevan": 0,
+    "is_gevan": false,
     "food_type": "Porridge",
     "cooking_method": "Boil rice into porridge with fish",
     "description": "Rice porridge cooked with fish.",
@@ -228,7 +228,7 @@
     "id": 17,
     "name": "Stir-Fried Noodles (Mee Cha)",
     "photo": "images/cooked_foods/stir_fried_noodles.jpg",
-    "is_gevan": 0,
+    "is_gevan": false,
     "food_type": "Noodles",
     "cooking_method": "Stir-fry noodles with vegetables",
     "description": "Fried noodles with vegetables and meat.",
@@ -243,8 +243,8 @@
     "id": 18,
     "name": "Stir-Fried Short Noodles (Lort Cha)",
     "photo": "images/cooked_foods/stir_fried_short_noodles_lort_cha.jpg",
-    "is_gevan": 0,
-    "food_type": "cooked",
+    "is_gevan": false,
+    "food_type": "Noodles",
     "cooking_method": "Stir-fry short rice noodles",
     "description": "Short rice noodles fried with egg and vegetables.",
     "calories": 410.0,
@@ -252,13 +252,13 @@
     "sugar": 50.0,
     "fat": 13.0,
     "created_at": "2026-04-20T12:36:36",
-    "updated_at": "2026-08-04T05:14:19"
+    "updated_at": "2026-04-21T07:25:16"
   },
   {
     "id": 19,
     "name": "Rice Noodles with Curry (Nom Banh Chok)",
     "photo": "images/cooked_foods/rice_noodles_with_curry_nom_banh_chok.jpg",
-    "is_gevan": 0,
+    "is_gevan": false,
     "food_type": "Noodles",
     "cooking_method": "Serve noodles with curry sauce",
     "description": "Rice noodles served with fish curry gravy.",
@@ -273,8 +273,8 @@
     "id": 20,
     "name": "Stir-Fried Chicken (Cha Sach Moan)",
     "photo": "images/cooked_foods/stir_fried_chicken.jpg",
-    "is_gevan": 0,
-    "food_type": "cooked",
+    "is_gevan": false,
+    "food_type": "Stir-fry",
     "cooking_method": "Stir-fry chicken with vegetables",
     "description": "Simple stir-fried chicken dish.",
     "calories": 290.0,
@@ -282,14 +282,14 @@
     "sugar": 9.0,
     "fat": 15.0,
     "created_at": "2026-04-20T12:36:36",
-    "updated_at": "2026-08-04T05:16:02"
+    "updated_at": "2026-04-21T07:25:16"
   },
   {
     "id": 21,
     "name": "Stir-Fried Pork (Cha Sach Chrouk)",
     "photo": "images/cooked_foods/stir_fried_pork.jpg",
-    "is_gevan": 0,
-    "food_type": "cooked",
+    "is_gevan": false,
+    "food_type": "Stir-fry",
     "cooking_method": "Stir-fry pork with vegetables",
     "description": "Stir-fried pork Khmer style.",
     "calories": 310.0,
@@ -297,14 +297,14 @@
     "sugar": 10.0,
     "fat": 17.0,
     "created_at": "2026-04-20T12:36:36",
-    "updated_at": "2026-08-04T05:12:38"
+    "updated_at": "2026-04-21T07:25:16"
   },
   {
     "id": 22,
     "name": "Stir-Fried Chicken with Ginger (Cha Khnhey Sach Moan)",
     "photo": "images/cooked_foods/cooked_food_e1dc35e78623470daada4dc70062c0ea.jpg",
-    "is_gevan": 0,
-    "food_type": "cooked",
+    "is_gevan": false,
+    "food_type": "Stir-fry",
     "cooking_method": "Stir-fry chicken with ginger",
     "description": "Chicken stir-fried with fresh ginger.",
     "calories": 300.0,
@@ -312,14 +312,14 @@
     "sugar": 8.0,
     "fat": 16.0,
     "created_at": "2026-04-20T12:36:36",
-    "updated_at": "2026-08-04T04:11:34"
+    "updated_at": "2026-08-05T07:43:32.773635"
   },
   {
     "id": 23,
     "name": "Stir-Fried Beef with Ginger (Cha Khnhey Sach Ko)",
     "photo": "images/cooked_foods/cooked_food_126e20c732284dd9986823e50edf9a82.jpg",
-    "is_gevan": 0,
-    "food_type": "cooked",
+    "is_gevan": false,
+    "food_type": "Stir-fry",
     "cooking_method": "Stir-fry beef with ginger",
     "description": "Beef stir-fried with ginger.",
     "calories": 320.0,
@@ -327,13 +327,13 @@
     "sugar": 7.0,
     "fat": 18.0,
     "created_at": "2026-04-20T12:36:36",
-    "updated_at": "2026-08-04T04:12:22"
+    "updated_at": "2026-08-05T07:43:32.773635"
   },
   {
     "id": 24,
     "name": "Vegetable and Beef Soup (Samlor Kako Sach Ko)",
     "photo": "images/cooked_foods/vegetable_and_beef_soup.jpg",
-    "is_gevan": 0,
+    "is_gevan": false,
     "food_type": "Soup",
     "cooking_method": "Boil vegetables and beef",
     "description": "Hearty vegetable soup with beef.",
@@ -348,7 +348,7 @@
     "id": 25,
     "name": "Fried Rice with Chicken",
     "photo": "images/cooked_foods/fried_rice_with_chicken.jpg",
-    "is_gevan": 0,
+    "is_gevan": false,
     "food_type": "Rice",
     "cooking_method": "Stir-fry rice with chicken and egg",
     "description": "Fried rice with chicken and vegetables.",
@@ -363,8 +363,8 @@
     "id": 26,
     "name": "Fried Rice with Seafood",
     "photo": "images/cooked_foods/cooked_food_3549d921128e4714893e74dbf4489ece.jpg",
-    "is_gevan": 0,
-    "food_type": "cooked",
+    "is_gevan": false,
+    "food_type": "Rice",
     "cooking_method": "Stir-fry rice with seafood",
     "description": "Fried rice with mixed seafood.",
     "calories": 440.0,
@@ -372,14 +372,14 @@
     "sugar": 54.0,
     "fat": 14.0,
     "created_at": "2026-04-20T12:36:36",
-    "updated_at": "2026-08-04T04:17:56"
+    "updated_at": "2026-08-05T07:43:32.773635"
   },
   {
     "id": 27,
     "name": "Vegetable Soup (Samlor Chuon)",
     "photo": "images/cooked_foods/vegetable_soup.jpg",
-    "is_gevan": 1,
-    "food_type": "cooked",
+    "is_gevan": true,
+    "food_type": "Soup",
     "cooking_method": "Boil mixed vegetables",
     "description": "Light vegetable soup.",
     "calories": 150.0,
@@ -387,14 +387,14 @@
     "sugar": 18.0,
     "fat": 5.0,
     "created_at": "2026-04-20T12:36:36",
-    "updated_at": "2026-08-04T04:26:19"
+    "updated_at": "2026-04-21T07:25:16"
   },
   {
     "id": 28,
     "name": "Vegetable Curry",
     "photo": "images/cooked_foods/vegetable_curry.jpg",
-    "is_gevan": 1,
-    "food_type": "cooked",
+    "is_gevan": true,
+    "food_type": "Curry",
     "cooking_method": "Cook vegetables in curry sauce",
     "description": "Vegetable curry with coconut milk.",
     "calories": 270.0,
@@ -402,14 +402,14 @@
     "sugar": 22.0,
     "fat": 16.0,
     "created_at": "2026-04-20T12:36:36",
-    "updated_at": "2026-08-04T04:19:57"
+    "updated_at": "2026-04-21T07:25:16"
   },
   {
     "id": 29,
     "name": "Stir-Fried Morning Glory",
     "photo": "images/cooked_foods/stir_fried_morning_glory.jpg",
-    "is_gevan": 1,
-    "food_type": "cooked",
+    "is_gevan": true,
+    "food_type": "Stir-fry",
     "cooking_method": "Stir-fry morning glory with garlic",
     "description": "Popular stir-fried water spinach.",
     "calories": 120.0,
@@ -417,13 +417,13 @@
     "sugar": 10.0,
     "fat": 7.0,
     "created_at": "2026-04-20T12:36:36",
-    "updated_at": "2026-08-04T04:22:16"
+    "updated_at": "2026-04-21T07:25:16"
   },
   {
     "id": 30,
     "name": "Stir-Fried Tofu",
     "photo": "images/cooked_foods/stir_fried_tofu.jpg",
-    "is_gevan": 1,
+    "is_gevan": true,
     "food_type": "Stir-fry",
     "cooking_method": "Stir-fry tofu with vegetables",
     "description": "Tofu cooked with vegetables.",
@@ -438,8 +438,8 @@
     "id": 31,
     "name": "Pumpkin Soup",
     "photo": "images/cooked_foods/cooked_food_c08dc7b6bd074e3eba9e49df5f3cd27c.jpg",
-    "is_gevan": 1,
-    "food_type": "cooked",
+    "is_gevan": true,
+    "food_type": "Soup",
     "cooking_method": "Boil pumpkin until soft",
     "description": "Smooth pumpkin soup Khmer style.",
     "calories": 180.0,
@@ -447,14 +447,14 @@
     "sugar": 24.0,
     "fat": 7.0,
     "created_at": "2026-04-20T12:36:36",
-    "updated_at": "2026-08-04T04:22:59"
+    "updated_at": "2026-08-05T07:43:32.773635"
   },
   {
     "id": 32,
     "name": "Stir-Fried Mixed Vegetables",
     "photo": "images/cooked_foods/stir_fried_mixed_vegetables.jpg",
-    "is_gevan": 1,
-    "food_type": "cooked",
+    "is_gevan": true,
+    "food_type": "Stir-fry",
     "cooking_method": "Stir-fry mixed vegetables with garlic",
     "description": "Mixed vegetables stir-fried with light seasoning.",
     "calories": 180.0,
@@ -462,14 +462,14 @@
     "sugar": 20.0,
     "fat": 8.0,
     "created_at": "2026-04-20T12:38:57",
-    "updated_at": "2026-08-04T03:23:09"
+    "updated_at": "2026-04-21T07:25:16"
   },
   {
     "id": 33,
     "name": "Vegetable Fried Rice",
     "photo": "images/cooked_foods/vegetable_fried_rice.jpg",
-    "is_gevan": 1,
-    "food_type": "cooked",
+    "is_gevan": true,
+    "food_type": "Rice",
     "cooking_method": "Stir-fry rice with vegetables",
     "description": "Fried rice with mixed vegetables.",
     "calories": 350.0,
@@ -477,14 +477,14 @@
     "sugar": 55.0,
     "fat": 10.0,
     "created_at": "2026-04-20T12:38:57",
-    "updated_at": "2026-08-04T03:20:42"
+    "updated_at": "2026-04-21T07:25:16"
   },
   {
     "id": 34,
     "name": "Vegetable Noodle Soup",
     "photo": "images/cooked_foods/vegetable_noodle_soup.jpg",
-    "is_gevan": 1,
-    "food_type": "cooked",
+    "is_gevan": true,
+    "food_type": "Noodles",
     "cooking_method": "Boil noodles with vegetable broth",
     "description": "Light noodle soup with vegetables.",
     "calories": 280.0,
@@ -492,13 +492,13 @@
     "sugar": 45.0,
     "fat": 6.0,
     "created_at": "2026-04-20T12:38:57",
-    "updated_at": "2026-08-04T03:24:22"
+    "updated_at": "2026-04-21T07:25:16"
   },
   {
     "id": 35,
     "name": "Stir-Fried Tofu with Vegetables",
     "photo": "images/cooked_foods/stir_fried_tofu_with_vegetables.jpg",
-    "is_gevan": 1,
+    "is_gevan": true,
     "food_type": "Stir-fry",
     "cooking_method": "Stir-fry tofu with vegetables",
     "description": "Tofu cooked with mixed vegetables.",
@@ -513,8 +513,8 @@
     "id": 36,
     "name": "Vegetable Curry with Coconut Milk",
     "photo": "images/cooked_foods/cooked_food_8f5b9b04ced2484abfb75b8c7d641632.jpg",
-    "is_gevan": 1,
-    "food_type": "cooked",
+    "is_gevan": true,
+    "food_type": "Curry",
     "cooking_method": "Cook vegetables in coconut curry",
     "description": "Vegetables cooked in creamy coconut curry.",
     "calories": 320.0,
@@ -522,14 +522,14 @@
     "sugar": 25.0,
     "fat": 18.0,
     "created_at": "2026-04-20T12:38:57",
-    "updated_at": "2026-08-04T03:25:41"
+    "updated_at": "2026-08-05T07:43:32.773635"
   },
   {
     "id": 37,
     "name": "Pumpkin Coconut Soup",
     "photo": "images/cooked_foods/cooked_food_c49f8c69c97e4375af3afe25beccffca.jpg",
-    "is_gevan": 1,
-    "food_type": "cooked",
+    "is_gevan": true,
+    "food_type": "Soup",
     "cooking_method": "Boil pumpkin with coconut milk",
     "description": "Smooth pumpkin soup with coconut flavor.",
     "calories": 220.0,
@@ -537,13 +537,13 @@
     "sugar": 26.0,
     "fat": 10.0,
     "created_at": "2026-04-20T12:38:57",
-    "updated_at": "2026-08-04T03:26:23"
+    "updated_at": "2026-08-05T07:43:32.773635"
   },
   {
     "id": 38,
     "name": "Stir-Fried Morning Glory with Garlic",
     "photo": "images/cooked_foods/stir_fried_morning_glory_with_garlic.jpg",
-    "is_gevan": 1,
+    "is_gevan": true,
     "food_type": "Stir-fry",
     "cooking_method": "Stir-fry water spinach with garlic",
     "description": "Popular Cambodian vegetable dish.",
@@ -558,8 +558,8 @@
     "id": 39,
     "name": "Braised Eggplant with Soy Sauce",
     "photo": "images/cooked_foods/cooked_food_210f56943acb44a39b6b6d4afe8a4ac9.jpg",
-    "is_gevan": 1,
-    "food_type": "cooked",
+    "is_gevan": true,
+    "food_type": "Stir-fry",
     "cooking_method": "Cook eggplant with soy sauce",
     "description": "Soft eggplant braised in soy sauce.",
     "calories": 200.0,
@@ -567,13 +567,13 @@
     "sugar": 18.0,
     "fat": 10.0,
     "created_at": "2026-04-20T12:38:57",
-    "updated_at": "2026-08-04T03:28:43"
+    "updated_at": "2026-08-05T07:43:32.773635"
   },
   {
     "id": 40,
     "name": "Vegetable Spring Rolls (Fresh)",
     "photo": "images/cooked_foods/vegetable_spring_rolls_fresh.jpg",
-    "is_gevan": 1,
+    "is_gevan": true,
     "food_type": "Salad",
     "cooking_method": "Wrap fresh vegetables in rice paper",
     "description": "Fresh vegetable rolls with herbs.",
@@ -588,7 +588,7 @@
     "id": 41,
     "name": "Vegetable Spring Rolls (Fried)",
     "photo": "images/cooked_foods/vegetable_spring_rolls_fried.jpg",
-    "is_gevan": 1,
+    "is_gevan": true,
     "food_type": "Snack",
     "cooking_method": "Deep-fry vegetable rolls",
     "description": "Crispy fried vegetable rolls.",
@@ -603,8 +603,8 @@
     "id": 42,
     "name": "Tofu and Mushroom Soup",
     "photo": "images/cooked_foods/cooked_food_a7cac5c330fe4e9699e978f962976e12.jpg",
-    "is_gevan": 1,
-    "food_type": "cooked",
+    "is_gevan": true,
+    "food_type": "Soup",
     "cooking_method": "Boil tofu and mushrooms in broth",
     "description": "Light soup with tofu and mushrooms.",
     "calories": 180.0,
@@ -612,14 +612,14 @@
     "sugar": 10.0,
     "fat": 8.0,
     "created_at": "2026-04-20T12:38:57",
-    "updated_at": "2026-08-04T03:29:45"
+    "updated_at": "2026-08-05T07:43:32.773635"
   },
   {
     "id": 43,
     "name": "Vegetable Rice Porridge",
     "photo": "images/cooked_foods/vegetable_rice_porridge.jpg",
-    "is_gevan": 1,
-    "food_type": "cooked",
+    "is_gevan": true,
+    "food_type": "Porridge",
     "cooking_method": "Boil rice with vegetables",
     "description": "Soft rice porridge with vegetables.",
     "calories": 200.0,
@@ -627,14 +627,14 @@
     "sugar": 35.0,
     "fat": 3.0,
     "created_at": "2026-04-20T12:38:57",
-    "updated_at": "2026-08-04T03:30:45"
+    "updated_at": "2026-04-21T07:25:16"
   },
   {
     "id": 44,
     "name": "Grilled Tofu Skewers",
     "photo": "images/cooked_foods/cooked_food_ac14b015038a4754807b7ff1ae8f9511.jpg",
-    "is_gevan": 1,
-    "food_type": "cooked",
+    "is_gevan": true,
+    "food_type": "Grill",
     "cooking_method": "Grill marinated tofu on skewers",
     "description": "Grilled tofu with light seasoning.",
     "calories": 220.0,
@@ -642,14 +642,14 @@
     "sugar": 10.0,
     "fat": 12.0,
     "created_at": "2026-04-20T12:38:57",
-    "updated_at": "2026-08-04T03:32:22"
+    "updated_at": "2026-08-05T07:43:32.773635"
   },
   {
     "id": 45,
     "name": "Stir-Fried Cabbage with Garlic",
     "photo": "images/cooked_foods/cooked_food_33e601a3eec4494b922afc1dc4f79b00.jpg",
-    "is_gevan": 1,
-    "food_type": "cooked",
+    "is_gevan": true,
+    "food_type": "Stir-fry",
     "cooking_method": "Stir-fry cabbage with garlic",
     "description": "Simple stir-fried cabbage dish.",
     "calories": 140.0,
@@ -657,14 +657,14 @@
     "sugar": 12.0,
     "fat": 7.0,
     "created_at": "2026-04-20T12:38:57",
-    "updated_at": "2026-08-04T03:17:51"
+    "updated_at": "2026-08-05T07:43:32.773635"
   },
   {
     "id": 46,
     "name": "Vegetable and Tofu Curry",
     "photo": "images/cooked_foods/vegetable_and_tofu_curry.jpg",
-    "is_gevan": 1,
-    "food_type": "cooked",
+    "is_gevan": true,
+    "food_type": "Curry",
     "cooking_method": "Cook tofu and vegetables in curry",
     "description": "Tofu and vegetables in curry sauce.",
     "calories": 310.0,
@@ -672,14 +672,14 @@
     "sugar": 20.0,
     "fat": 18.0,
     "created_at": "2026-04-20T12:38:57",
-    "updated_at": "2026-08-04T03:35:21"
+    "updated_at": "2026-04-21T07:25:16"
   },
   {
     "id": 47,
     "name": "Fried Tofu with Chili Sauce",
     "photo": "images/cooked_foods/cooked_food_cfe74f39447f48b8b7e24164d55a51b3.jpg",
-    "is_gevan": 1,
-    "food_type": "cooked",
+    "is_gevan": true,
+    "food_type": "Snack",
     "cooking_method": "Deep-fry tofu and serve with sauce",
     "description": "Crispy tofu served with chili sauce.",
     "calories": 260.0,
@@ -687,14 +687,14 @@
     "sugar": 14.0,
     "fat": 16.0,
     "created_at": "2026-04-20T12:38:57",
-    "updated_at": "2026-08-04T03:36:21"
+    "updated_at": "2026-08-05T07:43:32.773635"
   },
   {
     "id": 48,
     "name": "Vegetable Stir-Fried Noodles",
     "photo": "images/cooked_foods/cooked_food_e56f9db836eb4ad0972bed89e029748a.jpg",
-    "is_gevan": 1,
-    "food_type": "cooked",
+    "is_gevan": true,
+    "food_type": "Noodles",
     "cooking_method": "Stir-fry noodles with vegetables",
     "description": "Fried noodles with vegetables only.",
     "calories": 390.0,
@@ -702,14 +702,14 @@
     "sugar": 60.0,
     "fat": 12.0,
     "created_at": "2026-04-20T12:38:57",
-    "updated_at": "2026-08-04T03:38:59"
+    "updated_at": "2026-08-05T07:43:32.773635"
   },
   {
     "id": 49,
     "name": "Corn and Vegetable Soup",
     "photo": "images/cooked_foods/cooked_food_a9a881d2670a49d984479f2e5e133364.jpg",
-    "is_gevan": 1,
-    "food_type": "cooked",
+    "is_gevan": true,
+    "food_type": "Soup",
     "cooking_method": "Boil corn and vegetables",
     "description": "Sweet corn soup with vegetables.",
     "calories": 170.0,
@@ -717,13 +717,13 @@
     "sugar": 28.0,
     "fat": 4.0,
     "created_at": "2026-04-20T12:38:57",
-    "updated_at": "2026-08-04T04:09:48"
+    "updated_at": "2026-08-05T07:43:32.773635"
   },
   {
     "id": 50,
     "name": "Steamed Mixed Vegetables",
     "photo": "images/cooked_foods/steamed_mixed_vegetables.jpg",
-    "is_gevan": 1,
+    "is_gevan": true,
     "food_type": "Steam",
     "cooking_method": "Steam vegetables until soft",
     "description": "Healthy steamed vegetables.",
@@ -738,8 +738,8 @@
     "id": 51,
     "name": "Vegetable Salad with Lime Dressing",
     "photo": "images/cooked_foods/cooked_food_40b009552f9740e186840277754784aa.jpg",
-    "is_gevan": 1,
-    "food_type": "cooked",
+    "is_gevan": true,
+    "food_type": "Salad",
     "cooking_method": "Mix vegetables with lime dressing",
     "description": "Fresh salad with tangy lime dressing.",
     "calories": 150.0,
@@ -747,6 +747,6 @@
     "sugar": 16.0,
     "fat": 6.0,
     "created_at": "2026-04-20T12:38:57",
-    "updated_at": "2026-08-04T04:10:35"
+    "updated_at": "2026-08-05T07:43:32.773635"
   }
 ]
