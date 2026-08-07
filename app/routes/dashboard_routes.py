@@ -31,9 +31,27 @@ import json
 import os
 import re
 import uuid
+import subprocess
+from pathlib import Path
 from werkzeug.utils import secure_filename
 
 dashboard_bp = Blueprint("dashboard", __name__, url_prefix="/dashboard")
+
+
+def auto_dump_seeds():
+    """Automatically dump database to seed files after food/cooked_food changes"""
+    try:
+        project_root = Path(current_app.root_path).parent
+        seed_script = project_root / "seeds" / "seed.py"
+        if seed_script.exists():
+            subprocess.Popen(
+                ["python", str(seed_script), "dump"],
+                cwd=str(project_root),
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL
+            )
+    except Exception as e:
+        current_app.logger.warning(f"Auto seed dump failed: {e}")
 
 
 def _is_khmer_ui():
@@ -854,6 +872,10 @@ def create_doctor_food():
     try:
         db.session.add(food)
         db.session.commit()
+        
+        # Auto-dump to seed file
+        auto_dump_seeds()
+        
         return jsonify(
             {
                 "success": True,
@@ -925,6 +947,10 @@ def update_or_delete_doctor_food(food_id: int):
                     os.remove(photo_path)
             db.session.delete(food)
             db.session.commit()
+            
+            # Auto-dump to seed file
+            auto_dump_seeds()
+            
             return jsonify({"success": True})
         except Exception:
             db.session.rollback()
@@ -983,6 +1009,10 @@ def update_or_delete_doctor_food(food_id: int):
 
     try:
         db.session.commit()
+        
+        # Auto-dump to seed file
+        auto_dump_seeds()
+        
         return jsonify(
             {
                 "success": True,
@@ -1105,6 +1135,10 @@ def create_doctor_cooked_food():
     try:
         db.session.add(cooked_food)
         db.session.commit()
+        
+        # Auto-dump to seed file
+        auto_dump_seeds()
+        
         return jsonify(
             {
                 "success": True,
@@ -1180,6 +1214,10 @@ def update_or_delete_doctor_cooked_food(cooked_food_id: int):
                     os.remove(photo_path)
             db.session.delete(cooked_food)
             db.session.commit()
+            
+            # Auto-dump to seed file
+            auto_dump_seeds()
+            
             return jsonify({"success": True})
         except Exception:
             db.session.rollback()
@@ -1240,6 +1278,10 @@ def update_or_delete_doctor_cooked_food(cooked_food_id: int):
 
     try:
         db.session.commit()
+        
+        # Auto-dump to seed file
+        auto_dump_seeds()
+        
         return jsonify(
             {
                 "success": True,
