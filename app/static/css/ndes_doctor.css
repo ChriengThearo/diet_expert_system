@@ -9,6 +9,12 @@
   --nd-green-pale:  #edfbf2;
   --nd-green-soft:  #c3f0d4;
 
+  /* ── Accent Colors */
+  --nd-orange:      #f97316;
+  --nd-orange-pale: #fffbeb;
+  --nd-purple:      #8b5cf6;
+  --nd-purple-pale: #f5f3ff;
+
   /* ── Sidebar: WHITE with dark text (from image) */
   --nd-sidebar-bg:     #ffffff;
   --nd-sidebar-hover:  #f0faf4;
@@ -91,69 +97,32 @@
 .nd-mini-sparkline { width:100%; height:30px; }
 
 /* ── Grid Layout for Dashboard Panels ───────────── */
-.nd-panels { display:grid; grid-template-columns:1.2fr 1fr 1fr; gap:16px; margin-bottom:18px; }
+.nd-panels { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:18px; }
 .nd-panel { background:#fff; border-radius:var(--nd-radius); box-shadow:var(--nd-shadow); border:1px solid var(--nd-border); padding:16px; }
 .nd-panel-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
 .nd-panel-title { font-size:0.88rem; font-weight:800; color:var(--nd-ink); margin:0; display:flex; align-items:center; gap:7px; }
 .nd-panel-subtitle { font-size:0.7rem; color:var(--nd-muted); margin:3px 0 0; }
 .nd-panel-action { font-size:0.72rem; color:var(--nd-green); font-weight:700; cursor:pointer; text-decoration:none; }
 
-/* ── Healthy Plate Guide ────────────────────────── */
-.nd-plate-visual { display:flex; align-items:center; justify-content:center; margin-bottom:14px; position:relative; }
-.nd-plate-img { width:120px; height:120px; border-radius:50%; object-fit:cover; border:4px solid var(--nd-green-soft); box-shadow:0 4px 16px rgba(46,125,50,0.18); }
-.nd-plate-legend { list-style:none; padding:0; margin:0; display:grid; gap:6px; }
-.nd-plate-legend-item { display:flex; align-items:center; gap:8px; font-size:0.78rem; }
-.nd-plate-dot { width:8px; height:8px; border-radius:50%; }
-.nd-plate-dot.green { background:#43a047; }
-.nd-plate-dot.orange{ background:#fb8c00; }
-.nd-plate-dot.yellow{ background:#fdd835; }
-.nd-plate-dot.blue  { background:#1e88e5; }
-.nd-plate-pct { margin-left:auto; font-weight:700; color:var(--nd-ink); }
-
-/* ── Today's Recommendation ─────────────────────── */
-.nd-recommendation-img { width:100%; height:140px; border-radius:var(--nd-radius-sm); object-fit:cover; margin-bottom:12px; }
-.nd-recommendation-title { font-size:0.9rem; font-weight:800; color:var(--nd-ink); margin:0 0 6px; }
-.nd-recommendation-desc { font-size:0.72rem; color:var(--nd-muted); margin:0 0 10px; line-height:1.4; }
-.nd-recommendation-macros { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:12px; }
-.nd-macro-item { text-align:center; padding:6px; background:var(--nd-green-pale); border-radius:6px; }
-.nd-macro-value { font-size:0.9rem; font-weight:800; color:var(--nd-green); }
-.nd-macro-label { font-size:0.66rem; color:var(--nd-green); margin-top:2px; }
-.nd-recommendation-cta { width:100%; padding:8px; background:var(--nd-green); color:#fff; border:none; border-radius:var(--nd-radius-sm); font-weight:700; font-size:0.8rem; cursor:pointer; transition:all 0.18s; }
-.nd-recommendation-cta:hover { background:var(--nd-green-mid); transform:translateY(-1px); box-shadow:0 4px 12px rgba(46,125,50,0.24); }
-
-/* ── Nutrition Progress ─────────────────────────── */
-.nd-nutrition-row { display:grid; gap:10px; }
-.nd-nutrition-item { display:grid; grid-template-columns:1fr auto; align-items:center; gap:6px; }
-.nd-nutrition-label { display:flex; align-items:center; gap:6px; font-size:0.78rem; font-weight:700; color:var(--nd-ink); }
-.nd-nutrition-icon { width:22px; height:22px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:0.7rem; }
-.nd-nutrition-icon.fire  { background:#fff7ed; color:#f97316; }
-.nd-nutrition-icon.prot  { background:#eff6ff; color:#3b82f6; }
-.nd-nutrition-icon.veg   { background:#edfbf2; color:#2eb85c; }
-.nd-nutrition-icon.fruit { background:#fdf2f8; color:#ec4899; }
-.nd-nutrition-icon.water { background:#ecfeff; color:#06b6d4; }
-.nd-nutrition-stat { font-size:0.7rem; color:var(--nd-muted); text-align:right; white-space:nowrap; }
-.nd-nutrition-stat strong { color:var(--nd-ink); font-weight:800; }
-.nd-progress-track { height:7px; background:#f3f4f6; border-radius:999px; overflow:hidden; }
-/* All progress bars are green like the image */
-.nd-progress-fill         { height:100%; border-radius:999px; transition:width 0.7s ease; background:#2eb85c; }
-.nd-progress-fill.green   { background:#2eb85c; }
-.nd-progress-fill.blue    { background:#3b82f6; }
-.nd-progress-fill.orange  { background:#f97316; }
-.nd-progress-fill.pink    { background:#ec4899; }
-.nd-progress-fill.teal    { background:#06b6d4; }
-.nd-nutrition-pct { font-size:0.68rem; color:var(--nd-muted); text-align:right; }
-
-/* ── Stars ───────────────────────────────────────── */
-.nd-stars { color:#fbbf24; font-size:0.82rem; display:flex; gap:1px; }
-.nd-badge-match { background:#edfbf2; color:#2eb85c; border-radius:999px; padding:2px 10px; font-size:0.7rem; font-weight:800; }
-
-/* ── Complete Your Meal ─────────────────────────── */
-.nd-meal-complete { display:flex; gap:10px; margin-bottom:12px; }
-.nd-meal-chip { display:flex; align-items:center; gap:6px; padding:6px 10px; background:#f9fafb; border:1px solid var(--nd-border); border-radius:8px; font-size:0.75rem; font-weight:600; color:var(--nd-ink); }
-.nd-meal-chip-icon { font-size:0.9rem; }
-/* CTA button on recommendation panel */
-.nd-recommendation-cta { width:100%; padding:9px; background:var(--nd-green); color:#fff; border:none; border-radius:var(--nd-radius-sm); font-weight:700; font-size:0.82rem; cursor:pointer; transition:background 0.15s; letter-spacing:0.01em; }
-.nd-recommendation-cta:hover { background:var(--nd-green-mid); }
+/* ── Rule Dashboard Cards ────────────────────────── */
+.nd-rule-dash-card { background:#fff; border-radius:var(--nd-radius); box-shadow:var(--nd-shadow); border:1px solid var(--nd-border); padding:16px; display:flex; flex-direction:column; }
+.nd-rule-dash-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:10px; }
+.nd-rule-dash-icon { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1rem; }
+.nd-rule-dash-icon.green  { color:#2eb85c; background:#edfbf2; }
+.nd-rule-dash-icon.orange { color:#f97316; background:#fffbeb; }
+.nd-rule-dash-icon.purple { color:#8b5cf6; background:#f5f3ff; }
+.nd-rule-dash-title { font-size:0.88rem; font-weight:800; color:var(--nd-ink); margin:0; }
+.nd-rule-dash-badge { display:inline-flex; align-items:center; padding:2px 8px; border-radius:999px; font-size:0.66rem; font-weight:700; margin-top:3px; }
+.nd-rule-dash-badge.green  { background:#edfbf2; color:#2eb85c; }
+.nd-rule-dash-badge.orange { background:#fffbeb; color:#f97316; }
+.nd-rule-dash-badge.purple { background:#f5f3ff; color:#8b5cf6; }
+.nd-rule-dash-view { font-size:0.72rem; color:var(--nd-green); font-weight:700; cursor:pointer; text-decoration:none; }
+.nd-rule-dash-count { font-size:0.78rem; color:var(--nd-muted); font-weight:700; margin-bottom:10px; }
+.nd-rule-dash-count strong { color:var(--nd-ink); }
+.nd-rule-dash-list { list-style:none; padding:0; margin:0 0 12px; flex:1; }
+.nd-rule-dash-item { display:flex; align-items:center; gap:8px; padding:7px 8px; border-radius:8px; font-size:0.78rem; font-weight:600; color:var(--nd-ink); background:#f9fafb; border:1px solid var(--nd-border); margin-bottom:6px; }
+.nd-rule-dash-item i { font-size:0.7rem; color:var(--nd-muted); }
+.nd-rule-dash-btn { border-radius:8px; font-weight:700; }
 
 /* ── Workspace Tabs Section ─────────────────────── */
 .nd-workspace { background:#fff; border-radius:var(--nd-radius); box-shadow:var(--nd-shadow); border:1px solid var(--nd-border); overflow:hidden; }

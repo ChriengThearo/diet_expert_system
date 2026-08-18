@@ -192,135 +192,71 @@
         </div>
       </div>
 
-      <!-- THREE PANELS ROW -->
-      <div class="nd-panels">
-
-        <!-- PANEL 1: Healthy Plate Guide -->
-        <div class="nd-panel">
-          <div class="nd-panel-header">
-            <div>
-              <h5 class="nd-panel-title"><i class="fas fa-circle-half-stroke" style="color:#43a047;"></i> Healthy Plate Guide</h5>
+      <!-- PANELS ROW -->
+      <div class="nd-panels" id="nd-dashboard-panels">
+        <!-- Nutrition Rules -->
+        <div class="nd-rule-dash-card" data-category="nutrition">
+          <div class="nd-rule-dash-header">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="nd-rule-dash-icon green"><i class="fas fa-circle-check"></i></div>
+              <div>
+                <h5 class="nd-rule-dash-title">Nutrition Rules</h5>
+                <span class="nd-rule-dash-badge green">Active</span>
+              </div>
             </div>
+            <span class="nd-rule-dash-view" onclick="showSection('rules')">View All</span>
           </div>
-          <div class="nd-plate-visual">
-            <svg viewBox="0 0 120 120" width="130" height="130">
-              <circle cx="60" cy="60" r="58" fill="#f1f8f2" stroke="#c8e6c9" stroke-width="2"/>
-              <!-- Rice/Grains 50% -->
-              <path d="M60,60 L60,2 A58,58 0 0,1 118,60 Z" fill="#a5d6a7"/>
-              <!-- Vegetables 25% -->
-              <path d="M60,60 L118,60 A58,58 0 0,1 60,118 Z" fill="#66bb6a"/>
-              <!-- Protein 25% -->
-              <path d="M60,60 L60,118 A58,58 0 0,1 2,60 Z" fill="#ef9a9a"/>
-              <!-- Fruit 1 serving -->
-              <path d="M60,60 L2,60 A58,58 0 0,1 60,2 Z" fill="#fff176"/>
-              <circle cx="60" cy="60" r="18" fill="white" stroke="#c8e6c9" stroke-width="1.5"/>
-              <text x="60" y="56" text-anchor="middle" font-size="6" fill="#2e7d32" font-weight="bold">Healthy</text>
-              <text x="60" y="65" text-anchor="middle" font-size="6" fill="#2e7d32" font-weight="bold">Plate</text>
-            </svg>
-          </div>
-          <ul class="nd-plate-legend">
-            <li class="nd-plate-legend-item">
-              <span class="nd-plate-dot" style="background:#a5d6a7;"></span>
-              <span>Rice / Whole Grains</span>
-              <span class="nd-plate-pct">50%</span>
-            </li>
-            <li class="nd-plate-legend-item">
-              <span class="nd-plate-dot" style="background:#66bb6a;"></span>
-              <span>Vegetables</span>
-              <span class="nd-plate-pct">25%</span>
-            </li>
-            <li class="nd-plate-legend-item">
-              <span class="nd-plate-dot" style="background:#ef9a9a;"></span>
-              <span>Protein</span>
-              <span class="nd-plate-pct">25%</span>
-            </li>
-            <li class="nd-plate-legend-item">
-              <span class="nd-plate-dot" style="background:#fff176;border:1px solid #ddd;"></span>
-              <span>1 Serving Fruit</span>
-              <span class="nd-plate-pct">—</span>
-            </li>
-            <li class="nd-plate-legend-item">
-              <span class="nd-plate-dot" style="background:#90caf9;"></span>
-              <span>Drink — Plenty of Water</span>
-              <span class="nd-plate-pct">—</span>
-            </li>
+          <div class="nd-rule-dash-count"><span id="nd-nutrition-count">0</span> Active rules</div>
+          <ul class="nd-rule-dash-list" id="nd-nutrition-list">
+            <li class="nd-rule-dash-item">Loading…</li>
           </ul>
-          <p class="mt-3 mb-0" style="font-size:0.72rem;color:#607d6b;">
-            Eat a variety of foods and drink plenty of water every day.
-          </p>
+          <button class="nd-btn nd-btn-outline nd-btn-sm nd-rule-dash-btn" onclick="showSection('rules')" style="width:100%;justify-content:center;">
+            <i class="fas fa-gear"></i> Manage Rules
+          </button>
         </div>
 
-        <!-- PANEL 2: Today's Recommendation -->
-        <div class="nd-panel">
-          <div class="nd-panel-header">
-            <div>
-              <h5 class="nd-panel-title"><i class="fas fa-star" style="color:#ffd600;"></i> Today's Recommendation</h5>
+        <!-- Dietary Rules -->
+        <div class="nd-rule-dash-card" data-category="dietary">
+          <div class="nd-rule-dash-header">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="nd-rule-dash-icon orange"><i class="fas fa-shield-halved"></i></div>
+              <div>
+                <h5 class="nd-rule-dash-title">Dietary Rules</h5>
+                <span class="nd-rule-dash-badge orange">Active</span>
+              </div>
             </div>
-            <span class="nd-panel-action" onclick="showSection('foods')">View All</span>
+            <span class="nd-rule-dash-view" onclick="showSection('rules')">View All</span>
           </div>
-          <div id="nd-recommendation-wrap">
-            <div class="nd-loading"><i class="fas fa-spinner fa-spin me-1"></i> Loading…</div>
-          </div>
+          <div class="nd-rule-dash-count"><span id="nd-dietary-count">0</span> Active rules</div>
+          <ul class="nd-rule-dash-list" id="nd-dietary-list">
+            <li class="nd-rule-dash-item">Loading…</li>
+          </ul>
+          <button class="nd-btn nd-btn-outline nd-btn-sm nd-rule-dash-btn" onclick="showSection('rules')" style="width:100%;justify-content:center;">
+            <i class="fas fa-gear"></i> Manage Rules
+          </button>
         </div>
 
-        <!-- PANEL 3: Nutrition Progress -->
-        <div class="nd-panel">
-          <div class="nd-panel-header">
-            <div>
-              <h5 class="nd-panel-title"><i class="fas fa-chart-line" style="color:#1e88e5;"></i> Nutrition Progress</h5>
+        <!-- Health Rules -->
+        <div class="nd-rule-dash-card" data-category="health">
+          <div class="nd-rule-dash-header">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="nd-rule-dash-icon purple"><i class="fas fa-shield-halved"></i></div>
+              <div>
+                <h5 class="nd-rule-dash-title">Health Rules</h5>
+                <span class="nd-rule-dash-badge purple">Active</span>
+              </div>
             </div>
-            <select style="font-size:0.72rem;border:1px solid #dcedc8;border-radius:6px;padding:2px 6px;color:#607d6b;background:#fff;outline:none;">
-              <option>This Week ▾</option>
-            </select>
+            <span class="nd-rule-dash-view" onclick="showSection('rules')">View All</span>
           </div>
-          <div class="nd-nutrition-row">
-            <div class="nd-nutrition-item">
-              <div class="nd-nutrition-label">
-                <span class="nd-nutrition-icon fire"><i class="fas fa-fire"></i></span> Calories
-              </div>
-              <div class="nd-nutrition-stat"><strong>1,450</strong> / 2,000 kcal</div>
-            </div>
-            <div class="nd-progress-track mb-2"><div class="nd-progress-fill green" style="width:72%"></div></div>
-            <div class="nd-nutrition-pct" style="text-align:right;margin-top:-6px;">72%</div>
-
-            <div class="nd-nutrition-item mt-2">
-              <div class="nd-nutrition-label">
-                <span class="nd-nutrition-icon prot"><i class="fas fa-dumbbell"></i></span> Protein
-              </div>
-              <div class="nd-nutrition-stat"><strong>65</strong> / 80 g</div>
-            </div>
-            <div class="nd-progress-track mb-2"><div class="nd-progress-fill blue" style="width:81%"></div></div>
-            <div class="nd-nutrition-pct" style="text-align:right;margin-top:-6px;">81%</div>
-
-            <div class="nd-nutrition-item mt-2">
-              <div class="nd-nutrition-label">
-                <span class="nd-nutrition-icon veg"><i class="fas fa-leaf"></i></span> Vegetables
-              </div>
-              <div class="nd-nutrition-stat"><strong>4</strong> / 5 servings</div>
-            </div>
-            <div class="nd-progress-track mb-2"><div class="nd-progress-fill green" style="width:80%"></div></div>
-            <div class="nd-nutrition-pct" style="text-align:right;margin-top:-6px;">80%</div>
-
-            <div class="nd-nutrition-item mt-2">
-              <div class="nd-nutrition-label">
-                <span class="nd-nutrition-icon fruit"><i class="fas fa-apple-alt"></i></span> Fruit
-              </div>
-              <div class="nd-nutrition-stat"><strong>3</strong> / 5 servings</div>
-            </div>
-            <div class="nd-progress-track mb-2"><div class="nd-progress-fill pink" style="width:60%"></div></div>
-            <div class="nd-nutrition-pct" style="text-align:right;margin-top:-6px;">60%</div>
-
-            <div class="nd-nutrition-item mt-2">
-              <div class="nd-nutrition-label">
-                <span class="nd-nutrition-icon water"><i class="fas fa-droplet"></i></span> Water
-              </div>
-              <div class="nd-nutrition-stat"><strong>28</strong> / 35 glasses</div>
-            </div>
-            <div class="nd-progress-track mb-2"><div class="nd-progress-fill teal" style="width:80%"></div></div>
-            <div class="nd-nutrition-pct" style="text-align:right;margin-top:-6px;">80%</div>
-          </div>
+          <div class="nd-rule-dash-count"><span id="nd-health-count">0</span> Active rules</div>
+          <ul class="nd-rule-dash-list" id="nd-health-list">
+            <li class="nd-rule-dash-item">Loading…</li>
+          </ul>
+          <button class="nd-btn nd-btn-outline nd-btn-sm nd-rule-dash-btn" onclick="showSection('rules')" style="width:100%;justify-content:center;">
+            <i class="fas fa-gear"></i> Manage Rules
+          </button>
         </div>
-      </div><!-- /nd-panels -->
+      </div>
 
     </div><!-- /section-overview -->
 
@@ -869,7 +805,6 @@ function loadFoods() {
       const el = document.getElementById('nd-total-foods');
       if (el) el.textContent = foodsCache.length;
       renderFoodGrid(foodsCache);
-      renderRecommendation();
     })
     .catch(() => {
       const g = document.getElementById('nd-food-grid');
@@ -973,44 +908,51 @@ function renderCookedGrid(foods) {
   }).join('');
   renderPagination(pag, total, currentCookedPage, p => { currentCookedPage = p; renderCookedGrid(foods); });
 }
-
 // ═══════════════════════════════════════════════════════
-//  TODAY'S RECOMMENDATION
+//  DASHBOARD RULE CARDS
 // ═══════════════════════════════════════════════════════
-function renderRecommendation() {
-  const wrap = document.getElementById('nd-recommendation-wrap');
-  if (!wrap) return;
-  const cooked = cookedFoodsCache.length ? cookedFoodsCache : [];
-  const food = cooked.length ? cooked[Math.floor(Math.random() * Math.min(cooked.length, 5))] :
-               (foodsCache.length ? foodsCache[0] : null);
-  if (!food) { wrap.innerHTML = '<div class="nd-empty"><i class="fas fa-utensils"></i><p>No recommendations yet.</p></div>'; return; }
-  const src = food.photo ? (food.photo.startsWith('http') ? food.photo : '/' + food.photo) : '';
-  const img = src ? `<img src="${src}" class="nd-recommendation-img" alt="${food.name}" onerror="this.style.display='none';">`
-                  : `<div style="width:100%;height:140px;background:#e8f5e9;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:2rem;color:#43a047;"><i class="fas fa-utensils"></i></div>`;
-  wrap.innerHTML = `
-    ${img}
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
-      <h6 class="nd-recommendation-title">${food.name}</h6>
-      <span class="nd-badge-match">95% Match</span>
-    </div>
-    <div class="nd-stars">${'★'.repeat(5)}</div>
-    <p class="nd-recommendation-desc mt-1">${food.description || 'A nutritious and delicious dish.'}</p>
-    <div class="nd-recommendation-macros">
-      <div class="nd-macro-item"><div class="nd-macro-value">${food.calories ?? '—'}</div><div class="nd-macro-label">kcal</div></div>
-      <div class="nd-macro-item"><div class="nd-macro-value">${food.protein ?? '—'}g</div><div class="nd-macro-label">Protein</div></div>
-      <div class="nd-macro-item"><div class="nd-macro-value">${food.sugar ?? '—'}g</div><div class="nd-macro-label">Carbs</div></div>
-      <div class="nd-macro-item"><div class="nd-macro-value">${food.fat ?? '—'}g</div><div class="nd-macro-label">Fat</div></div>
-    </div>
-    <div style="font-size:0.72rem;color:#607d6b;margin-bottom:8px;font-weight:700;">Complete your meal</div>
-    <div class="nd-meal-complete">
-      <div class="nd-meal-chip"><span class="nd-meal-chip-icon">🍌</span><span>Fruit<br><small>Banana</small></span></div>
-      <div class="nd-meal-chip"><span class="nd-meal-chip-icon">💧</span><span>Water<br><small>2 Glasses</small></span></div>
-    </div>
-    <button class="nd-recommendation-cta" onclick="showSection('cooked')">View Details</button>`;
+function categorizeRule(rule) {
+  const text = ((rule.name || '') + ' ' + (rule.description || '') + ' ' + (rule.conditions || []).join(' ')).toLowerCase();
+  if (/vegetarian|vegan|gluten.free|dairy.free|pork|halal|kosher|meatless/.test(text)) return 'dietary';
+  if (/diabetes|hypertension|blood.pressure|cholesterol|heart|weight.management|obesity|cardio/.test(text)) return 'health';
+  if (/protein|carb|fiber|sodium|calorie|fat|sugar|micronutrient|vitamin|mineral|water|hydration/.test(text)) return 'nutrition';
+  return null;
 }
-</script>
 
-<script>
+function renderDashboardRuleCards() {
+  const categories = {
+    nutrition: { count: 0, rules: [], elCount: document.getElementById('nd-nutrition-count'), elList: document.getElementById('nd-nutrition-list'), icon: 'fa-circle-check', color: 'green' },
+    dietary: { count: 0, rules: [], elCount: document.getElementById('nd-dietary-count'), elList: document.getElementById('nd-dietary-list'), icon: 'fa-shield-halved', color: 'orange' },
+    health: { count: 0, rules: [], elCount: document.getElementById('nd-health-count'), elList: document.getElementById('nd-health-list'), icon: 'fa-shield-halved', color: 'purple' }
+  };
+
+  const activeRules = (sampleRules || []).filter(r => r.active);
+  activeRules.forEach(rule => {
+    const cat = categorizeRule(rule);
+    if (cat && categories[cat]) {
+      categories[cat].count++;
+      categories[cat].rules.push(rule);
+    }
+  });
+
+  Object.keys(categories).forEach(key => {
+    const cat = categories[key];
+    if (!cat.elCount || !cat.elList) return;
+    cat.elCount.textContent = cat.count;
+    const top = cat.rules.slice(0, 4);
+    if (!top.length) {
+      cat.elList.innerHTML = '<li class="nd-rule-dash-item">No active rules</li>';
+      return;
+    }
+    cat.elList.innerHTML = top.map(r => `
+      <li class="nd-rule-dash-item">
+        <i class="fas ${cat.icon}" style="color:var(--nd-${cat.color});"></i>
+        <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${r.name}">${r.name}</span>
+      </li>
+    `).join('');
+  });
+}
+
 // ═══════════════════════════════════════════════════════
 //  RULES
 // ═══════════════════════════════════════════════════════
@@ -1025,6 +967,7 @@ function loadRules(page = 1) {
       sampleRules = data.rules || [];
       if (statusEl) statusEl.textContent = `${sampleRules.length} rules loaded`;
       renderRules();
+      renderDashboardRuleCards();
     })
     .catch(() => { if (statusEl) statusEl.textContent = 'Failed to load rules'; });
 }
