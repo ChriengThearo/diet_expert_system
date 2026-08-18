@@ -363,8 +363,18 @@
                 {% for food in latest_plan_foods %}
                 <div style="background:#f9fdf9;border:1px solid #dcedc8;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:6px;transition:box-shadow 0.18s;" onmouseover="this.style.boxShadow='0 4px 16px rgba(46,125,50,0.12)'" onmouseout="this.style.boxShadow='none'">
                   <div style="display:flex;align-items:center;gap:10px;">
-                    <div style="width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#e8f5e9,#c8e6c9);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <div style="width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,#e8f5e9,#c8e6c9);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;">
+                      {% if food.photo %}
+                      <img src="{{ url_for('main.images', filename=food.photo|replace('images/','')) }}"
+                           alt="{{ food.name }}"
+                           style="width:42px;height:42px;object-fit:cover;border-radius:10px;"
+                           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                      <span style="display:none;width:100%;height:100%;align-items:center;justify-content:center;">
+                        <i class="fas fa-leaf" style="color:#2e7d32;font-size:1rem;"></i>
+                      </span>
+                      {% else %}
                       <i class="fas fa-leaf" style="color:#2e7d32;font-size:1rem;"></i>
+                      {% endif %}
                     </div>
                     <div>
                       <div style="font-weight:700;font-size:0.85rem;color:#1a2e1a;line-height:1.3;">{{ food.name }}</div>
@@ -417,8 +427,18 @@
               <div style="display:flex;flex-direction:column;gap:8px;">
                 {% for food in latest_plan_avoid_foods %}
                 <div style="background:#fff5f5;border:1px solid #ffcdd2;border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:12px;">
-                  <div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#ffebee,#ffcdd2);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                  <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#ffebee,#ffcdd2);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;">
+                    {% if food.photo %}
+                    <img src="{{ url_for('main.images', filename=food.photo|replace('images/','')) }}"
+                         alt="{{ food.name }}"
+                         style="width:36px;height:36px;object-fit:cover;border-radius:8px;"
+                         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                    <span style="display:none;width:100%;height:100%;align-items:center;justify-content:center;">
+                      <i class="fas fa-ban" style="color:#e53935;font-size:0.85rem;"></i>
+                    </span>
+                    {% else %}
                     <i class="fas fa-ban" style="color:#e53935;font-size:0.85rem;"></i>
+                    {% endif %}
                   </div>
                   <div style="flex:1;min-width:0;">
                     <div style="font-weight:700;font-size:0.83rem;color:#1a2e1a;">{{ food.name }}</div>
