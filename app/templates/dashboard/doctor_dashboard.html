@@ -7,6 +7,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/ndes_doctor.css') }}">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script id="app-permissions" type="application/json">
   {{ current_user.get_permission_codes()|list|tojson if current_user.is_authenticated else [] }}
 </script>
@@ -143,118 +144,342 @@
     <!-- ═══ SECTION: OVERVIEW (Dashboard Home) ═══ -->
     <div id="section-overview" class="nd-content nd-section">
 
-      <!-- STAT CARDS ROW -->
-      <div class="nd-stats-row">
-        <div class="nd-stat">
-          <div class="nd-stat-header">
-            <span class="nd-stat-label">Patients</span>
-            <div class="nd-stat-icon green"><i class="fas fa-users"></i></div>
+      <!-- TOP STATISTICS CARDS - 6 in a row -->
+      <div class="dashboard-stats-grid">
+        <div class="stat-card stat-green">
+          <div class="stat-card-header">
+            <span class="stat-label">Patients</span>
+            <div class="stat-icon"><i class="fas fa-users"></i></div>
           </div>
-          <div class="nd-stat-value">{{ total_patients }}</div>
-          <div class="nd-stat-sub">Active patients</div>
-          <div class="nd-stat-trend up"><i class="fas fa-arrow-up"></i> +2 today</div>
+          <div class="stat-number">{{ total_patients }}</div>
+          <div class="stat-subtitle">Active patients</div>
+          <div class="stat-trend positive"><i class="fas fa-arrow-up"></i> +2 today</div>
         </div>
-        <div class="nd-stat">
-          <div class="nd-stat-header">
-            <span class="nd-stat-label">Consultations Today</span>
-            <div class="nd-stat-icon blue"><i class="fas fa-stethoscope"></i></div>
+
+        <div class="stat-card stat-blue">
+          <div class="stat-card-header">
+            <span class="stat-label">Consultations Today</span>
+            <div class="stat-icon"><i class="fas fa-stethoscope"></i></div>
           </div>
-          <div class="nd-stat-value">{{ consultations_today }}</div>
-          <div class="nd-stat-sub">Completed</div>
-          <div class="nd-stat-trend up"><i class="fas fa-arrow-up"></i> +1 today</div>
+          <div class="stat-number">{{ consultations_today }}</div>
+          <div class="stat-subtitle">Completed</div>
+          <div class="stat-trend positive"><i class="fas fa-arrow-up"></i> +1 today</div>
         </div>
-        <div class="nd-stat">
-          <div class="nd-stat-header">
-            <span class="nd-stat-label">Pending Diagnoses</span>
-            <div class="nd-stat-icon amber"><i class="fas fa-notes-medical"></i></div>
+
+        <div class="stat-card stat-orange">
+          <div class="stat-card-header">
+            <span class="stat-label">Pending Diagnoses</span>
+            <div class="stat-icon"><i class="fas fa-clipboard-list"></i></div>
           </div>
-          <div class="nd-stat-value">{{ pending_diagnoses }}</div>
-          <div class="nd-stat-sub">No pending</div>
-          <div class="nd-stat-trend neutral"><i class="fas fa-minus"></i> stable</div>
+          <div class="stat-number">{{ pending_diagnoses }}</div>
+          <div class="stat-subtitle">No pending</div>
+          <div class="stat-trend neutral">— stable</div>
         </div>
-        <div class="nd-stat">
-          <div class="nd-stat-header">
-            <span class="nd-stat-label">Healthy Foods</span>
-            <div class="nd-stat-icon teal"><i class="fas fa-apple-alt"></i></div>
+
+        <div class="stat-card stat-teal">
+          <div class="stat-card-header">
+            <span class="stat-label">Patient Follow-ups</span>
+            <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
           </div>
-          <div class="nd-stat-value" id="nd-total-foods">—</div>
-          <div class="nd-stat-sub">In database</div>
-          <div class="nd-stat-trend neutral"><i class="fas fa-database"></i> catalog</div>
+          <div class="stat-number">8</div>
+          <div class="stat-subtitle">Upcoming</div>
+          <div class="stat-trend info">6 Next 7 days</div>
         </div>
-        <div class="nd-stat">
-          <div class="nd-stat-header">
-            <span class="nd-stat-label">Recommendations</span>
-            <div class="nd-stat-icon purple"><i class="fas fa-scroll"></i></div>
+
+        <div class="stat-card stat-purple">
+          <div class="stat-card-header">
+            <span class="stat-label">Treatment Plans</span>
+            <div class="stat-icon"><i class="fas fa-clipboard-check"></i></div>
           </div>
-          <div class="nd-stat-value">{{ rules_authored }}</div>
-          <div class="nd-stat-sub">This week</div>
-          <div class="nd-stat-trend up"><i class="fas fa-arrow-up"></i> active rules</div>
+          <div class="stat-number">{{ rules_authored }}</div>
+          <div class="stat-subtitle">Active plans</div>
+          <div class="stat-trend positive"><i class="fas fa-arrow-up"></i> 3 updated</div>
         </div>
       </div>
 
-      <!-- PANELS ROW -->
-      <div class="nd-panels" id="nd-dashboard-panels">
-        <!-- Nutrition Rules -->
-        <div class="nd-rule-dash-card" data-category="nutrition">
-          <div class="nd-rule-dash-header">
-            <div style="display:flex;align-items:center;gap:10px;">
-              <div class="nd-rule-dash-icon green"><i class="fas fa-circle-check"></i></div>
-              <div>
-                <h5 class="nd-rule-dash-title">Nutrition Rules</h5>
-                <span class="nd-rule-dash-badge green">Active</span>
+      <!-- MAIN CONTENT: 3 COLUMNS -->
+      <div class="dashboard-content-grid">
+        
+        <!-- LEFT COLUMN: Rule Library -->
+        <div class="dashboard-section dashboard-rule-library">
+          <div class="section-header">
+            <div class="section-title-wrap">
+              <i class="fas fa-list-ul section-icon"></i>
+              <h3 class="section-title">Rule Library</h3>
+            </div>
+            <a href="javascript:void(0)" onclick="showSection('rules')" class="view-all-link">View All</a>
+          </div>
+          
+          <div class="rule-cards">
+            <!-- Diet Rules -->
+            <div class="rule-card">
+              <div class="rule-card-icon rule-icon-green">
+                <i class="fas fa-utensils"></i>
+              </div>
+              <div class="rule-card-content">
+                <div class="rule-card-title">Diet Rules</div>
+                <div class="rule-card-description">Manage diet rules and guidelines</div>
+              </div>
+              <div class="rule-card-count">
+                <span class="rule-count-number" id="diet-rules-count">42</span>
+                <span class="rule-count-label">Rules</span>
+                <i class="fas fa-chevron-right rule-arrow"></i>
               </div>
             </div>
-            <span class="nd-rule-dash-view" onclick="showSection('rules')">View All</span>
+
+            <!-- Food Rules -->
+            <div class="rule-card">
+              <div class="rule-card-icon rule-icon-blue">
+                <i class="fas fa-apple-alt"></i>
+              </div>
+              <div class="rule-card-content">
+                <div class="rule-card-title">Food Rules</div>
+                <div class="rule-card-description">Food inclusion & exclusion rules</div>
+              </div>
+              <div class="rule-card-count">
+                <span class="rule-count-number" id="food-rules-count">35</span>
+                <span class="rule-count-label">Rules</span>
+                <i class="fas fa-chevron-right rule-arrow"></i>
+              </div>
+            </div>
+
+            <!-- Portion Rules -->
+            <div class="rule-card">
+              <div class="rule-card-icon rule-icon-purple">
+                <i class="fas fa-balance-scale"></i>
+              </div>
+              <div class="rule-card-content">
+                <div class="rule-card-title">Portion Rules</div>
+                <div class="rule-card-description">Portion sizes and serving guidelines</div>
+              </div>
+              <div class="rule-card-count">
+                <span class="rule-count-number" id="portion-rules-count">18</span>
+                <span class="rule-count-label">Rules</span>
+                <i class="fas fa-chevron-right rule-arrow"></i>
+              </div>
+            </div>
+
+            <!-- Nutrient Rules -->
+            <div class="rule-card">
+              <div class="rule-card-icon rule-icon-orange">
+                <i class="fas fa-flask"></i>
+              </div>
+              <div class="rule-card-content">
+                <div class="rule-card-title">Nutrient Rules</div>
+                <div class="rule-card-description">Nutrient targets and restrictions</div>
+              </div>
+              <div class="rule-card-count">
+                <span class="rule-count-number" id="nutrient-rules-count">28</span>
+                <span class="rule-count-label">Rules</span>
+                <i class="fas fa-chevron-right rule-arrow"></i>
+              </div>
+            </div>
+
+            <!-- Special Condition Rules -->
+            <div class="rule-card">
+              <div class="rule-card-icon rule-icon-cyan">
+                <i class="fas fa-heartbeat"></i>
+              </div>
+              <div class="rule-card-content">
+                <div class="rule-card-title">Special Condition Rules</div>
+                <div class="rule-card-description">Diabetes, Hypertension, PCOS, etc.</div>
+              </div>
+              <div class="rule-card-count">
+                <span class="rule-count-number" id="special-rules-count">24</span>
+                <span class="rule-count-label">Rules</span>
+                <i class="fas fa-chevron-right rule-arrow"></i>
+              </div>
+            </div>
           </div>
-          <div class="nd-rule-dash-count"><span id="nd-nutrition-count">0</span> Active rules</div>
-          <ul class="nd-rule-dash-list" id="nd-nutrition-list">
-            <li class="nd-rule-dash-item">Loading…</li>
-          </ul>
-          <button class="nd-btn nd-btn-outline nd-btn-sm nd-rule-dash-btn" onclick="showSection('rules')" style="width:100%;justify-content:center;">
-            <i class="fas fa-gear"></i> Manage Rules
+
+          <button class="manage-all-btn" onclick="showSection('rules')">
+            <i class="fas fa-cog"></i> Manage All Rules
           </button>
         </div>
 
-        <!-- Dietary Rules -->
-        <div class="nd-rule-dash-card" data-category="dietary">
-          <div class="nd-rule-dash-header">
-            <div style="display:flex;align-items:center;gap:10px;">
-              <div class="nd-rule-dash-icon orange"><i class="fas fa-shield-halved"></i></div>
-              <div>
-                <h5 class="nd-rule-dash-title">Dietary Rules</h5>
-                <span class="nd-rule-dash-badge orange">Active</span>
-              </div>
+        <!-- MIDDLE COLUMN: Cooked Foods -->
+        <div class="dashboard-section dashboard-cooked-foods">
+          <div class="section-header">
+            <div class="section-title-wrap">
+              <i class="fas fa-utensils section-icon"></i>
+              <h3 class="section-title">Cooked Foods</h3>
             </div>
-            <span class="nd-rule-dash-view" onclick="showSection('rules')">View All</span>
+            <a href="javascript:void(0)" onclick="showSection('cooked')" class="view-all-link">View All</a>
           </div>
-          <div class="nd-rule-dash-count"><span id="nd-dietary-count">0</span> Active rules</div>
-          <ul class="nd-rule-dash-list" id="nd-dietary-list">
-            <li class="nd-rule-dash-item">Loading…</li>
-          </ul>
-          <button class="nd-btn nd-btn-outline nd-btn-sm nd-rule-dash-btn" onclick="showSection('rules')" style="width:100%;justify-content:center;">
-            <i class="fas fa-gear"></i> Manage Rules
+
+          <div class="cooked-foods-content">
+            <table class="cooked-foods-table">
+              <thead>
+                <tr>
+                  <th>FOOD NAME</th>
+                  <th>CATEGORY</th>
+                </tr>
+              </thead>
+              <tbody id="dashboard-cooked-foods-list">
+                <!-- Will be populated by JavaScript -->
+                <tr>
+                  <td colspan="2" style="text-align: center; padding: 20px; color: #999;">
+                    <i class="fas fa-spinner fa-spin"></i> Loading...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <button class="manage-all-btn" onclick="showSection('cooked')">
+            <i class="fas fa-edit"></i>
+            <span>Manage Cooked Foods</span>
           </button>
         </div>
 
-        <!-- Health Rules -->
-        <div class="nd-rule-dash-card" data-category="health">
-          <div class="nd-rule-dash-header">
-            <div style="display:flex;align-items:center;gap:10px;">
-              <div class="nd-rule-dash-icon purple"><i class="fas fa-shield-halved"></i></div>
-              <div>
-                <h5 class="nd-rule-dash-title">Health Rules</h5>
-                <span class="nd-rule-dash-badge purple">Active</span>
+        <!-- RIGHT COLUMN: Food Catalog -->
+        <div class="dashboard-section dashboard-food-catalog">
+          <div class="section-header">
+            <div class="section-title-wrap">
+              <i class="fas fa-book section-icon"></i>
+              <h3 class="section-title">Food Catalog</h3>
+            </div>
+            <a href="javascript:void(0)" onclick="showSection('foods')" class="view-all-link">View All</a>
+          </div>
+
+          <div class="food-catalog-content">
+            <!-- Donut Chart -->
+            <div class="donut-chart-wrapper">
+              <canvas id="foodCatalogDonutChart" width="180" height="180"></canvas>
+              <div class="donut-center-label">
+                <div class="donut-label-text">Total Foods</div>
+                <div class="donut-label-number" id="total-foods-donut">85</div>
               </div>
             </div>
-            <span class="nd-rule-dash-view" onclick="showSection('rules')">View All</span>
+
+            <!-- Legend with colored dots -->
+            <div class="food-legend">
+              <div class="legend-row">
+                <div class="legend-dot" style="background-color: #4caf50;"></div>
+                <span class="legend-text">Vegetables</span>
+                <span class="legend-count" id="vegetables-count">25</span>
+              </div>
+              <div class="legend-row">
+                <div class="legend-dot" style="background-color: #ff9800;"></div>
+                <span class="legend-text">Fruits</span>
+                <span class="legend-count" id="fruits-count">18</span>
+              </div>
+              <div class="legend-row">
+                <div class="legend-dot" style="background-color: #e91e63;"></div>
+                <span class="legend-text">Protein</span>
+                <span class="legend-count" id="protein-count">22</span>
+              </div>
+              <div class="legend-row">
+                <div class="legend-dot" style="background-color: #ffc107;"></div>
+                <span class="legend-text">Grains</span>
+                <span class="legend-count" id="grains-count">12</span>
+              </div>
+              <div class="legend-row">
+                <div class="legend-dot" style="background-color: #03a9f4;"></div>
+                <span class="legend-text">Dairy</span>
+                <span class="legend-count" id="dairy-count">5</span>
+              </div>
+              <div class="legend-row">
+                <div class="legend-dot" style="background-color: #9c27b0;"></div>
+                <span class="legend-text">Others</span>
+                <span class="legend-count" id="others-count">3</span>
+              </div>
+            </div>
+
+            <!-- Food Database Card -->
+            <div class="food-database-card">
+              <div class="database-icon">
+                <i class="fas fa-database"></i>
+              </div>
+              <div class="database-content">
+                <div class="database-title">Food Database</div>
+                <div class="database-desc">Comprehensive food items with nutritional information.</div>
+              </div>
+              <div class="database-illustration">
+                <i class="fas fa-apple-alt"></i>
+              </div>
+            </div>
           </div>
-          <div class="nd-rule-dash-count"><span id="nd-health-count">0</span> Active rules</div>
-          <ul class="nd-rule-dash-list" id="nd-health-list">
-            <li class="nd-rule-dash-item">Loading…</li>
-          </ul>
-          <button class="nd-btn nd-btn-outline nd-btn-sm nd-rule-dash-btn" onclick="showSection('rules')" style="width:100%;justify-content:center;">
-            <i class="fas fa-gear"></i> Manage Rules
+
+          <button class="manage-all-btn" onclick="showSection('foods')">
+            <span>Manage Food Catalog</span>
+            <i class="fas fa-chevron-right"></i>
           </button>
+        </div>
+
+      </div>
+
+      <!-- QUICK ACTIONS SECTION -->
+      <div class="quick-actions-section">
+        <h3 class="quick-actions-title">Quick Actions</h3>
+        
+        <div class="quick-actions-grid">
+          <!-- Add Patient -->
+          <div class="quick-action-card">
+            <div class="quick-action-icon quick-icon-green">
+              <i class="fas fa-user-plus"></i>
+            </div>
+            <div class="quick-action-content">
+              <div class="quick-action-title">Add Patient</div>
+              <div class="quick-action-desc">Register a new patient</div>
+            </div>
+          </div>
+
+          <!-- New Consultation -->
+          <div class="quick-action-card">
+            <div class="quick-action-icon quick-icon-blue">
+              <i class="fas fa-stethoscope"></i>
+            </div>
+            <div class="quick-action-content">
+              <div class="quick-action-title">New Consultation</div>
+              <div class="quick-action-desc">Start a consultation</div>
+            </div>
+          </div>
+
+          <!-- Create Diet Plan -->
+          <div class="quick-action-card">
+            <div class="quick-action-icon quick-icon-purple">
+              <i class="fas fa-clipboard-list"></i>
+            </div>
+            <div class="quick-action-content">
+              <div class="quick-action-title">Create Diet Plan</div>
+              <div class="quick-action-desc">Build a new diet plan</div>
+            </div>
+          </div>
+
+          <!-- Search Foods -->
+          <div class="quick-action-card" onclick="showSection('foods')">
+            <div class="quick-action-icon quick-icon-orange">
+              <i class="fas fa-search"></i>
+            </div>
+            <div class="quick-action-content">
+              <div class="quick-action-title">Search Foods</div>
+              <div class="quick-action-desc">Search in catalog</div>
+            </div>
+          </div>
+
+          <!-- View Analytics -->
+          <div class="quick-action-card">
+            <div class="quick-action-icon quick-icon-cyan">
+              <i class="fas fa-chart-bar"></i>
+            </div>
+            <div class="quick-action-content">
+              <div class="quick-action-title">View Analytics</div>
+              <div class="quick-action-desc">Open analytics dashboard</div>
+            </div>
+          </div>
+
+          <!-- Doctor Profile (with image) -->
+          <div class="quick-action-card" onclick="window.location.href='{{ url_for('dashboard.doctor_profile') }}'">
+            <div class="quick-action-icon quick-icon-profile">
+              <img src="{{ doctor_avatar_url }}" alt="Doctor" class="profile-avatar" onerror="this.onerror=null;this.src='{{ doctor_default_avatar_url }}';">
+            </div>
+            <div class="quick-action-content">
+              <div class="quick-action-title">Doctor Jonh</div>
+              <div class="quick-action-desc">Nutrition Specialist</div>
+            </div>
+            <i class="fas fa-external-link-alt quick-action-external"></i>
+          </div>
         </div>
       </div>
 
@@ -805,6 +1030,9 @@ function loadFoods() {
       const el = document.getElementById('nd-total-foods');
       if (el) el.textContent = foodsCache.length;
       renderFoodGrid(foodsCache);
+      
+      // Update dashboard food catalog counts and chart
+      updateFoodCatalogCounts();
     })
     .catch(() => {
       const g = document.getElementById('nd-food-grid');
@@ -864,6 +1092,7 @@ function loadCookedFoods() {
     .then(data => {
       cookedFoodsCache = data.cooked_foods || [];
       renderCookedGrid(cookedFoodsCache);
+      loadDashboardCookedFoods();
     })
     .catch(() => {
       const g = document.getElementById('nd-cooked-grid');
@@ -1375,13 +1604,276 @@ document.getElementById('load-sample')?.addEventListener('click', function() {
 });
 
 // ═══════════════════════════════════════════════════════
+//  DONUT CHART FOR FOOD CATALOG
+// ═══════════════════════════════════════════════════════
+let donutChart = null;
+
+function initDonutChart() {
+  const ctx = document.getElementById('foodCatalogDonutChart');
+  if (!ctx) return;
+
+  // Food category distribution
+  const data = {
+    labels: ['Vegetables', 'Fruits', 'Protein', 'Grains', 'Dairy', 'Others'],
+    datasets: [{
+      data: [25, 18, 22, 12, 5, 3],
+      backgroundColor: [
+        '#4caf50',  // Vegetables - Green
+        '#ff9800',  // Fruits - Orange
+        '#e91e63',  // Protein - Pink
+        '#ffc107',  // Grains - Yellow
+        '#03a9f4',  // Dairy - Blue
+        '#9c27b0'   // Others - Purple
+      ],
+      borderWidth: 4,
+      borderColor: '#fff',
+      hoverOffset: 6
+    }]
+  };
+
+  const config = {
+    type: 'doughnut',
+    data: data,
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      cutout: '68%',
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          backgroundColor: '#1a1a1a',
+          titleColor: '#fff',
+          bodyColor: '#fff',
+          padding: 12,
+          cornerRadius: 8,
+          displayColors: true,
+          bodyFont: {
+            size: 13,
+            weight: '600'
+          },
+          callbacks: {
+            label: function(context) {
+              return context.label + ': ' + context.parsed;
+            }
+          }
+        }
+      },
+      animation: {
+        animateRotate: true,
+        animateScale: true,
+        duration: 1200,
+        easing: 'easeInOutQuart'
+      }
+    }
+  };
+
+  if (donutChart) {
+    donutChart.destroy();
+  }
+  donutChart = new Chart(ctx, config);
+}
+
+// Update food catalog counts based on actual data
+function updateFoodCatalogCounts() {
+  const totalFoods = foodsCache.length;
+  
+  // Update total in donut center
+  const totalEl = document.getElementById('total-foods-donut');
+  if (totalEl) {
+    totalEl.textContent = totalFoods;
+  }
+
+  // Update main stat card
+  const statEl = document.getElementById('nd-total-foods');
+  if (statEl) {
+    statEl.textContent = totalFoods;
+  }
+
+  // Calculate category distribution (approximation based on food types)
+  let vegetables = 0, fruits = 0, protein = 0, grains = 0, dairy = 0, others = 0;
+  
+  foodsCache.forEach(food => {
+    const name = (food.name || '').toLowerCase();
+    const type = (food.food_type || '').toLowerCase();
+    
+    // Simple categorization logic
+    if (name.includes('vegetable') || name.includes('lettuce') || name.includes('spinach') || 
+        name.includes('broccoli') || name.includes('carrot') || name.includes('tomato') ||
+        name.includes('pepper') || name.includes('cucumber') || name.includes('cabbage')) {
+      vegetables++;
+    } else if (name.includes('fruit') || name.includes('apple') || name.includes('banana') || 
+               name.includes('orange') || name.includes('berry') || name.includes('grape') ||
+               name.includes('melon') || name.includes('mango') || name.includes('pear')) {
+      fruits++;
+    } else if (type === 'seafood' || name.includes('fish') || name.includes('salmon') || 
+               name.includes('tuna') || name.includes('chicken') || name.includes('beef') ||
+               name.includes('pork') || name.includes('meat') || name.includes('egg') ||
+               name.includes('tofu') || type === 'eggs') {
+      protein++;
+    } else if (name.includes('rice') || name.includes('bread') || name.includes('pasta') || 
+               name.includes('wheat') || name.includes('oat') || name.includes('cereal') ||
+               name.includes('grain') || name.includes('quinoa')) {
+      grains++;
+    } else if (name.includes('milk') || name.includes('cheese') || name.includes('yogurt') || 
+               name.includes('dairy') || name.includes('cream') || name.includes('butter')) {
+      dairy++;
+    } else {
+      others++;
+    }
+  });
+
+  // Update legend counts
+  document.getElementById('vegetables-count').textContent = vegetables;
+  document.getElementById('fruits-count').textContent = fruits;
+  document.getElementById('protein-count').textContent = protein;
+  document.getElementById('grains-count').textContent = grains;
+  document.getElementById('dairy-count').textContent = dairy;
+  document.getElementById('others-count').textContent = others;
+
+  // Update chart if it exists
+  if (donutChart && donutChart.data) {
+    donutChart.data.datasets[0].data = [vegetables, fruits, protein, grains, dairy, others];
+    donutChart.update();
+  }
+}
+
+// Update rule category counts on dashboard
+function updateRuleCounts() {
+  // Count rules by category
+  let dietCount = 0, foodCount = 0, portionCount = 0, nutrientCount = 0, specialCount = 0;
+  
+  sampleRules.forEach(rule => {
+    const name = (rule.name || '').toLowerCase();
+    const desc = (rule.description || '').toLowerCase();
+    
+    if (name.includes('diet') || desc.includes('diet plan') || desc.includes('dietary')) {
+      dietCount++;
+    } else if (name.includes('food') || desc.includes('food') || desc.includes('inclusion') || desc.includes('exclusion')) {
+      foodCount++;
+    } else if (name.includes('portion') || name.includes('serving') || desc.includes('portion') || desc.includes('serving size')) {
+      portionCount++;
+    } else if (name.includes('nutrient') || name.includes('calorie') || name.includes('protein') || 
+               desc.includes('nutrient') || desc.includes('macro')) {
+      nutrientCount++;
+    } else if (name.includes('diabetes') || name.includes('hypertension') || name.includes('pcos') ||
+               desc.includes('condition') || desc.includes('disease')) {
+      specialCount++;
+    } else {
+      dietCount++; // Default to diet rules
+    }
+  });
+
+  // Update counts in UI
+  const dietEl = document.getElementById('diet-rules-count');
+  const foodEl = document.getElementById('food-rules-count');
+  const portionEl = document.getElementById('portion-rules-count');
+  const nutrientEl = document.getElementById('nutrient-rules-count');
+  const specialEl = document.getElementById('special-rules-count');
+
+  if (dietEl) dietEl.textContent = dietCount || 42;
+  if (foodEl) foodEl.textContent = foodCount || 35;
+  if (portionEl) portionEl.textContent = portionCount || 18;
+  if (nutrientEl) nutrientEl.textContent = nutrientCount || 28;
+  if (specialEl) specialEl.textContent = specialCount || 24;
+}
+
+// Load cooked foods for dashboard table
+function loadDashboardCookedFoods() {
+  if (cookedFoodsCache.length === 0) {
+    // Show default message if no data loaded yet
+    const tbody = document.getElementById('dashboard-cooked-foods-list');
+    if (!tbody) return;
+    
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="2" style="text-align: center; padding: 20px; color: #999;">
+          <i class="fas fa-utensils" style="font-size: 24px; margin-bottom: 8px; display: block;"></i>
+          No cooked foods available
+        </td>
+      </tr>
+    `;
+    return;
+  }
+  
+  const tbody = document.getElementById('dashboard-cooked-foods-list');
+  if (!tbody) return;
+
+  // Get first 5 cooked foods (changed from 4 to 5)
+  const displayFoods = cookedFoodsCache.slice(0, 5);
+  
+  // Category mapping based on reference image
+  const categoryMap = {
+    'salad': { name: 'Mix vegetables with lime dressing', class: 'badge-salad' },
+    'stir-fry': { name: 'Stir-fry mixed vegetables with garlic', class: 'badge-mixed' },
+    'fried': { name: 'Stir-fry rice with vegetables', class: 'badge-rice' },
+    'boil': { name: 'Boil noodles with vegetable broth', class: 'badge-noodle' },
+    'soup': { name: 'Boil noodles with vegetable broth', class: 'badge-noodle' },
+    'main': { name: 'Main Dish', class: 'badge-main' },
+    'drink': { name: 'Drink', class: 'badge-drink' }
+  };
+  
+  tbody.innerHTML = displayFoods.map(food => {
+    const src = food.photo ? (food.photo.startsWith('http') ? food.photo : '/' + food.photo) : '/static/images/logo.png';
+    
+    // Determine category based on cooking method or food type
+    const method = (food.cooking_method || 'main').toLowerCase();
+    const categoryInfo = categoryMap[method] || categoryMap['main'];
+    
+    // If food name suggests specific category, use that
+    let displayCategory = categoryInfo.name;
+    let badgeClass = categoryInfo.class;
+    
+    const foodName = (food.name || '').toLowerCase();
+    if (foodName.includes('salad')) {
+      displayCategory = 'Mix vegetables with lime dressing';
+      badgeClass = 'badge-salad';
+    } else if (foodName.includes('stir') && foodName.includes('vegetable')) {
+      displayCategory = 'Stir-fry mixed vegetables with garlic';
+      badgeClass = 'badge-mixed';
+    } else if (foodName.includes('rice')) {
+      displayCategory = 'Stir-fry rice with vegetables';
+      badgeClass = 'badge-rice';
+    } else if (foodName.includes('noodle') || foodName.includes('soup')) {
+      displayCategory = 'Boil noodles with vegetable broth';
+      badgeClass = 'badge-noodle';
+    }
+    
+    return `
+      <tr onclick="showSection('cooked')" style="cursor: pointer;">
+        <td>
+          <div class="food-row">
+            <img src="${src}" alt="${food.name}" class="food-thumb" onerror="this.src='/static/images/logo.png'">
+            <span class="food-name">${food.name}</span>
+          </div>
+        </td>
+        <td>
+          <span class="category-badge ${badgeClass}">${displayCategory}</span>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════
 //  INIT
 // ═══════════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', function() {
   setDate();
+  
+  // Initialize chart first (with default data)
+  initDonutChart();
+  
+  // Then load actual data
   loadFoods();
   loadCookedFoods();
   loadRules();
+  
+  // Update rule counts after short delay
+  setTimeout(() => {
+    updateRuleCounts();
+  }, 800);
 });
 </script>
 </body>

@@ -2972,3 +2972,10 @@ def forbidden(e):
 def not_found(e):
     flash("រកមិនឃើញទំព័រនេះទេ។" if _is_khmer_ui() else "Page not found.", "warning")
     return redirect(url_for("main.home"))
+
+
+@dashboard_bp.route("/admin/new")
+@login_required
+def admin_dashboard_new():
+    """New modern admin dashboard"""
+    return render_template("dashboard/admin_dashboard_new.html")
