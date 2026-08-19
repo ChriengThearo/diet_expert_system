@@ -8,19 +8,20 @@ body {
   min-height: 100vh;
 }
 
-/* Enhanced Layout */
+/* Enhanced Layout - FULL SCREEN */
 .admin-layout {
   display: flex;
   min-height: 100vh;
+  flex-direction: column;
 }
 
-/* PREMIUM SIDEBAR */
+/* PREMIUM SIDEBAR - HIDDEN FOR FULL SCREEN */
 .admin-sidebar {
+  display: none;
   width: 280px;
   background: linear-gradient(180deg, #ffffff 0%, #f8f9fb 100%);
   border-right: 1px solid rgba(0, 0, 0, 0.06);
   box-shadow: 4px 0 24px rgba(0, 0, 0, 0.04);
-  display: flex;
   flex-direction: column;
   position: fixed;
   left: 0;
@@ -202,20 +203,21 @@ body {
   transform: translateX(2px);
 }
 
-/* Premium Main Wrapper */
+/* Premium Main Wrapper - FULL SCREEN */
 .admin-main-wrapper {
   flex: 1;
-  margin-left: 280px;
+  margin-left: 0;
+  width: 100%;
   display: flex;
   flex-direction: column;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* PREMIUM TOPBAR */
+/* PREMIUM TOPBAR - ENHANCED FOR FULL SCREEN */
 .admin-topbar {
   background: #ffffff;
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-  padding: 24px 32px;
+  padding: 28px 48px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -224,20 +226,27 @@ body {
   top: 0;
   z-index: 999;
   backdrop-filter: blur(20px);
+  width: 100%;
+}
+
+.admin-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
 .admin-topbar-left h1 {
-  font-size: 26px;
+  font-size: 32px;
   font-weight: 900;
-  background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 100%);
+  background: linear-gradient(135deg, #1a1a1a 0%, #4caf50 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin: 0 0 6px;
-  letter-spacing: -0.5px;
+  letter-spacing: -1px;
 }
 
 .admin-topbar-left p {
-  font-size: 14px;
+  font-size: 15px;
   color: #757575;
   margin: 0;
   font-weight: 500;
@@ -372,14 +381,21 @@ body {
   font-weight: 500;
 }
 
-/* PREMIUM STATISTICS CARDS */
+/* PREMIUM STATISTICS CARDS - FULL WIDTH */
 .dashboard-stats-grid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+  max-width: 100%;
 }
 
-@media (max-width: 1600px) {
+@media (min-width: 1200px) {
+  .dashboard-stats-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+@media (max-width: 1400px) {
   .dashboard-stats-grid {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -628,17 +644,25 @@ body {
   box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
 }
 
-/* PREMIUM CONTENT GRID */
+/* PREMIUM CONTENT GRID - FULL WIDTH */
 .dashboard-content-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  gap: 28px;
+  max-width: 100%;
 }
 
 @media (max-width: 1400px) {
   .dashboard-content-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* Main Content Padding - Increased for Full Screen */
+.admin-main-content {
+  padding: 40px 48px;
+  max-width: 100%;
+  width: 100%;
 }
 
 /* Premium Health Cards */
@@ -1081,3 +1105,189 @@ html {
 .dashboard-stats-grid > *:nth-child(4) { animation-delay: 0.2s; }
 .dashboard-stats-grid > *:nth-child(5) { animation-delay: 0.25s; }
 .dashboard-stats-grid > *:nth-child(6) { animation-delay: 0.3s; }
+
+
+/* Topbar Logo - Since sidebar is hidden */
+.admin-topbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(76, 175, 80, 0.3);
+  margin-right: 32px;
+}
+
+.admin-topbar-logo img {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: white;
+  padding: 4px;
+}
+
+.admin-topbar-logo-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-topbar-logo-title {
+  font-size: 16px;
+  font-weight: 900;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.3px;
+}
+
+.admin-topbar-logo-subtitle {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+/* Full Screen Navigation Menu in Topbar */
+.admin-topbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  margin-right: 32px;
+}
+
+.topbar-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  color: #616161;
+  text-decoration: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+}
+
+.topbar-nav-link:hover {
+  background: linear-gradient(135deg, #f5f5f5 0%, #eeeeee 100%);
+  color: #2e7d32;
+}
+
+.topbar-nav-link.active {
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+}
+
+.topbar-nav-link i {
+  font-size: 16px;
+}
+
+/* Dropdown Menu for More Options */
+.topbar-dropdown {
+  position: relative;
+}
+
+.topbar-dropdown-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  color: #616161;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.topbar-dropdown-toggle:hover {
+  background: linear-gradient(135deg, #f5f5f5 0%, #eeeeee 100%);
+  color: #2e7d32;
+}
+
+.topbar-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  padding: 8px;
+  min-width: 220px;
+  display: none;
+  z-index: 1000;
+}
+
+.topbar-dropdown:hover .topbar-dropdown-menu {
+  display: block;
+  animation: fadeInDown 0.3s ease-out;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.topbar-dropdown-menu a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  color: #616161;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.topbar-dropdown-menu a:hover {
+  background: linear-gradient(135deg, #f5f5f5 0%, #eeeeee 100%);
+  color: #2e7d32;
+}
+
+.topbar-dropdown-menu a i {
+  width: 20px;
+  text-align: center;
+  font-size: 16px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .topbar-nav-link span {
+    display: none;
+  }
+  
+  .topbar-nav-link {
+    padding: 10px 14px;
+  }
+  
+  .admin-topbar-logo-text {
+    display: none;
+  }
+}
+
+/* Clean full-screen layout */
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+.admin-main-wrapper {
+  min-height: 100vh;
+}

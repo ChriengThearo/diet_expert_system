@@ -779,10 +779,63 @@ body {
   <div class="admin-main-wrapper">
     <!-- Top Bar -->
     <div class="admin-topbar">
-      <div class="admin-topbar-left">
-        <h1>Admin Dashboard</h1>
-        <p>Welcome back, Admin 👋 Let's make today productive!</p>
+      <!-- Logo in Topbar -->
+      <div class="admin-topbar-logo">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Diet Expert">
+        <div class="admin-topbar-logo-text">
+          <div class="admin-topbar-logo-title">Diet Expert</div>
+          <div class="admin-topbar-logo-subtitle">Clinical Suite</div>
+        </div>
       </div>
+
+      <div class="admin-topbar-left">
+        <div>
+          <h1>Admin Dashboard</h1>
+          <p>Welcome back, Admin 👋 Let's make today productive!</p>
+        </div>
+      </div>
+
+      <!-- Navigation Links in Topbar -->
+      <nav class="admin-topbar-nav">
+        <a href="#" class="topbar-nav-link active">
+          <i class="fas fa-gauge-high"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="{{ url_for('tbl_users.index') }}" class="topbar-nav-link">
+          <i class="fas fa-users"></i>
+          <span>Users</span>
+        </a>
+        <a href="{{ url_for('dashboard.doctor_dashboard') }}" class="topbar-nav-link">
+          <i class="fas fa-user-md"></i>
+          <span>Doctors</span>
+        </a>
+        <div class="topbar-dropdown">
+          <button class="topbar-dropdown-toggle">
+            <i class="fas fa-ellipsis-h"></i>
+            <span>More</span>
+            <i class="fas fa-chevron-down" style="font-size: 11px;"></i>
+          </button>
+          <div class="topbar-dropdown-menu">
+            <a href="{{ url_for('tbl_permissions.index') }}">
+              <i class="fas fa-key"></i>
+              <span>Permissions</span>
+            </a>
+            <a href="{{ url_for('tbl_roles.index') }}">
+              <i class="fas fa-cog"></i>
+              <span>Settings</span>
+            </a>
+            <a href="{{ url_for('dashboard.doctor_dashboard') }}#foods">
+              <i class="fas fa-apple-alt"></i>
+              <span>Food Catalog</span>
+            </a>
+            <a href="{{ url_for('dashboard.doctor_dashboard') }}#rules">
+              <i class="fas fa-list"></i>
+              <span>Rule Library</span>
+            </a>
+          </div>
+        </div>
+      </nav>
+
       <div class="admin-topbar-right">
         <span class="admin-date" id="admin-current-date"><i class="fas fa-calendar-alt"></i> Aug 4, 2026</span>
         <div class="admin-notification">
@@ -801,10 +854,10 @@ body {
     </div>
 
 <!-- Main Content -->
-<div style="padding: 24px;">
+<div class="admin-main-content" style="padding: 40px 48px;">
 
   <!-- Statistics Cards -->
-  <div class="dashboard-stats-grid" style="margin-bottom: 24px;">
+  <div class="dashboard-stats-grid" style="margin-bottom: 32px;">
     <div class="stat-card stat-green">
       <div class="stat-card-header">
         <span class="stat-label">Total Users</span>
