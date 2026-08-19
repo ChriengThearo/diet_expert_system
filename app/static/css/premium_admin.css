@@ -382,17 +382,13 @@ body {
 }
 
 /* PREMIUM STATISTICS CARDS - FULL WIDTH */
+/* COMPACT STATS GRID - MATCHES REFERENCE */
 .dashboard-stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
   max-width: 100%;
-}
-
-@media (min-width: 1200px) {
-  .dashboard-stats-grid {
-    grid-template-columns: repeat(6, 1fr);
-  }
+  margin-bottom: 24px;
 }
 
 @media (max-width: 1400px) {
@@ -407,80 +403,89 @@ body {
   }
 }
 
+/* COMPACT STAT CARDS - MATCHES REFERENCE */
 .stat-card {
   background: #fff;
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e9ecef;
   position: relative;
   overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.stat-card::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  right: -50%;
-  width: 200%;
-  height: 200%;
-  opacity: 0.05;
-  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s ease;
 }
 
 .stat-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
-
-.stat-card:hover::before {
-  transform: rotate(45deg);
-}
-
-.stat-card.stat-green::before { background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%); }
-.stat-card.stat-blue::before { background: linear-gradient(135deg, #2196f3 0%, #1565c0 100%); }
-.stat-card.stat-purple::before { background: linear-gradient(135deg, #9c27b0 0%, #6a1b9a 100%); }
-.stat-card.stat-orange::before { background: linear-gradient(135deg, #ff9800 0%, #e65100 100%); }
-.stat-card.stat-teal::before { background: linear-gradient(135deg, #00bcd4 0%, #006064 100%); }
 
 .stat-card-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
+  align-items: flex-start;
+  margin-bottom: 8px;
 }
 
 .stat-label {
-  font-size: 13px;
-  font-weight: 700;
-  color: #757575;
+  font-size: 11px;
+  font-weight: 600;
+  color: #6c757d;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
+  margin: 0;
 }
 
 .stat-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
+  font-size: 18px;
   color: #fff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s ease;
+  flex-shrink: 0;
 }
 
-.stat-card:hover .stat-icon {
-  transform: scale(1.1) rotate(5deg);
+.stat-number {
+  font-size: 28px;
+  font-weight: 800;
+  color: #000;
+  margin: 4px 0;
+  line-height: 1;
 }
 
-.stat-card.stat-green .stat-icon { background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%); }
-.stat-card.stat-blue .stat-icon { background: linear-gradient(135deg, #2196f3 0%, #1565c0 100%); }
-.stat-card.stat-purple .stat-icon { background: linear-gradient(135deg, #9c27b0 0%, #6a1b9a 100%); }
-.stat-card.stat-orange .stat-icon { background: linear-gradient(135deg, #ff9800 0%, #e65100 100%); }
-.stat-card.stat-teal .stat-icon { background: linear-gradient(135deg, #00bcd4 0%, #006064 100%); }
+.stat-subtitle {
+  font-size: 11px;
+  color: #6c757d;
+  margin: 4px 0;
+}
+
+.stat-trend {
+  font-size: 11px;
+  font-weight: 600;
+  color: #28a745;
+  margin-top: 4px;
+}
+
+.stat-trend i {
+  font-size: 10px;
+}
+
+.stat-trend.positive {
+  color: #28a745;
+}
+
+.stat-trend.negative {
+  color: #dc3545;
+}
+
+.stat-card.stat-green .stat-icon { background: linear-gradient(135deg, #28a745 0%, #20803d 100%); }
+.stat-card.stat-blue .stat-icon { background: linear-gradient(135deg, #007bff 0%, #0056b3 100%); }
+.stat-card.stat-purple .stat-icon { background: linear-gradient(135deg, #6f42c1 0%, #5a32a3 100%); }
+.stat-card.stat-orange .stat-icon { background: linear-gradient(135deg, #fd7e14 0%, #dc6502 100%); }
+.stat-card.stat-teal .stat-icon { background: linear-gradient(135deg, #20c997 0%, #1aa179 100%); }
 
 .stat-number {
   font-size: 36px;

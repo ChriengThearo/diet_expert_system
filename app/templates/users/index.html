@@ -1,78 +1,907 @@
-{% extends "layouts/base.html" %} {% block title %}Users{% endblock %} {% block
-content %}
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <h1 class="h3 mb-0">Users</h1>
-  <a href="{{ url_for('tbl_users.create') }}" class="btn btn-primary"
-    >Create User</a
-  >
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Users Management</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+/* EXACT MATCH to Reference Design */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #f8f9fa;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow-x: hidden;
+}
+
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar - EXACT MATCH */
+.sidebar {
+  width: 240px;
+  background: #fff;
+  border-right: 1px solid #e9ecef;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+}
+
+.sidebar-brand {
+  padding: 20px;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar-brand img {
+  width: 28px;
+  height: 28px;
+}
+
+.brand-text h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #000;
+  margin: 0;
+}
+
+.brand-text p {
+  font-size: 10px;
+  color: #6c757d;
+  margin: 0;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 15px 0;
+  overflow-y: auto;
+}
+
+.nav-section {
+  padding: 8px 20px 4px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #adb5bd;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.nav-item {
+  padding: 0 12px;
+  margin-bottom: 2px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  color: #495057;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.nav-link:hover {
+  background: #f8f9fa;
+  color: #000;
+}
+
+.nav-link.active {
+  background: #28a745;
+  color: #fff;
+}
+
+.nav-link i {
+  width: 18px;
+  margin-right: 12px;
+  font-size: 15px;
+}
+
+.nav-link .fa-chevron-right {
+  margin-left: auto;
+  margin-right: 0;
+  font-size: 10px;
+  opacity: 0.6;
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  margin-left: 240px;
+}
+
+/* Top Header - EXACT MATCH */
+.top-header {
+  background: #fff;
+  border-bottom: 1px solid #e9ecef;
+  padding: 12px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-left h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #000;
+  margin: 0 0 2px;
+}
+
+.header-left p {
+  font-size: 13px;
+  color: #6c757d;
+  margin: 0;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.header-date {
+  font-size: 13px;
+  color: #495057;
+}
+
+.notification-btn {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  background: #f8f9fa;
+  border: none;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.notification-btn i {
+  color: #495057;
+  font-size: 16px;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  background: #dc3545;
+  color: #fff;
+  font-size: 9px;
+  padding: 2px 5px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #28a745;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.user-info h4 {
+  font-size: 13px;
+  font-weight: 600;
+  color: #000;
+  margin: 0;
+}
+
+.user-info p {
+  font-size: 10px;
+  color: #6c757d;
+  margin: 0;
+}
+
+/* Content Area */
+.content-area {
+  padding: 24px 32px;
+}
+
+/* Stats Cards - EXACT MATCH with icon on LEFT */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.stat-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.icon-green { background: #d4edda; color: #28a745; }
+.icon-blue { background: #cce5ff; color: #007bff; }
+.icon-purple { background: #e7d6f5; color: #6f42c1; }
+.icon-orange { background: #ffe5cc; color: #fd7e14; }
+
+.stat-info {
+  flex: 1;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #6c757d;
+  margin: 0 0 4px;
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 800;
+  color: #000;
+  margin: 0 0 2px;
+}
+
+.stat-trend {
+  font-size: 11px;
+  color: #28a745;
+  font-weight: 600;
+}
+
+.stat-trend i {
+  font-size: 10px;
+}
+
+.stat-trend.negative {
+  color: #dc3545;
+}
+
+/* Controls Bar */
+.controls-bar {
+  background: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.search-box {
+  flex: 1;
+  max-width: 400px;
+  position: relative;
+}
+
+.search-box i {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #adb5bd;
+  font-size: 14px;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 10px 12px 10px 38px;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.search-box input:focus {
+  outline: none;
+  border-color: #28a745;
+}
+
+.filter-group {
+  display: flex;
+  gap: 10px;
+}
+
+.filter-select {
+  padding: 10px 16px;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  font-size: 14px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.btn-create {
+  padding: 10px 20px;
+  background: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-create:hover {
+  background: #218838;
+  color: #fff;
+}
+
+/* Table - EXACT MATCH */
+.table-card {
+  background: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table thead {
+  background: #f8f9fa;
+}
+
+.data-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.data-table td {
+  padding: 14px 16px;
+  font-size: 13px;
+  color: #212529;
+  border-bottom: 1px solid #f8f9fa;
+}
+
+.data-table tbody tr:hover {
+  background: #f8f9fa;
+}
+
+.data-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.user-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-avatar-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.user-name {
+  font-weight: 600;
+  color: #000;
+  margin: 0 0 2px;
+}
+
+.user-email {
+  font-size: 12px;
+  color: #6c757d;
+  margin: 0;
+}
+
+.badge-role {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  background: #007bff;
+  color: #fff;
+  display: inline-block;
+  margin-right: 4px;
+}
+
+.badge-permission {
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  background: #28a745;
+  color: #fff;
+  display: inline-block;
+  margin: 2px;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-badge.active {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-badge.inactive {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.action-btns {
+  display: flex;
+  gap: 6px;
+}
+
+.btn-action {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.btn-edit {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.btn-delete {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+@media (max-width: 1200px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  
+  .main-content {
+    margin-left: 0;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+  </style>
+</head>
+<body>
+
+<div class="dashboard-layout">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Diet Expert">
+      <div class="brand-text">
+        <h3>Diet Expert</h3>
+        <p>Clinical Nutrition Suite</p>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-item">
+        <a href="{{ url_for('dashboard.admin_dashboard') }}" class="nav-link">
+          <i class="fas fa-th-large"></i>
+          Dashboard
+        </a>
+      </div>
+
+      <div class="nav-section">MANAGEMENT</div>
+      
+      <div class="nav-item">
+        <a href="{{ url_for('tbl_users.index') }}" class="nav-link active">
+          <i class="fas fa-users"></i>
+          Users
+        </a>
+      </div>
+
+      <div class="nav-item">
+        <a href="{{ url_for('dashboard.doctor_dashboard') }}" class="nav-link">
+          <i class="fas fa-user-md"></i>
+          Doctors
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </div>
+
+      <div class="nav-item">
+        <a href="#" class="nav-link">
+          <i class="fas fa-hospital-user"></i>
+          Patients
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </div>
+
+      <div class="nav-item">
+        <a href="{{ url_for('tbl_roles.index') }}" class="nav-link">
+          <i class="fas fa-shield-alt"></i>
+          Roles & Permissions
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </div>
+
+      <div class="nav-section">CONTENT & DATA</div>
+
+      <div class="nav-item">
+        <a href="#" class="nav-link">
+          <i class="fas fa-utensils"></i>
+          Food Catalog
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </div>
+
+      <div class="nav-item">
+        <a href="#" class="nav-link">
+          <i class="fas fa-drumstick-bite"></i>
+          Cooked Foods
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </div>
+
+      <div class="nav-item">
+        <a href="#" class="nav-link">
+          <i class="fas fa-list-check"></i>
+          Rule Library
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </div>
+
+      <div class="nav-item">
+        <a href="#" class="nav-link">
+          <i class="fas fa-clipboard-list"></i>
+          Diet Plans
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </div>
+
+      <div class="nav-section">SYSTEM</div>
+
+      <div class="nav-item">
+        <a href="#" class="nav-link">
+          <i class="fas fa-cog"></i>
+          Settings
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </div>
+
+      <div class="nav-item">
+        <a href="#" class="nav-link">
+          <i class="fas fa-file-alt"></i>
+          Audit Logs
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </div>
+
+      <div class="nav-item">
+        <a href="#" class="nav-link">
+          <i class="fas fa-heartbeat"></i>
+          System Health
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Top Header -->
+    <div class="top-header">
+      <div class="header-left">
+        <h1>Users Management</h1>
+        <p>Welcome back, Admin 👋</p>
+      </div>
+      <div class="header-right">
+        <span class="header-date" id="headerDate">Aug 19, 2026</span>
+        <button class="notification-btn">
+          <i class="fas fa-bell"></i>
+          <span class="notification-badge">3</span>
+        </button>
+        <div class="user-menu">
+          <div class="user-avatar">AD</div>
+          <div class="user-info">
+            <h4>Admin</h4>
+            <p>Super Administrator</p>
+          </div>
+          <i class="fas fa-chevron-down" style="font-size: 10px; color: #6c757d;"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content Area -->
+    <div class="content-area">
+      <!-- Flash Messages -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <!-- Stats Cards with icon on LEFT -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon icon-green">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="stat-info">
+            <p class="stat-label">Total Users</p>
+            <h3 class="stat-value">{{ users|length }}</h3>
+            <p class="stat-trend"><i class="fas fa-arrow-up"></i> 5 this week</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon icon-blue">
+            <i class="fas fa-user-check"></i>
+          </div>
+          <div class="stat-info">
+            <p class="stat-label">Active Users</p>
+            <h3 class="stat-value">{{ users|selectattr('is_active')|list|length }}</h3>
+            <p class="stat-trend"><i class="fas fa-arrow-up"></i> +20%</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon icon-purple">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <div class="stat-info">
+            <p class="stat-label">Roles</p>
+            {% set unique_roles = [] %}
+            {% for user in users %}
+              {% for role in user.roles %}
+                {% if role.name not in unique_roles %}
+                  {% set _ = unique_roles.append(role.name) %}
+                {% endif %}
+              {% endfor %}
+            {% endfor %}
+            <h3 class="stat-value">{{ unique_roles|length }}</h3>
+            <p class="stat-trend"><i class="fas fa-arrow-up"></i> +0%</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon icon-orange">
+            <i class="fas fa-user-clock"></i>
+          </div>
+          <div class="stat-info">
+            <p class="stat-label">Inactive/Pending</p>
+            <h3 class="stat-value">{{ users|rejectattr('is_active')|list|length }}</h3>
+            <p class="stat-trend negative"><i class="fas fa-arrow-down"></i> -33%</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controls Bar -->
+      <div class="controls-bar">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" id="userSearch" placeholder="Search users..." onkeyup="filterUsers()">
+        </div>
+        <div class="filter-group">
+          <select class="filter-select">
+            <option>All Roles</option>
+            <option>Admin</option>
+            <option>Doctor</option>
+            <option>User</option>
+          </select>
+          <select class="filter-select">
+            <option>All Status</option>
+            <option>Active</option>
+            <option>Inactive</option>
+          </select>
+        </div>
+        <a href="{{ url_for('tbl_users.create') }}" class="btn-create">
+          <i class="fas fa-plus"></i>
+          Create User
+        </a>
+      </div>
+
+      <!-- Users Table -->
+      {% if users %}
+      <div class="table-card">
+        <table class="data-table" id="usersTable">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Role</th>
+              <th>Permissions</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for user in users %}
+            <tr class="user-row"
+                data-name="{{ user.full_name|lower }}"
+                data-email="{{ user.email|lower }}"
+                data-username="{{ user.username|lower }}">
+              <td>
+                <div class="user-cell">
+                  <div class="user-avatar-circle" style="background: {% if loop.index % 5 == 0 %}#6f42c1{% elif loop.index % 5 == 1 %}#28a745{% elif loop.index % 5 == 2 %}#007bff{% elif loop.index % 5 == 3 %}#fd7e14{% else %}#dc3545{% endif %};">
+                    {{ user.username[0]|upper }}
+                  </div>
+                  <div>
+                    <div class="user-name">{{ user.full_name }}</div>
+                    <div class="user-email">{{ user.email }}</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                {% if user.roles %}
+                  {% for role in user.roles %}
+                    <span class="badge-role">{{ role.name }}</span>
+                  {% endfor %}
+                {% else %}
+                  <span style="color: #adb5bd;">No role</span>
+                {% endif %}
+              </td>
+              <td>
+                {% set user_permissions = user.get_permission_codes() %}
+                {% if user_permissions %}
+                  {% for permission in user_permissions[:3] %}
+                    <span class="badge-permission">{{ permission }}</span>
+                  {% endfor %}
+                  {% if user_permissions|length > 3 %}
+                    <a href="{{ url_for('tbl_users.detail', user_id=user.id) }}" style="color: #28a745; font-size: 12px; font-weight: 600; text-decoration: none;">
+                      +{{ user_permissions|length - 3 }} more
+                    </a>
+                  {% endif %}
+                {% else %}
+                  <span style="color: #adb5bd;">No permissions</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if user.is_active %}
+                  <span class="status-badge active">
+                    <span class="status-dot"></span>
+                    Active
+                  </span>
+                {% else %}
+                  <span class="status-badge inactive">
+                    <span class="status-dot"></span>
+                    Inactive
+                  </span>
+                {% endif %}
+              </td>
+              <td>
+                <div class="action-btns">
+                  <a href="{{ url_for('tbl_users.edit', user_id=user.id) }}" class="btn-action btn-edit" title="Edit">
+                    <i class="fas fa-edit"></i>
+                  </a>
+                  <a href="{{ url_for('tbl_users.delete_confirm', user_id=user.id) }}" class="btn-action btn-delete" title="Delete">
+                    <i class="fas fa-trash"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div style="text-align: center; padding: 60px; background: #fff; border-radius: 12px; border: 1px solid #e9ecef;">
+        <i class="fas fa-users" style="font-size: 64px; color: #dee2e6; margin-bottom: 16px;"></i>
+        <h3 style="font-size: 20px; font-weight: 700; color: #495057;">No Users Found</h3>
+        <p style="font-size: 14px; color: #6c757d; margin-bottom: 24px;">Get started by creating your first user</p>
+        <a href="{{ url_for('tbl_users.create') }}" class="btn-create">
+          <i class="fas fa-plus"></i>
+          Create First User
+        </a>
+      </div>
+      {% endif %}
+    </div>
+  </main>
 </div>
 
-{% if users %}
-<table class="table table-striped align-middle">
-  <thead>
-    <tr>
-      <th>Username</th>
-      <th>Full Name</th>
-      <th>Email</th>
-      <th>Roles</th>
-      <th>Permissions</th>
-      <th>Status</th>
-      <th class="text-end">Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for user in users %}
-    <tr>
-      <td>
-        <a
-          href="{{ url_for('tbl_users.detail', user_id=user.id) }}">
-          {{ user.username }}
-        </a>
-      </td>
-      <td>{{ user.full_name }}</td>
-      <td>{{ user.email }}</td>
-      <td>
-        {% if user.roles %}
-          {% for role in user.roles %}
-            <span class="badge text-bg-primary me-1">{{ role.name }}</span>
-          {% endfor %}
-        {% else %}
-          <span class="text-muted">No role</span>
-        {% endif %}
-      </td>
-      <td>
-        {% set user_permissions = user.get_permission_codes() %}
-        {% if user_permissions %}
-          {% for permission in user_permissions %}
-            <span class="badge text-bg-info me-1" style="font-size: 0.75em;">{{ permission }}</span>
-          {% endfor %}
-        {% else %}
-          <span class="text-muted">No permissions</span>
-        {% endif %}
-      </td>
-      <td>
-        {% if user.is_active %}
-        <span class="badge text-bg-success">Active</span>
-        {% else %}
-        <span class="badge text-bg-secondary">Inactive</span>
-        {% endif %}
-      </td>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// Update date
+document.getElementById('headerDate').textContent = new Date().toLocaleDateString('en-US', { 
+  month: 'short', 
+  day: 'numeric', 
+  year: 'numeric' 
+});
 
-      <td class="text-end">
-        <a
-          href="{{ url_for('tbl_users.edit', user_id=user.id) }}"
-          class="btn btn-sm btn-warning">✏️</a>
+// Filter users
+function filterUsers() {
+  const searchTerm = document.getElementById('userSearch').value.toLowerCase();
+  const rows = document.querySelectorAll('.user-row');
+  
+  rows.forEach(row => {
+    const name = row.dataset.name;
+    const email = row.dataset.email;
+    const username = row.dataset.username;
+    
+    const matchesSearch = !searchTerm || 
+      name.includes(searchTerm) || 
+      email.includes(searchTerm) || 
+      username.includes(searchTerm);
+    
+    row.style.display = matchesSearch ? '' : 'none';
+  });
+}
+</script>
 
-        <a
-          href="{{ url_for('tbl_users.delete_confirm', user_id=user.id) }}"
-          class="btn btn-sm btn-danger">🗑️</a>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-
-{% else %}
-<p class="text-muted">No users found.</p>  
-{% endif %}
-{% endblock %}
+</body>
+</html>
