@@ -213,11 +213,11 @@ body {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* PREMIUM TOPBAR - ENHANCED FOR FULL SCREEN */
+/* PREMIUM TOPBAR - COMPACT FOR 100% ZOOM */
 .admin-topbar {
   background: #ffffff;
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-  padding: 28px 48px;
+  padding: 20px 32px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -227,6 +227,7 @@ body {
   z-index: 999;
   backdrop-filter: blur(20px);
   width: 100%;
+  box-sizing: border-box;
 }
 
 .admin-topbar-left {
@@ -649,25 +650,46 @@ body {
   box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
 }
 
-/* PREMIUM CONTENT GRID - FULL WIDTH */
+/* PREMIUM CONTENT GRID - 2 ROW LAYOUT TO FIT 100% ZOOM */
 .dashboard-content-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 28px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
   max-width: 100%;
+  margin-bottom: 20px;
+}
+
+/* System Overview spans full width on row 1 */
+.dashboard-content-grid > :first-child {
+  grid-column: 1 / -1;
 }
 
 @media (max-width: 1400px) {
   .dashboard-content-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .dashboard-content-grid > :first-child {
+    grid-column: 1 / -1;
   }
 }
 
-/* Main Content Padding - Increased for Full Screen */
+@media (max-width: 768px) {
+  .dashboard-content-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .dashboard-content-grid > :first-child {
+    grid-column: 1;
+  }
+}
+
+/* Main Content Padding - Compact for 100% Zoom */
 .admin-main-content {
-  padding: 40px 48px;
+  padding: 24px 32px;
   max-width: 100%;
   width: 100%;
+  box-sizing: border-box;
 }
 
 /* Premium Health Cards */
@@ -866,23 +888,23 @@ body {
   color: #ffa726;
 }
 
-/* PREMIUM QUICK ACTIONS */
+/* PREMIUM QUICK ACTIONS - 4 COLUMNS FOR 100% ZOOM */
 .admin-quick-actions {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 20px;
-  margin-top: 24px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 20px;
 }
 
 @media (max-width: 1400px) {
   .admin-quick-actions {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 768px) {
   .admin-quick-actions {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
   }
 }
 
