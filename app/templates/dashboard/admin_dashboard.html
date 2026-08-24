@@ -12,16 +12,37 @@
 :root {
   --bg: #f7f9fc;
   --card: #ffffff;
+  --white: #ffffff;
   --ink: #0f1f3a;
   --text: #26364f;
   --muted: #66758b;
+  --muted-2: #69768b;
+  --muted-3: #7b8aa0;
+  --nav-text: #1d2d44;
+  --nav-icon: #3f5069;
+  --panel-title: #12243e;
   --line: #e2e8f0;
   --soft-line: #edf1f6;
+  --input-line: #dbe3ee;
+  --control-line: #dce3ec;
   --green: #20b85d;
   --green-dark: #12964b;
+  --green-mid: #16a950;
+  --green-soft: #e7f8ee;
+  --green-soft-2: #dcf6e9;
+  --green-soft-3: #e6f8ee;
+  --green-soft-4: #edf9f4;
   --blue: #1779f2;
+  --blue-soft: #e8f2ff;
+  --cyan: #10b9a9;
+  --cyan-soft: #e3fbf7;
   --orange: #f28b22;
+  --orange-soft: #fff0df;
+  --purple: #8657e9;
+  --purple-soft: #f1e6ff;
   --red: #ef3f51;
+  --red-soft: #ffe7ec;
+  --gray-soft: #f1f4f7;
   --shadow: 0 10px 30px rgba(15, 31, 58, .06);
 }
 
@@ -55,7 +76,7 @@ select { font: inherit; }
   top: 0;
   height: 100vh;
   border-right: 1px solid var(--line);
-  background: #fff;
+  background: var(--white);
   display: flex;
   flex-direction: column;
 }
@@ -77,7 +98,7 @@ select { font: inherit; }
 
 .brand-name {
   margin: 0;
-  color: #0f1f3a;
+  color: var(--ink);
   font-size: 20px;
   font-weight: 900;
   line-height: 1.05;
@@ -85,7 +106,7 @@ select { font: inherit; }
 
 .brand-sub {
   margin: 4px 0 0;
-  color: #394b65;
+  color: var(--text);
   font-size: 12px;
   font-weight: 500;
 }
@@ -95,8 +116,8 @@ select { font: inherit; }
   height: 28px;
   border: 1px solid var(--line);
   border-radius: 50%;
-  background: #fff;
-  color: #6b778c;
+  background: var(--white);
+  color: var(--muted-2);
   display: grid;
   place-items: center;
 }
@@ -109,7 +130,7 @@ select { font: inherit; }
 
 .nav-section {
   margin: 28px 10px 12px;
-  color: #7b8aa0;
+  color: var(--muted-3);
   font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
@@ -124,7 +145,7 @@ select { font: inherit; }
   display: flex;
   align-items: center;
   gap: 15px;
-  color: #1d2d44;
+  color: var(--nav-text);
   font-size: 14px;
   font-weight: 600;
 }
@@ -133,25 +154,25 @@ select { font: inherit; }
 
 .nav-link i:first-child {
   width: 18px;
-  color: #3f5069;
+  color: var(--nav-icon);
   font-size: 16px;
   text-align: center;
 }
 
 .nav-link .chevron {
   margin-left: auto;
-  color: #69768b;
+  color: var(--muted-2);
   font-size: 12px;
 }
 
 .nav-link.active {
   height: 45px;
-  background: linear-gradient(135deg, #24bd62, #16a950);
-  color: #fff;
+  background: linear-gradient(135deg, var(--green), var(--green-mid));
+  color: var(--white);
   box-shadow: 0 9px 18px rgba(22, 169, 80, .2);
 }
 
-.nav-link.active i { color: #fff; }
+.nav-link.active i { color: var(--white); }
 
 .sidebar-user {
   height: 102px;
@@ -169,7 +190,7 @@ select { font: inherit; }
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: #d8f7e5;
+  background: var(--green-soft-2);
   color: var(--green-dark);
   font-weight: 800;
 }
@@ -213,7 +234,7 @@ select { font: inherit; }
 
 .page-title p {
   margin: 8px 0 0;
-  color: #536175;
+  color: var(--muted);
   font-size: 13px;
   font-weight: 500;
 }
@@ -234,29 +255,29 @@ select { font: inherit; }
   left: 15px;
   top: 50%;
   transform: translateY(-50%);
-  color: #718096;
+  color: var(--muted);
   font-size: 15px;
 }
 
 .search-box input {
   width: 100%;
   height: 42px;
-  border: 1px solid #dbe3ee;
+  border: 1px solid var(--input-line);
   border-radius: 10px;
-  background: #fff;
+  background: var(--white);
   outline: none;
   padding: 0 14px 0 43px;
-  color: #25364f;
+  color: var(--text);
   box-shadow: 0 7px 18px rgba(15, 31, 58, .035);
 }
 
-.search-box input::placeholder { color: #6d788b; }
+.search-box input::placeholder { color: var(--muted-2); }
 
 .date-pill {
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #33445c;
+  color: var(--text);
   font-size: 13px;
   font-weight: 500;
   white-space: nowrap;
@@ -270,8 +291,8 @@ select { font: inherit; }
   height: 42px;
   border: 1px solid var(--line);
   border-radius: 50%;
-  background: #fff;
-  color: #34445b;
+  background: var(--white);
+  color: var(--text);
   display: grid;
   place-items: center;
   font-size: 18px;
@@ -283,10 +304,10 @@ select { font: inherit; }
   right: -2px;
   min-width: 18px;
   height: 18px;
-  border: 2px solid #fff;
+  border: 2px solid var(--white);
   border-radius: 50%;
-  background: #ef3f51;
-  color: #fff;
+  background: var(--red);
+  color: var(--white);
   display: grid;
   place-items: center;
   font-size: 10px;
@@ -302,7 +323,7 @@ select { font: inherit; }
 .profile-head .avatar {
   width: 45px;
   height: 45px;
-  background: #d5f5e2;
+  background: var(--green-soft-2);
 }
 
 .content {
@@ -342,17 +363,17 @@ select { font: inherit; }
   font-size: 24px;
 }
 
-.soft-green { background: #e7f8ee; color: var(--green); }
-.soft-cyan { background: #e3fbf7; color: #10b9a9; }
-.soft-blue { background: #e8f2ff; color: var(--blue); }
-.soft-orange { background: #fff0df; color: var(--orange); }
-.soft-purple { background: #f1e6ff; color: #8657e9; }
-.soft-red { background: #ffe7ec; color: var(--red); }
-.soft-gray { background: #f2f5f9; color: #69778b; }
+.soft-green { background: var(--green-soft); color: var(--green); }
+.soft-cyan { background: var(--cyan-soft); color: var(--cyan); }
+.soft-blue { background: var(--blue-soft); color: var(--blue); }
+.soft-orange { background: var(--orange-soft); color: var(--orange); }
+.soft-purple { background: var(--purple-soft); color: var(--purple); }
+.soft-red { background: var(--red-soft); color: var(--red); }
+.soft-gray { background: var(--gray-soft); color: var(--muted-2); }
 
 .stat-label {
   margin: 0 0 12px;
-  color: #2b3b52;
+  color: var(--text);
   font-size: 13px;
   font-weight: 500;
 }
@@ -367,7 +388,7 @@ select { font: inherit; }
 
 .stat-caption {
   margin: 11px 0 0;
-  color: #4f5d70;
+  color: var(--muted);
   font-size: 13px;
   font-weight: 500;
 }
@@ -401,7 +422,7 @@ select { font: inherit; }
   display: flex;
   align-items: center;
   gap: 11px;
-  color: #12243e;
+  color: var(--panel-title);
   font-size: 15px;
   font-weight: 800;
 }
@@ -414,10 +435,10 @@ select { font: inherit; }
 .period-select,
 .view-btn {
   height: 32px;
-  border: 1px solid #dce3ec;
+  border: 1px solid var(--control-line);
   border-radius: 7px;
-  background: #fff;
-  color: #39485c;
+  background: var(--white);
+  color: var(--text);
   font-size: 12px;
   font-weight: 600;
 }
@@ -445,7 +466,7 @@ select { font: inherit; }
   display: flex;
   align-items: center;
   gap: 27px;
-  color: #37475d;
+  color: var(--text);
   font-size: 13px;
   font-weight: 500;
 }
@@ -467,13 +488,13 @@ select { font: inherit; }
 }
 
 .grid-line {
-  stroke: #dce4ee;
+  stroke: var(--control-line);
   stroke-width: 1;
   stroke-dasharray: 2 3;
 }
 
 .axis {
-  fill: #5a687c;
+  fill: var(--muted);
   font-size: 12px;
   font-weight: 500;
 }
@@ -514,7 +535,7 @@ select { font: inherit; }
 
 .item-title {
   margin: 0 0 4px;
-  color: #182b46;
+  color: var(--ink);
   font-size: 12px;
   font-weight: 800;
   white-space: nowrap;
@@ -524,7 +545,7 @@ select { font: inherit; }
 
 .item-sub {
   margin: 0;
-  color: #47586e;
+  color: var(--muted);
   font-size: 11px;
   font-weight: 500;
   white-space: nowrap;
@@ -534,7 +555,7 @@ select { font: inherit; }
 
 .item-time {
   justify-self: end;
-  color: #40516a;
+  color: var(--text);
   font-size: 11px;
   font-weight: 500;
 }
@@ -553,19 +574,19 @@ select { font: inherit; }
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: #dcf6e9;
-  color: #1b7a48;
+  background: var(--green-soft-2);
+  color: var(--green-dark);
   font-size: 12px;
   font-weight: 800;
 }
 
-.rank-muted { background: #f1f4f7; color: #6b788b; }
+.rank-muted { background: var(--gray-soft); color: var(--muted-2); }
 
 .use-badge {
   height: 23px;
   border-radius: 7px;
-  background: #e6f8ee;
-  color: #16a057;
+  background: var(--green-soft-3);
+  color: var(--green-dark);
   display: grid;
   place-items: center;
   font-size: 10px;
@@ -594,7 +615,7 @@ select { font: inherit; }
   width: 91px;
   height: 91px;
   border-radius: 50%;
-  background: #fff;
+  background: var(--white);
   display: grid;
   place-items: center;
   text-align: center;
@@ -603,7 +624,7 @@ select { font: inherit; }
 
 .donut-core strong {
   display: block;
-  color: #0f1f3a;
+  color: var(--ink);
   font-size: 24px;
   line-height: 1;
   font-weight: 900;
@@ -612,7 +633,7 @@ select { font: inherit; }
 .donut-core span {
   display: block;
   margin-top: 7px;
-  color: #69768b;
+  color: var(--muted-2);
   font-size: 11px;
   font-weight: 500;
 }
@@ -628,7 +649,7 @@ select { font: inherit; }
   grid-template-columns: 9px minmax(0, 1fr) 116px;
   align-items: center;
   gap: 13px;
-  color: #26364f;
+  color: var(--text);
   font-size: 12px;
 }
 
@@ -648,7 +669,7 @@ select { font: inherit; }
   min-height: 66px;
   margin-top: 12px;
   border-radius: 7px;
-  background: linear-gradient(135deg, #f0fbf5, #edf9f4);
+  background: linear-gradient(135deg, var(--green-soft), var(--green-soft-4));
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
@@ -662,7 +683,7 @@ select { font: inherit; }
   gap: 16px;
 }
 
-.patient-stat + .patient-stat { border-left: 1px solid #dbeee4; }
+.patient-stat + .patient-stat { border-left: 1px solid var(--control-line); }
 
 .patient-stat i {
   color: var(--green);
@@ -678,10 +699,28 @@ select { font: inherit; }
 .patient-stat span {
   display: block;
   margin-top: 4px;
-  color: #536175;
+  color: var(--muted);
   font-size: 11px;
   font-weight: 500;
 }
+
+.profile-chevron {
+  color: var(--text);
+  font-size: 13px;
+}
+
+.sidebar-chevron {
+  color: var(--muted-2);
+  font-size: 12px;
+}
+
+.legend-key-green { color: var(--green); }
+.legend-key-blue { color: var(--blue); }
+.legend-copy { color: var(--text); }
+.dot-active { background: var(--green); }
+.dot-inactive { background: var(--blue); }
+.dot-new { background: var(--orange); }
+.dot-risk { background: var(--red); }
 
 @media (max-width: 1200px) {
   .stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -755,7 +794,7 @@ select { font: inherit; }
         <p class="user-name">Admin</p>
         <p class="user-role">Super Administrator</p>
       </div>
-      <i class="fas fa-chevron-down" style="color:#67758a;font-size:12px;"></i>
+      <i class="fas fa-chevron-down sidebar-chevron"></i>
     </div>
   </aside>
 
@@ -774,7 +813,7 @@ select { font: inherit; }
         <button class="notify" type="button" aria-label="Notifications"><i class="far fa-bell"></i><span>5</span></button>
         <div class="profile-head">
           <div class="avatar">A</div>
-          <i class="fas fa-chevron-down" style="color:#34445b;font-size:13px;"></i>
+          <i class="fas fa-chevron-down profile-chevron"></i>
         </div>
       </div>
     </header>
@@ -843,18 +882,18 @@ select { font: inherit; }
         </div>
         <div class="chart-wrap">
           <div class="chart-legend">
-            <span style="color:var(--green);"><i class="ring"></i><span style="color:#37475d;">Users</span></span>
-            <span style="color:var(--blue);"><i class="ring"></i><span style="color:#37475d;">Consultations</span></span>
+            <span class="legend-key-green"><i class="ring"></i><span class="legend-copy">Users</span></span>
+            <span class="legend-key-blue"><i class="ring"></i><span class="legend-copy">Consultations</span></span>
           </div>
           <svg class="chart" viewBox="0 0 1188 266" role="img" aria-label="System overview users and consultations chart" preserveAspectRatio="none">
             <defs>
               <linearGradient id="blueFill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="#1779f2" stop-opacity=".16"></stop>
-                <stop offset="1" stop-color="#1779f2" stop-opacity=".07"></stop>
+                <stop offset="0" stop-color="var(--blue)" stop-opacity=".16"></stop>
+                <stop offset="1" stop-color="var(--blue)" stop-opacity=".07"></stop>
               </linearGradient>
               <linearGradient id="greenFill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="#20b85d" stop-opacity=".11"></stop>
-                <stop offset="1" stop-color="#20b85d" stop-opacity=".02"></stop>
+                <stop offset="0" stop-color="var(--green)" stop-opacity=".11"></stop>
+                <stop offset="1" stop-color="var(--green)" stop-opacity=".02"></stop>
               </linearGradient>
             </defs>
 
@@ -885,10 +924,10 @@ select { font: inherit; }
             <path d="M34 158 C92 151 138 123 224 110 S342 96 414 126 S558 126 640 102 S778 72 846 66 S982 61 1048 56 S1132 42 1174 38" fill="none" stroke="var(--green)" stroke-width="3" stroke-linecap="round"></path>
             <path d="M34 192 C102 185 148 164 224 160 S344 158 414 177 S570 157 640 140 S780 124 846 118 S986 108 1048 101 S1136 82 1174 75" fill="none" stroke="var(--blue)" stroke-width="3" stroke-linecap="round"></path>
 
-            <g fill="#fff" stroke="var(--green)" stroke-width="3">
+            <g fill="var(--white)" stroke="var(--green)" stroke-width="3">
               <circle cx="34" cy="158" r="4"></circle><circle cx="224" cy="110" r="4"></circle><circle cx="414" cy="126" r="4"></circle><circle cx="640" cy="102" r="4"></circle><circle cx="846" cy="66" r="4"></circle><circle cx="1048" cy="56" r="4"></circle><circle cx="1174" cy="38" r="4"></circle>
             </g>
-            <g fill="#fff" stroke="var(--blue)" stroke-width="3">
+            <g fill="var(--white)" stroke="var(--blue)" stroke-width="3">
               <circle cx="34" cy="192" r="4"></circle><circle cx="224" cy="160" r="4"></circle><circle cx="414" cy="177" r="4"></circle><circle cx="640" cy="140" r="4"></circle><circle cx="846" cy="118" r="4"></circle><circle cx="1048" cy="101" r="4"></circle><circle cx="1174" cy="75" r="4"></circle>
             </g>
 
@@ -943,10 +982,10 @@ select { font: inherit; }
               </div>
             </div>
             <div class="patient-legend">
-              <div class="legend-row"><span class="dot" style="background:var(--green);"></span><span>Active</span><span class="legend-value">512&nbsp;&nbsp;(60.8%)</span></div>
-              <div class="legend-row"><span class="dot" style="background:var(--blue);"></span><span>Inactive</span><span class="legend-value">210&nbsp;&nbsp;(24.9%)</span></div>
-              <div class="legend-row"><span class="dot" style="background:var(--orange);"></span><span>New This Week</span><span class="legend-value">42&nbsp;&nbsp;&nbsp;&nbsp;(5.0%)</span></div>
-              <div class="legend-row"><span class="dot" style="background:var(--red);"></span><span>At Risk</span><span class="legend-value">78&nbsp;&nbsp;&nbsp;&nbsp;(9.3%)</span></div>
+              <div class="legend-row"><span class="dot dot-active"></span><span>Active</span><span class="legend-value">512&nbsp;&nbsp;(60.8%)</span></div>
+              <div class="legend-row"><span class="dot dot-inactive"></span><span>Inactive</span><span class="legend-value">210&nbsp;&nbsp;(24.9%)</span></div>
+              <div class="legend-row"><span class="dot dot-new"></span><span>New This Week</span><span class="legend-value">42&nbsp;&nbsp;&nbsp;&nbsp;(5.0%)</span></div>
+              <div class="legend-row"><span class="dot dot-risk"></span><span>At Risk</span><span class="legend-value">78&nbsp;&nbsp;&nbsp;&nbsp;(9.3%)</span></div>
             </div>
             <div class="patient-stats">
               <div class="patient-stat"><i class="fas fa-arrow-trend-up"></i><div><strong>+42</strong><span>vs last week</span></div></div>

@@ -48,6 +48,13 @@
           <i class="fas fa-gauge-high"></i> Dashboard
         </button>
       </li>
+      {% if 'dashboard.admin' in dashboard_permissions %}
+      <li class="nd-nav-item">
+        <a class="nd-nav-link nd-admin-return" href="{{ url_for('dashboard.admin_dashboard') }}">
+          <i class="fas fa-arrow-left"></i> Admin Dashboard
+        </a>
+      </li>
+      {% endif %}
       <li class="nd-nav-section">Knowledge Base</li>
       <li class="nd-nav-item">
         <button class="nd-nav-link" id="nav-foods" onclick="showSection('foods')">
@@ -122,6 +129,12 @@
         <p>Welcome back, {{ doctor_display_name }} 👋</p>
       </div>
       <div class="nd-topbar-right">
+        {% if 'dashboard.admin' in dashboard_permissions %}
+        <a class="nd-admin-return-btn" href="{{ url_for('dashboard.admin_dashboard') }}">
+          <i class="fas fa-arrow-left"></i>
+          <span>Back to Admin</span>
+        </a>
+        {% endif %}
         <span class="nd-topbar-date" id="nd-today-date"></span>
         <div class="nd-topbar-icon position-relative" title="Notifications">
           <i class="fas fa-bell"></i>

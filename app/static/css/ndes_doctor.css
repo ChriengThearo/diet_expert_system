@@ -55,6 +55,8 @@
 .nd-nav-link:hover { background:var(--nd-sidebar-hover); color:var(--nd-green); }
 .nd-nav-link.active { background:var(--nd-green); color:#fff; font-weight:700; }
 .nd-nav-link i { width:16px; text-align:center; font-size:0.85rem; }
+.nd-nav-link.nd-admin-return { background:#ecfdf3; color:#198f48; border:1px solid #bbf7d0; font-weight:800; }
+.nd-nav-link.nd-admin-return:hover { background:var(--nd-green); color:#fff; border-color:var(--nd-green); }
 .nd-nav-arrow { margin-left:auto; font-size:0.65rem; opacity:0.5; }
 .nd-nav-section { padding:12px 18px 4px; color:#9ca3af; font-size:0.66rem; letter-spacing:0.1em; text-transform:uppercase; font-weight:700; }
 .nd-sidebar-footer { padding:12px 14px; border-top:1px solid var(--nd-border); }
@@ -71,6 +73,8 @@
 .nd-topbar-date { font-size:0.75rem; color:var(--nd-muted); font-weight:600; }
 .nd-topbar-icon { width:32px; height:32px; border-radius:50%; border:1px solid var(--nd-border); background:#fff; display:flex; align-items:center; justify-content:center; color:var(--nd-muted); cursor:pointer; transition:all 0.15s; font-size:0.85rem; text-decoration:none; }
 .nd-topbar-icon:hover { background:var(--nd-green-pale); color:var(--nd-green); border-color:var(--nd-green-soft); }
+.nd-admin-return-btn { height:32px; padding:0 13px; border-radius:8px; background:var(--nd-green); color:#fff; display:inline-flex; align-items:center; gap:7px; font-size:0.78rem; font-weight:800; text-decoration:none; border:1px solid var(--nd-green); box-shadow:0 6px 14px rgba(46,184,92,0.18); white-space:nowrap; }
+.nd-admin-return-btn:hover { background:var(--nd-green-mid); color:#fff; border-color:var(--nd-green-mid); }
 
 /* ── Content Area ────────────────────────────────── */
 .nd-content { padding:20px 24px; flex:1; }
