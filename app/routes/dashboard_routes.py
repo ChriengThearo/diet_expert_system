@@ -2974,8 +2974,3 @@ def not_found(e):
     return redirect(url_for("main.home"))
 
 
-@dashboard_bp.route("/admin/new")
-@login_required
-def admin_dashboard_new():
-    """Legacy admin dashboard URL."""
-    return redirect(url_for("dashboard.admin_dashboard"))
