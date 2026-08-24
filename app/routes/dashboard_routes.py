@@ -2977,5 +2977,5 @@ def not_found(e):
 @dashboard_bp.route("/admin/new")
 @login_required
 def admin_dashboard_new():
-    """New modern admin dashboard"""
-    return render_template("dashboard/admin_dashboard_new.html")
+    """Legacy admin dashboard URL."""
+    return redirect(url_for("dashboard.admin_dashboard"))
