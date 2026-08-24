@@ -817,7 +817,7 @@ body {
                 {% endif %}
               </td>
               <td>
-                {% set user_permissions = user.get_permission_codes() %}
+                {% set user_permissions = user.get_permission_codes()|sort %}
                 {% if user_permissions %}
                   {% for permission in user_permissions[:3] %}
                     <span class="badge-permission">{{ permission }}</span>
